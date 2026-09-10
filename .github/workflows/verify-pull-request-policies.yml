@@ -93,5 +93,5 @@ jobs:
           fi
 
           closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
-          echo "will close ${closes} in ${repo_slug}"
+          echo "closes ${closes}"
           printf 'Closes %s.\n' "${closes}" >> "${GITHUB_STEP_SUMMARY}"
