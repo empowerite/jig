@@ -15,13 +15,30 @@ already knows. A gate is therefore one implementation, in Go, versioned with jig
 than in any workflow. The bash that runs the gates in this repository today is a stand-in, and each step goes when
 its verb arrives. What a consumer repository holds is `jig.toml`, and nothing under `.github/`.
 
+### Two classes of gate, one mechanism
+
+A gate is one of two classes, and the classes differ in who owns the policy that names it, not in how it runs.
+
+- An organization gate is named in a policy the organization owns, kept in the central repository the required
+  workflow is served from, versioned there, and read by `jig verify` beside the repository's own file. A
+  repository cannot weaken or remove one by editing `jig.toml`. This is the class with the copy problem, and the
+  organization ruleset below is what solves it.
+- A repository gate is the project's own, named in its `jig.toml`, and may be a command the repository declares,
+  such as `just test`, as a local gate. Nothing about it is copied anywhere; the only shared thing is the binary
+  that runs it. Whether it is required is the repository's own branch ruleset, a per-repository choice.
+
+The precedence rule is one line: the organization adds, the repository adds, nobody removes. `jig verify` runs
+the union, and a refusal names which policy the gate came from.
+
 ### One reusable workflow, required by the organization
 
-This repository ships one workflow with `workflow_call`: check out, install the pinned jig, run `jig verify`. A
-repository that wants it writes a five-line caller, `uses: empowerite/jig/.github/workflows/verify.yml@v1`. An
-organization that wants it everywhere requires it through an organization-level ruleset that names the workflow,
-which runs it in every repository with no file in any of them, beside the branch ruleset that requires the
-check. Both rulesets are Terraform. Maintenance is one file, and rollout is a tag.
+This repository ships one workflow with `workflow_call`: check out, install the pinned jig, run `jig verify` over
+both policies. An organization requires it through an organization-level ruleset that names the workflow, which
+runs it in every repository with no file in any of them, beside the branch ruleset that requires the check; so a
+repository needs no workflow file for either class of gate. A repository outside such an organization, or one
+that wants its own gates without the organization's requirement, writes a five-line caller,
+`uses: empowerite/jig/.github/workflows/verify.yml@v1`, against its own file alone. Both rulesets are Terraform.
+Maintenance is one file, and rollout is a tag.
 
 ### Releases install through mise
 
@@ -37,6 +54,8 @@ consumer never sees them, because a consumer has no workflow of its own to lint.
 
 ## Why
 
+- Two classes with one mechanism, because only the organization's gates have the copy problem, and a design
+  that solved it by taking a repository's own gates out of its hands would trade one wrong for another.
 - Gates in the binary, because a gate in YAML is a gate copied, and a copy in thousands of repositories is
   thousands of versions; a verb is one, and a fix is a release.
 - A reusable workflow and an organization ruleset, because a file that must exist in every repository is a file
@@ -56,6 +75,8 @@ consumer never sees them, because a consumer has no workflow of its own to lint.
 
 ## Open questions
 
+- Where the organization's policy file lives and what it may say: the central repository the workflow is
+  served from is the natural home, and whether it may also pin the jig version every repository runs.
 - How GitHub composes the check's display name for a reusable and for a required workflow, since
   `required_status_checks` must name it exactly; measured on a scratch repository before the ruleset is written.
 - Whether `jig verify` also runs on a desk before a commit, as the pre-commit hook, so a refusal is met before a
