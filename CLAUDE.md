@@ -6,11 +6,15 @@ take over, and when it does, the paragraph goes.
 
 ## The loop
 
-Every change begins as a ticket and ends as a pull request a maintainer merges. Nothing reaches `main` any other way.
+Every change begins as an issue and ends as a pull request a maintainer merges. Nothing reaches `main` any other
+way.
 
-1. Open a ticket. Say why before what. A change without a ticket has not started.
-2. Branch from `main` as `<N>-<slug>`, where `<N>` is the ticket number. One ticket, one branch. A worktree is fine.
-3. Commit with a signed commit. The subject is `#<N> <what changed>`, under 72 characters. The body says why, in
+1. Open an issue. Say why before what. A change without an issue has not started.
+2. Wait for `accepted`. A person reads the issue and labels it `accepted` or `rejected`, and work begins only on an
+   accepted one. A session that reaches an issue without the label stops there and says so. Before starting, it
+   says in one line what it is about to build, so a misread issue is caught before the work.
+3. Branch from `main`. Name the branch as you like; `<N>-<slug>` is a habit, not a rule. A worktree is fine.
+4. Commit with a signed commit. The subject is `#<N> <what changed>`, under 72 characters. The body says why, in
    plain prose. The branch ruleset rejects an unsigned commit, so a fresh clone needs this once:
 
    ```sh
@@ -19,12 +23,21 @@ Every change begins as a ticket and ends as a pull request a maintainer merges. 
    git config commit.gpgsign true
    ```
 
-4. Open a pull request and link the issue under Development in its sidebar. A session working through the API
+5. Open a pull request and link the issue under Development in its sidebar. A session working through the API
    makes the same link with the `addCloseIssueReferences` mutation. The link is what counts, and the check on `main`
    reads only that. The pull request is the report: what changed, what was checked, and what was left out and why.
    Call nothing merged, landed or done until the merge is observed.
-5. A maintainer reviews and merges, by squash or rebase. The ruleset requires linear history, so there are no merge
-   commits.
+6. A maintainer reviews and merges, by squash or rebase. A merge to `main` is never automatic: it happens on a
+   maintainer's request, or as the landing step of a transition that owns the merge. The ruleset requires linear
+   history, so there are no merge commits.
+
+## Labels
+
+- `accepted`: a person read the issue and wants it built. Work begins only after it.
+- `rejected`: a person read the issue and it does not stand as written. Rework it; it can be accepted afterward.
+- `parked`: a person's hold, on an issue or a pull request. Nothing moves until it comes off.
+
+Anyone may file an issue; a person decides. Until jig enforces it, a session sets none of these on its own.
 
 ## Spec first
 
