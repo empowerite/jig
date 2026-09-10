@@ -1,0 +1,57 @@
+# The ticket check: a pull request closes an open ticket of this repository, and its branch is named for it.
+# One job, `ticket`, which is the name the branch ruleset requires once this has reported green.
+
+name: ticket
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  issues: read
+
+jobs:
+  ticket:
+    name: ticket
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      BODY: ${{ github.event.pull_request.body }}
+      BRANCH: ${{ github.event.pull_request.head.ref }}
+    steps:
+      - name: Closes an open ticket, on a branch named for it
+        run: |
+          set -o errexit -o nounset -o pipefail
+
+          numbers=$(printf '%s\n' "$BODY" \
+            | grep -oiE '(^|[^[:alnum:]])(close[sd]?|fix(e[sd])?|resolve[sd]?)[[:space:]]+#[0-9]+' \
+            | grep -oE '[0-9]+$' | sort -un || true)
+          if [ -z "$numbers" ]; then
+            echo '::error::the pull request body names no ticket; write "Closes #<N>"'
+            exit 1
+          fi
+
+          named=false
+          while IFS= read -r n; do
+            if ! issue=$(gh api "repos/$REPO/issues/$n" 2>/dev/null); then
+              echo "::error::#$n is not a ticket of this repository"
+              exit 1
+            fi
+            if printf '%s' "$issue" | jq -e '.pull_request' >/dev/null; then
+              echo "::error::#$n is a pull request, not a ticket"
+              exit 1
+            fi
+            state=$(printf '%s' "$issue" | jq -r '.state')
+            if [ "$state" != open ]; then
+              echo "::error::#$n is $state; a pull request closes an open ticket"
+              exit 1
+            fi
+            case "$BRANCH" in "$n"-*) named=true ;; esac
+          done <<< "$numbers"
+
+          if [ "$named" != true ]; then
+            echo "::error::branch '$BRANCH' is not named <N>-<slug> for a ticket this pull request closes"
+            exit 1
+          fi
+          echo "closes $(printf '%s\n' "$numbers" | sed 's/^/#/' | tr '\n' ' ')on branch '$BRANCH'"
