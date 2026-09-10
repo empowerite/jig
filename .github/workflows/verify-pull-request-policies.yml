@@ -142,12 +142,13 @@ jobs:
           broken=0
           if (( ${#present[@]} > 0 ))
           then
-            # lychee reports the file and the target, not the line; --offline resolves local targets only.
+            # --offline resolves local targets only; the JSON names each broken link's file, line and target.
             if ! lychee --offline --include-fragments --no-progress --format json "${present[@]}" > lychee.json
             then
-              jq --raw-output '.fail_map | to_entries[] | .key as $file | .value[]
-                | "::error file=\($file)::link does not resolve: \(.url)"' lychee.json
-              broken=$(jq '[.fail_map[] | length] | add' lychee.json)
+              jq --raw-output --arg root "file://${PWD}/" '.error_map | to_entries[] | .key as $file | .value[]
+                | "::error file=\($file),line=\(.span.line)::link does not resolve: \(.url | ltrimstr($root))"' \
+                lychee.json
+              broken=$(jq '[.error_map[] | length] | add' lychee.json)
             fi
             rm --force lychee.json
           fi
