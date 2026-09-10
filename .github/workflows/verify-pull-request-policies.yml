@@ -28,8 +28,9 @@ jobs:
           repo_name="${repo_slug#*/}"
           pr_number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
 
-          pull="https://github.com/${repo_slug}/pull/${pr_number}"
-          issues="https://github.com/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
+          pull="${GITHUB_SERVER_URL}/${repo_slug}/pull/${pr_number}"
+          issues="${GITHUB_SERVER_URL}/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
+          run="${GITHUB_SERVER_URL}/${repo_slug}/actions/runs/${GITHUB_RUN_ID}"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
           # error + remedy: the remedy is Markdown, read from stdin, printed to the log and appended to the step
@@ -65,7 +66,7 @@ jobs:
           then
             refuse 'this pull request closes no issue' <<REMEDY
           Link one under **Development** in [the sidebar](${pull}); pick from the [open issues](${issues}).
-          Then re-run this check: linking fires no event. See [linking a pull request to an issue](${docs}).
+          Then [re-run this check](${run}): linking fires no event. See [linking a pull request to an issue](${docs}).
           REMEDY
           fi
 
@@ -89,7 +90,7 @@ jobs:
           then
             refuse 'every issue this pull request closes is already closed or belongs to another repository' <<REMEDY
           Link an open issue of this repository under **Development** in [the sidebar](${pull}); pick from the
-          [open issues](${issues}). Then re-run this check: linking fires no event.
+          [open issues](${issues}). Then [re-run this check](${run}): linking fires no event.
           REMEDY
           fi
 
