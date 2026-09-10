@@ -19,7 +19,8 @@ a provider; the ports do.
   that mints a new commit over the same tree keeps its verdict. It carries a conclusion and any artifacts the gate
   produced.
 - An actor is whoever takes a transition: a person, an agent session, a CI job, a bot. jig briefs actors and gates
-  their moves; it starts none.
+  their moves; it starts none. Every running jig is one actor: a desk's jig is its person, and a jigbot is its bot
+  account, each known to the providers by that account.
 - A binding is a work item's or a change's counterpart in one provider: the provider, the role it plays, and the
   provider's own identifier and number. A work item may hold several bindings at once.
 - A batch is an ordered set of admitted changes tested together as one speculative tree, with that tree's verdict.
@@ -51,6 +52,10 @@ A work item is in one of three states: filed; assigned, an actor having taken it
 | | filed | | a person or a session files it |
 | filed | assigned | `accepted` is set; neither `rejected` nor `parked` is | the actor takes the assignment |
 | assigned | resolved | every change for it is realized, or integrated if policy says so | the item is closed |
+
+The assignee is the provider's own, and it names the actor that holds the item. A running jig takes the transitions
+of a work item, and of the changes for it, only when the assignee is its own actor, or when policy hands it the
+board. Two people's jigs on one repository never take the same item, and a jigbot takes only what policy gives it.
 
 A change is in one of six states: drafted, a draft pull request exists, opened at the start of the work so that the
 work is visible; proposed, the draft marked ready; admissible, every gate green and nothing holding it, so it may
@@ -124,6 +129,9 @@ Each decision above follows from one of the charter's four principles.
 - A state's suffix is a rule because a reader should know from the name alone whether a thing waits for an
   actor, is a permission the engine computed, or is in flight; and because the silent transitions are the
   ones a tick executes, so telling them apart from the acted ones is the engine's whole job.
+- Ownership is the assignee because it is the one claim every provider already has a slot for, every person can
+  see and change, and every running jig can test against its own name; a claim kept anywhere else would be a
+  second truth.
 - Admissible is a state, not a gate, because it is the state a batch admits from and the state a board shows as
   waiting to land; a person and a batch both need to ask "may this merge?" and get one answer.
 - A change is drafted before it is proposed because a draft pull request opened at the start of the work is what
