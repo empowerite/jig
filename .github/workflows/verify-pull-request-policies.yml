@@ -32,11 +32,22 @@ jobs:
           run="${GITHUB_SERVER_URL}/${repo_slug}/actions/runs/${GITHUB_RUN_ID}"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
-          # error + remedy: the remedy is Markdown, read from stdin, printed to the log and appended to the step
+          # error + remedy: one remedy for every refusal, Markdown, printed to the log and appended to the step
           # summary, where it renders with its links
+          remedy=$(cat <<REMEDY
+          Link an open issue of this repository under **Development** in [the sidebar](${pull}):
+
+          * click the gear beside **Development** and pick the issue
+          * [re-run this check](${run})
+
+          Linking does not fire any event, so the check must be re-run.
+
+          See: [linking a pull request to an issue](${docs}).
+          REMEDY
+          )
           refuse() {
             echo "::error::$1"
-            { printf '### %s\n\n' "${1^}"; cat; } | tee --append "${GITHUB_STEP_SUMMARY}"
+            printf '### %s\n\n%s\n' "${1^}" "${remedy}" | tee --append "${GITHUB_STEP_SUMMARY}"
             exit 1
           }
 
@@ -63,16 +74,7 @@ jobs:
 
           if [[ -z "${refs}" ]]
           then
-            refuse 'this pull request closes no issue' <<REMEDY
-          Link an issue under **Development** in [the sidebar](${pull}):
-
-          * click the gear beside **Development** and pick the issue
-          * [re-run this check](${run})
-
-          Linking does not fire any event, so the check must be re-run.
-
-          See: [linking a pull request to an issue](${docs}).
-          REMEDY
+            refuse 'this pull request closes no issue'
           fi
 
           open_local=0
@@ -93,14 +95,7 @@ jobs:
 
           if (( open_local == 0 ))
           then
-            refuse 'every issue this pull request closes is already closed or belongs to another repository' <<REMEDY
-          Link an open issue of this repository under **Development** in [the sidebar](${pull}):
-
-          * click the gear beside **Development** and pick an open issue of this repository
-          * [re-run this check](${run})
-
-          Linking does not fire any event, so the check must be re-run.
-          REMEDY
+            refuse 'every issue this pull request closes is already closed or belongs to another repository'
           fi
 
           closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
