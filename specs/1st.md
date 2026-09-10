@@ -25,3 +25,4 @@ One line per spec, in number order: the file, its subject, its status. jig will 
 can; until then it is kept by hand.
 
 - [0001-world-model.md](0001-world-model.md): world model and lifecycle (draft)
+- [0002-ports.md](0002-ports.md): port contracts, proofs, metrics (draft)
