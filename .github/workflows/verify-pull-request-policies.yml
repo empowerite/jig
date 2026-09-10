@@ -64,7 +64,7 @@ jobs:
           then
             refuse 'this pull request closes no issue' <<REMEDY
           Link one under **Development** in [the sidebar](${pull}); pick from the [open issues](${issues}).
-          Writing "Closes #<N>" in the body does the same; see [linking a pull request to an issue](${docs}).
+          See [linking a pull request to an issue](${docs}).
           REMEDY
           fi
 
