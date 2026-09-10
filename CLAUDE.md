@@ -19,10 +19,10 @@ Every change begins as a ticket and ends as a pull request a maintainer merges. 
    git config commit.gpgsign true
    ```
 
-4. Open a pull request and link the issue under Development in its sidebar. A session working through the API has
-   no sidebar and writes `Closes #<N>` as the body's first line instead; the link is what counts, and the check on
-   `main` reads only that. The pull request is the report: what changed, what was checked, and what was left out and
-   why. Call nothing merged, landed or done until the merge is observed.
+4. Open a pull request and link the issue under Development in its sidebar. A session working through the API
+   makes the same link with the `addCloseIssueReferences` mutation. The link is what counts, and the check on `main`
+   reads only that. The pull request is the report: what changed, what was checked, and what was left out and why.
+   Call nothing merged, landed or done until the merge is observed.
 5. A maintainer reviews and merges, by squash or rebase. The ruleset requires linear history, so there are no merge
    commits.
 
