@@ -45,9 +45,10 @@ jobs:
           See: [linking a pull request to an issue](${docs}).
           REMEDY
           )
+
           refuse() {
             echo "::error::$1"
-            printf '### %s\n\n%s\n' "${1^}" "${remedy}" | tee --append "${GITHUB_STEP_SUMMARY}"
+            printf '### ❌ %s\n\n%s\n' "${1^}" "${remedy}" | tee --append "${GITHUB_STEP_SUMMARY}"
             exit 1
           }
 
@@ -74,7 +75,7 @@ jobs:
 
           if [[ -z "${refs}" ]]
           then
-            refuse 'this pull request closes no issue'
+            refuse 'this pull request does not close any issues'
           fi
 
           open_local=0
