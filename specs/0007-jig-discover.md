@@ -65,7 +65,8 @@ only to answer `jig context`'s question about the paths a change touches; it tak
 ## Consequences
 
 - `CLAUDE.md` sheds its "what to read" guidance to this extension; the loop's file becomes a pointer.
-- `jig context`, [0008-jig-context.md](0008-jig-context.md), includes the rules for the paths a change touches by calling this.
+- `jig context`, [0008-jig-context.md](0008-jig-context.md), includes the rules for the paths a change touches by
+  calling this.
 - `jig policy check` validates every rule file's front matter: `scope` present, `applies` globs well formed.
 
 ## Open questions
@@ -74,4 +75,3 @@ only to answer `jig context`'s question about the paths a change touches; it tak
   rule and not the argument; the shape of that declaration.
 - Whether a rule file may also name other rule files it entails, so a general rule can pull a specific one in
   without the specific one repeating the globs.
-

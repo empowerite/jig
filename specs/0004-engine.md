@@ -4,11 +4,11 @@ Status: draft
 
 ## Decision
 
-The engine is one function, `next(policy, view) → actions`. It takes the policy of [0003-policy.md](0003-policy.md) and the
-view of the model in [0001-world-model.md](0001-world-model.md), and it returns the actions that are due: the
+The engine is one function, `next(policy, view) → actions`. It takes the policy of [0003-policy.md](0003-policy.md)
+and the view of the model in [0001-world-model.md](0001-world-model.md), and it returns the actions that are due: the
 silent transitions it may take by observing, and the acted transitions whose gate is met and whose actor is the
-running jig. It reads no provider and writes nothing. A tick calls it once and executes what it returns through
-the ports of [0002-ports.md](0002-ports.md).
+running jig. It reads no provider and writes nothing. A tick calls it once and executes what it returns through the
+ports of [0002-ports.md](0002-ports.md).
 
 ### The tick
 
@@ -85,10 +85,12 @@ the cursors and metrics, in jig's own view. It rebases no member, edits no perso
 
 ## Consequences
 
-- The engine's test suite runs against the fakes of [0002-ports.md](0002-ports.md) and covers every transition and every
-  branch of the batch: a red batch of k isolates its culprit in at most ⌈log₂ k⌉ rebuilds.
-- A jigbot, [0009-jigbot.md][0009], is this engine run board-wide on a schedule and on events, holding the lease.
-- The operator surface, [0005-operator-surface.md][0005], shows a tick's record and the batch's state.
+- The engine's test suite runs against the fakes of [0002-ports.md](0002-ports.md) and covers every transition and
+  every branch of the batch: a red batch of k isolates its culprit in at most ⌈log₂ k⌉ rebuilds.
+- A jigbot, [0009-jigbot.md](0009-jigbot.md), is this engine run board-wide on a schedule and on events, holding the
+  lease.
+- The operator surface, [0005-operator-surface.md](0005-operator-surface.md), shows a tick's record and the batch's
+  state.
 
 ## Open questions
 
@@ -96,6 +98,3 @@ the cursors and metrics, in jig's own view. It rebases no member, edits no perso
   comment on the change, or both.
 - Whether an integrate path that is the provider's own queue, a merge train, replaces the batch entirely or feeds
   it; the answer is per port and belongs to its section of `0002`.
-
-[0005]: https://github.com/empowerite/jig/issues/10
-[0009]: https://github.com/empowerite/jig/issues/14

@@ -56,5 +56,3 @@ nothing.
 
 - The brief's size: whether rule text is inlined or referenced past a budget, and who sets the budget.
 - Whether the needs feed is also written to the provider, as a comment or a label, so a person without jig sees it.
-
-[0007]: https://github.com/empowerite/jig/issues/12
