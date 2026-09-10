@@ -2,10 +2,13 @@
 #
 # actionlint knows GitHub's own runner labels and reports every other `runs-on` value as unknown. The workflows
 # here run on a Blacksmith runner, so its labels are declared, which is the remedy actionlint's own finding names.
+#
+# see: https://www.blacksmith.sh/pricing
+# see: https://docs.blacksmith.sh/blacksmith-runners/overview
 
 self-hosted-runner:
   labels:
-    - blacksmith-2vcpu-ubuntu-2404
+    - blacksmith-2vcpu-ubuntu-2404        # 8
     - blacksmith-4vcpu-ubuntu-2404
     - blacksmith-8vcpu-ubuntu-2404
     - blacksmith-16vcpu-ubuntu-2404
