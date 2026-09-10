@@ -18,6 +18,11 @@ jobs:
     if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      # The tools the steps below call, at the versions mise.lock records.
+      - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c  # v4.3.0
+
       - name: must-close-open-issue
         env:
           GH_TOKEN: ${{ github.token }}
@@ -103,9 +108,6 @@ jobs:
               printf '✅ Closes %s.\n' "${closes}" | tee --append "${GITHUB_STEP_SUMMARY}"
             fi
           fi
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
-        if: ${{ !cancelled() }}
 
       - name: links-resolve
         if: ${{ !cancelled() }}

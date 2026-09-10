@@ -1,0 +1,14 @@
+# mise.toml - the pinned toolchain; see: https://mise.jdx.dev/configuration.html
+#
+# Every tool the repository runs, at one version, installed the same way on a desk (`mise install`) and on a
+# runner (`jdx/mise-action` in the workflow). `lockfile = true` turns each pin into the exact version recorded in
+# `mise.lock`, so a tool never floats. git and bash come from the machine.
+
+[settings]
+lockfile = true
+
+[tools]
+actionlint = "1.7"
+gh = "2.100"
+jq = "1.8"
+lychee = "0.24"
