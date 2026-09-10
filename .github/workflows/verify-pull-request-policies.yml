@@ -76,29 +76,29 @@ jobs:
           if [[ -z "${refs}" ]]
           then
             refuse 'this pull request does not close any issues'
-          fi
+          else
+            open_local=0
+            while read -r n state repo
+            do
+              if [[ "${repo}" != "${repo_slug}" ]]
+              then
+                echo "::warning::skipping foreign issue ${repo}#${n}"
+                continue
+              fi
+              if [[ "${state}" != OPEN ]]
+              then
+                echo "::warning::${repo}#${n} is ${state}; merging will not change it"
+                continue
+              fi
+              open_local=$(( open_local + 1 ))
+            done <<< "${refs}"
 
-          open_local=0
-          while read -r n state repo
-          do
-            if [[ "${repo}" != "${repo_slug}" ]]
+            if (( open_local == 0 ))
             then
-              echo "::warning::skipping foreign issue ${repo}#${n}"
-              continue
+              refuse 'every issue this pull request closes is already closed or belongs to another repository'
+            else
+              closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
+              echo "closes ${closes}"
+              printf '✅ Closes %s.\n' "${closes}" >> "${GITHUB_STEP_SUMMARY}"
             fi
-            if [[ "${state}" != OPEN ]]
-            then
-              echo "::warning::${repo}#${n} is ${state}; merging will not change it"
-              continue
-            fi
-            open_local=$(( open_local + 1 ))
-          done <<< "${refs}"
-
-          if (( open_local == 0 ))
-          then
-            refuse 'every issue this pull request closes is already closed or belongs to another repository'
           fi
-
-          closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
-          echo "closes ${closes}"
-          printf 'Closes %s.\n' "${closes}" >> "${GITHUB_STEP_SUMMARY}"
