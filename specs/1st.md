@@ -30,3 +30,4 @@ can; until then it is kept by hand.
 - [0002-ports.md](0002-ports.md): port contracts, proofs, metrics (draft)
 - [0003-policy.md](0003-policy.md): what a repository declares (draft)
 - [0004-engine.md](0004-engine.md): ticking, batching, landing (draft)
+- [0005-operator-surface.md](0005-operator-surface.md): CLI, API, GUI (draft)
