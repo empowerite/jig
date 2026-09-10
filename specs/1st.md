@@ -33,3 +33,4 @@ can; until then it is kept by hand.
 - [0005-operator-surface.md](0005-operator-surface.md): CLI, API, GUI (draft)
 - [0006-extensions.md](0006-extensions.md): extension points, what they expose (draft)
 - [0008-jig-context.md](0008-jig-context.md): state to brief (draft)
+- [0010-release.md](0010-release.md): jig's own lifecycle, releases (draft)
