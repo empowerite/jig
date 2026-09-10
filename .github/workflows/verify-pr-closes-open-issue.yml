@@ -1,7 +1,7 @@
-# Verifies a pull request closes at least one open ticket belonging to this repository.
+# Verifies a pull request closes at least one open issue belonging to this repository.
 # Applies only to pull requests into the default branch.
 
-name: verify-pr-closes-open-ticket
+name: verify-pr-closes-open-issue
 
 on:
   pull_request:
@@ -13,12 +13,12 @@ permissions:
 
 jobs:
   # The job's name is the check the branch ruleset requires. Renaming it breaks the requirement.
-  ticket:
-    name: ticket
+  # The job's key is the check's name, the one the branch ruleset requires. Renaming it breaks the requirement.
+  verify-pr-closes-open-issue:
     if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
-      - name: Verify pull request closes an open ticket
+      - name: Verify pull request closes an open issue
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -30,7 +30,7 @@ jobs:
           pr_number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
 
           pull="https://github.com/${repo_slug}/pull/${pr_number}"
-          tickets="https://github.com/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
+          issues="https://github.com/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
           # An annotation is plain text. The remedy, with its links, goes to the job summary, which renders
@@ -64,10 +64,10 @@ jobs:
 
           if [[ -z "${refs}" ]]
           then
-            remedy="Write \"Closes #<N>\" in [the pull request's body](${pull}), or link the ticket under"
-            remedy+=" Development in its sidebar. Pick one of the [open tickets](${tickets});"
+            remedy="Write \"Closes #<N>\" in [the pull request's body](${pull}), or link the issue under"
+            remedy+=" Development in its sidebar. Pick one of the [open issues](${issues});"
             remedy+=" see [linking a pull request to an issue](${docs})."
-            refuse 'the pull request will close no ticket' "${remedy}"
+            refuse 'the pull request will close no issue' "${remedy}"
           fi
 
           open_local=0
@@ -88,10 +88,10 @@ jobs:
 
           if (( open_local == 0 ))
           then
-            remedy="The tickets named are closed or belong to another repository. Name one of the"
-            remedy+=" [open tickets](${tickets}) of this one, in [the pull request's body](${pull}) or under"
+            remedy="The issues named are closed or belong to another repository. Name one of the"
+            remedy+=" [open issues](${issues}) of this one, in [the pull request's body](${pull}) or under"
             remedy+=" Development in its sidebar."
-            refuse 'none of the tickets this pull request will close is an open ticket of this repository' "${remedy}"
+            refuse 'none of the issues this pull request will close is an open issue of this repository' "${remedy}"
           fi
 
           closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
