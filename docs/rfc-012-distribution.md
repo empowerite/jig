@@ -6,29 +6,29 @@ Status: draft
 
 jig reaches a repository in three layers, and none of them is a file copied into that repository.
 
-### Gates live in the binary
-
-Every policy a repository's pull requests must satisfy is a `jig verify` verb: `jig verify pull-request` reads
-`jig.toml` and the pull request and passes or refuses, with the annotation, the log line and the summary a person
-already knows. A gate is therefore one implementation, in Go, versioned with jig, tested against the fakes of
-[rfc-002-ports.md](rfc-002-ports.md), and named in the policy of [rfc-003-policy.md](rfc-003-policy.md) rather
-than in any workflow. The bash that runs the gates in this repository today is a stand-in, and each step goes when
-its verb arrives. What a consumer repository holds is `jig.toml`, and nothing under `.github/`.
-
 ### Two classes of gate, one mechanism
 
-A gate is one of two classes, and the classes differ in who owns the policy that names it, not in how it runs.
+A gate is one of two classes, and the classes differ in who owns the policy that names it and in what may run it.
 
 - An organization gate is named in a policy the organization owns, kept in the central repository the required
   workflow is served from, versioned there, and read by `jig verify` beside the repository's own file. A
-  repository cannot weaken or remove one by editing `jig.toml`. This is the class with the copy problem, and the
-  organization ruleset below is what solves it.
-- A repository gate is the project's own, named in its `jig.toml`, and may be a command the repository declares,
-  such as `just test`, as a local gate. Nothing about it is copied anywhere; the only shared thing is the binary
-  that runs it. Whether it is required is the repository's own branch ruleset, a per-repository choice.
+  repository cannot weaken or remove one by editing `jig.toml`. What runs it is a `jig verify` verb in the binary
+  or an extension, so that it cannot be tampered with and a fix is a release. This is the class with the copy
+  problem, and the organization ruleset below is what solves it.
+- A repository gate is the project's own, named in its `jig.toml`. What runs it is whatever the repository names:
+  a script or a command in the repository first of all, `just test` or `controls/coverage`; an extension when it
+  is shared with other teams; a verb only if jig happens to have one. Nothing about it is copied anywhere, the
+  binary that runs it is the only shared thing, and debugging it never means releasing jig. Whether it is
+  required is the repository's own branch ruleset, a per-repository choice.
 
 The precedence rule is one line: the organization adds, the repository adds, nobody removes. `jig verify` runs
 the union, and a refusal names which policy the gate came from.
+
+### What a consumer repository holds
+
+`jig.toml`, and the scripts its own gates name, wherever it keeps them. Nothing under `.github/`. The bash that
+runs this repository's gates in its workflow today is a stand-in, and each step goes when its control or verb
+arrives.
 
 ### One reusable workflow, required by the organization
 
@@ -56,8 +56,10 @@ consumer never sees them, because a consumer has no workflow of its own to lint.
 
 - Two classes with one mechanism, because only the organization's gates have the copy problem, and a design
   that solved it by taking a repository's own gates out of its hands would trade one wrong for another.
-- Gates in the binary, because a gate in YAML is a gate copied, and a copy in thousands of repositories is
-  thousands of versions; a verb is one, and a fix is a release.
+- The organization's gates in the binary or an extension, because a gate in YAML is a gate copied, and a copy in
+  thousands of repositories is thousands of versions; a verb is one, and a fix is a release.
+- The repository's gates as its own scripts, because a project's control changes with the project, and a change
+  that needed a jig release to debug would make jig the bottleneck of every team at once.
 - A reusable workflow and an organization ruleset, because a file that must exist in every repository is a file
   that will be missing from some, and a ruleset that injects the workflow makes the repository's own tree the
   wrong place to look for it, which is where it should not be.
@@ -68,10 +70,11 @@ consumer never sees them, because a consumer has no workflow of its own to lint.
 
 - [rfc-010-release.md](rfc-010-release.md)'s release section changes: `ubi` as the install path makes artifact
   signing the first open question to close, since `mise` will install whatever the release says.
-- [rfc-003-policy.md](rfc-003-policy.md) gains the gates' names as `jig verify` knows them, so a policy names a
-  verb and not a script.
+- [rfc-003-policy.md](rfc-003-policy.md) names a gate as a verb, an extension or a command by path, and says
+  which class may use which.
 - The infrastructure that manages the branch ruleset manages the organization ruleset beside it.
-- The two policies in this repository's workflow are the first two verbs.
+- The controls in this repository, [rfc-013][rfc013], are repository gates today and the organization's first
+  verbs when they are shared.
 
 ## Open questions
 
@@ -82,3 +85,5 @@ consumer never sees them, because a consumer has no workflow of its own to lint.
 - Whether `jig verify` also runs on a desk before a commit, as the pre-commit hook, so a refusal is met before a
   push.
 - Whether the reusable workflow and the action live in this repository or in one of their own.
+
+[rfc013]: https://github.com/empowerite/jig/issues/58
