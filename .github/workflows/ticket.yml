@@ -1,9 +1,8 @@
-# Verifies that a pull request into the default branch will close an open ticket of this repository. A pull request may close
-# several; the branch is named however its author likes.
-# GitHub resolves a closing keyword in the body and a link made under Development into one list, the pull
-# request's closingIssuesReferences, and that list is what is checked. One job, `ticket`, which is the name the
-# branch ruleset requires once this has reported green.
-
+# Verifies that a pull request into the default branch will close an open ticket of this repository. A pull
+# request may close several, and its branch is named however its author likes. GitHub resolves a closing keyword
+# in the body and a link made under Development into one list, the pull request's closingIssuesReferences, and
+# that list is what is checked. One job, `ticket`, which is the name the branch ruleset requires once this has
+# reported green.
 name: ticket
 
 on:
