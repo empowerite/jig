@@ -25,7 +25,7 @@ jobs:
         run: |
           set -o errexit -o nounset -o pipefail
 
-          number=$(jq -r '.pull_request.number' "${GITHUB_EVENT_PATH}")
+          number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
           query=$(cat <<'GRAPHQL'
           query($owner: String!, $name: String!, $number: Int!) {
             repository(owner: $owner, name: $name) {
@@ -38,8 +38,8 @@ jobs:
           }
           GRAPHQL
           )
-          refs=$(gh api graphql -F owner="${GITHUB_REPOSITORY_OWNER}" -F name="${GITHUB_REPOSITORY#*/}" \
-            -F number="${number}" -f query="${query}" \
+          refs=$(gh api graphql --field owner="${GITHUB_REPOSITORY_OWNER}" --field name="${GITHUB_REPOSITORY#*/}" \
+            --field number="${number}" --raw-field query="${query}" \
             --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[] | "\(.number) \(.state) \(.repository.nameWithOwner)"')
 
           if [[ -z "${refs}" ]]
@@ -71,4 +71,4 @@ jobs:
             echo "::error::branch '${GITHUB_HEAD_REF}' is not named <N>-<slug> for a ticket this pull request will close"
             exit 1
           fi
-          echo "will close $(cut -d' ' -f1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')from branch '${GITHUB_HEAD_REF}'"
+          echo "will close $(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')from branch '${GITHUB_HEAD_REF}'"
