@@ -36,9 +36,10 @@ jig rests on four principles.
 
 ## The lifecycle
 
-jig owns one lifecycle and versions it with the code. A work item exists and someone commits to it. A change is
-authored, proposed, judged, integrated, and realized. The item is resolved. A merge does not end the lifecycle. The
-verdict after integration does, once the apply has run or the deployment is up.
+jig owns one lifecycle and versions it with the code. A work item is filed, assigned, and resolved. A change is
+drafted, proposed, admissible, integrating, integrated, and realized; admissible is the state from which it may
+land, on its own or in a batch. A merge does not end the lifecycle. The verdict after integration does, once the
+apply has run or the deployment is up.
 
 Each provider realizes these steps in its own way: a draft pull request, a merge train, a build-validation policy. Its
 port carries those paths. A repository chooses among them and attaches gates, actors and attributes. It cannot add a
