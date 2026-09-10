@@ -86,11 +86,11 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 ## Consequences
 
-- The engine, [0004-engine.md](0004-engine.md), reaches every provider through these operations and no other, and
+- The engine, [0004-engine.md][0004], reaches every provider through these operations and no other, and
   its lease lives in the scm port's compare-and-swap on a ref.
-- Policy, [0003-policy.md](0003-policy.md), chooses among the capabilities a port declares and cannot name a path a
+- Policy, [0003-policy.md][0003], chooses among the capabilities a port declares and cannot name a path a
   port does not offer.
-- The operator surface, [0005-operator-surface.md](0005-operator-surface.md), shows the metrics every port
+- The operator surface, [0005-operator-surface.md][0005], shows the metrics every port
   reports.
 - A scratch repository per provider, for the live suite, is provisioned outside this repository.
 
@@ -101,3 +101,7 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 - Whether a gate port's local form, a command on a desk, reports through the same verdict type as a hosted one, or
   a narrower one without artifacts.
 - How the rate-limit budget is spent when several jigs share one provider account.
+
+[0003]: https://github.com/empowerite/jig/issues/8
+[0004]: https://github.com/empowerite/jig/issues/9
+[0005]: https://github.com/empowerite/jig/issues/10

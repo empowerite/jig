@@ -16,6 +16,8 @@ this directory; an extender needs both.
   other specs, for the code, and for the operator. Open questions are named under their own heading, never buried.
 - A spec and the code do not disagree. The change that would make them disagree corrects the spec, or marks it
   superseded and writes the successor, in the same pull request. A spec never rots silently.
+- A link to a spec that has not landed names the spec's issue, and the pull request that lands the spec rewrites
+  every such link to the file. A link to a file that is not there is a red check.
 - The writing rules in [CLAUDE.md](../CLAUDE.md) apply: plain sentences, lists where the content is a list, a blank
   line after every block.
 
