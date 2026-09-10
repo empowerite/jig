@@ -53,17 +53,20 @@ in the provider.
 | assigned | resolved | every change for it is realized, or integrated if policy says so | the item is closed |
 
 A change is in one of five states: drafted, a draft pull request exists, opened at the start of the work so that the
-work is visible; proposed, the draft marked ready; judged, its gates having reported; integrated, landed on the
-default branch; realized, its post-integration verdict green.
+work is visible; proposed, the draft marked ready; admissible, every gate green and nothing holding it, so it may
+land, on its own or in a batch; integrated, landed on the default branch; realized, its post-integration verdict
+green. Verdicts are facts on the change in every state; a red one keeps a change out of admissible and sends it
+back if it was there.
 
 | From | To | Gate | Action |
 | --- | --- | --- | --- |
 | | drafted | its work item is assigned | the actor opens a draft pull request |
 | drafted | proposed | the actor says it is ready | the draft is marked ready for review |
-| proposed | judged | every gate policy names has reported | none; the verdicts are observed |
-| judged | drafted | a verdict is red | the change is marked draft again, for repair |
-| judged | integrated | every verdict is green and `parked` is not set | the integrate path lands it: a merge, by a person or by the batch, as policy says, and never otherwise |
-| integrated | realized | the post-integration verdict is green | none; the verdict is observed |
+| proposed | admissible | every gate policy names has reported green; `parked` is not set | none; observed |
+| admissible | proposed | a verdict turns red, `parked` is set, or a new commit arrives | none; observed |
+| proposed | drafted | a verdict is red and policy returns red changes to draft | the change is marked draft again |
+| admissible | integrated | none beyond the state itself | the integrate path lands it: a merge, by a person or by the batch, as policy says, and never otherwise |
+| integrated | realized | the post-integration verdict is green | none; observed |
 
 A provider realizes each step in its own way, a draft pull request, a merge train, a build-validation policy, and
 its port carries those paths, with sub-states of its own. Policy chooses among the paths and attaches gates, actors
@@ -98,6 +101,8 @@ Each decision above follows from one of the charter's four principles.
   lost at that moment would force a second run for nothing.
 - Attributes are not states because a person sets them freely, in the provider, at any time; a state is where the
   lifecycle puts a thing, and only a transition moves it.
+- Admissible is a state, not a gate, because it is the state a batch admits from and the state a board shows as
+  waiting to land; a person and a batch both need to ask "may this merge?" and get one answer.
 - A change is drafted before it is proposed because a draft pull request opened at the start of the work is what
   makes the work visible: it prevents a second actor taking the same item, and it shows the board what is in flight.
 - The lifecycle is fixed because every port must map to a known vocabulary, the interface must know what to draw,
