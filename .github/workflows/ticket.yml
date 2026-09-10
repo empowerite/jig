@@ -13,7 +13,7 @@ permissions:
 jobs:
   ticket:
     name: ticket
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     env:
       GH_TOKEN: ${{ github.token }}
       REPO: ${{ github.repository }}
