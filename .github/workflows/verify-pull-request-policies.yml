@@ -159,3 +159,37 @@ jobs:
           else
             printf '✅ Every link in the changed Markdown resolves.\n' | tee --append "${GITHUB_STEP_SUMMARY}"
           fi
+
+      - name: unique-rfc-numbers
+        if: ${{ !cancelled() }}
+        run: |
+          set -o errexit -o nounset -o pipefail
+
+          run="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          index="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_HEAD_REF}/docs/1st.md"
+
+          # error + remedy: same markdown remedy for every refusal
+          remedy=$(cat <<REMEDY
+          Two RFCs share a number. Renumber the newcomer to the next free number, rename its file and its line in
+          [docs/1st.md](${index}), and push; then [re-run this check](${run}).
+          REMEDY
+          )
+
+          refuse() {
+            echo "::error::$1"
+            printf '### ❌ %s\n\n%s\n' "${1^}" "${remedy}" | tee --append "${GITHUB_STEP_SUMMARY}"
+            return 1
+          }
+
+          duplicates=$(printf '%s\n' docs/rfc-*.md \
+            | sed --expression='s|^docs/rfc-||' --expression='s|-.*||' | sort | uniq --repeated || :)
+          if [[ -n "${duplicates}" ]]
+          then
+            while IFS= read -r number
+            do
+              echo "::error::rfc-${number} is two files: $(printf '%s ' docs/rfc-"${number}"-*.md)"
+            done <<< "${duplicates}"
+            refuse "$(wc --lines <<< "${duplicates}" | tr --delete ' ') RFC number(s) used twice"
+          else
+            printf '✅ Every RFC number is used once.\n' | tee --append "${GITHUB_STEP_SUMMARY}"
+          fi
