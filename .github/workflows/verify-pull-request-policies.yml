@@ -64,7 +64,7 @@ jobs:
           then
             refuse 'this pull request closes no issue' <<REMEDY
           Link one under **Development** in [the sidebar](${pull}); pick from the [open issues](${issues}).
-          See [linking a pull request to an issue](${docs}).
+          Then re-run this check: linking fires no event. See [linking a pull request to an issue](${docs}).
           REMEDY
           fi
 
@@ -88,7 +88,7 @@ jobs:
           then
             refuse 'every issue this pull request closes is already closed or belongs to another repository' <<REMEDY
           Link an open issue of this repository under **Development** in [the sidebar](${pull}); pick from the
-          [open issues](${issues}).
+          [open issues](${issues}). Then re-run this check: linking fires no event.
           REMEDY
           fi
 
