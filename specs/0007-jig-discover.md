@@ -5,21 +5,30 @@ Status: draft
 ## Decision
 
 `jig-discover` is the first extension, run as `jig discover <path>…`. Given a path, it prints the rules that bind
-it: the rule files a routing table the repository commits maps to that path. It is a function of the table and the
-path, and it reads nothing else.
+it: every rule file whose declared globs match it. It is a function of the rule files and the path, and it reads
+nothing else.
 
-### The table
+### The rule file
 
-The repository declares its routing in `jig.toml`, under `[discover]`: rows of a glob and the rule files it pulls
-in, and a directory is a prefix that binds everything beneath it. Rows add; nothing overrides. For a path, the
-rules are the union of every row it matches, printed general before specific, so a session reads the broad rule
-before the narrow one that refines it. A rule file is Markdown, wherever the repository keeps it, and its first
-line says what it governs.
+A rule file is Markdown with YAML front matter, wherever the repository keeps it, and the front matter is what
+`jig discover` reads:
+
+```yaml
+---
+scope: what this file governs, in one sentence a session can decide from
+applies: [globs the rule binds, relative to the rule file's directory]
+---
+```
+
+`scope` is required. `applies` is the routing: a path binds a rule file when it matches one of that file's globs.
+Rows add; nothing overrides. For a path, the rules are the union of every file whose glob it matches, printed
+general before specific, shallower file first, so a session reads a repository's rule before the subtree's rule
+that refines it. There is no central table; the tree is the table.
 
 ### What it prints
 
-- `jig discover <path>`: the rule files' contents, each once, general before specific.
-- `jig discover --paths <path>`: their paths only.
+- `jig discover <path>`: the repository-relative paths of the rule files that bind it, one per line, general
+  before specific, and nothing else; the caller reads the files.
 - `jig discover --audit`: every file kind in the tree no row matches, with a count and one example, so silence is
   counted rather than merely met.
 
@@ -29,9 +38,10 @@ person's decision, made by adding a row.
 ### Delivery
 
 The harness port of [0002-ports.md](0002-ports.md) carries the answer to the session without being asked: a Claude
-Code hook runs `jig discover` after every read and edit and hands the session each rule file once per session; a
-Cursor rule file is generated from the table, one glob-attached rule per row. The table is the one source and the
-adapters are derived from it.
+Code hook runs `jig discover` after every read and edit and hands the session the files it names, each once per
+session; a
+Cursor rule file is generated from the front matter, one glob-attached rule per rule file. The rule files are the
+one source and the adapters are derived from them.
 
 ### The seat
 
@@ -46,19 +56,22 @@ only to answer `jig context`'s question about the paths a change touches; it tak
   of a repository's law by declaring something about itself.
 - Silence said aloud, because an unmatched path answered with nothing is indistinguishable from a matched path
   with no rules, and only one of those is a decision someone made.
-- One table and derived adapters, because two harnesses given two hand-kept lists of rules will disagree by the
-  end of the week.
+- Front matter and not prose, because a machine routes on a field and a person reads a sentence, and one file can
+  carry both.
+- The tree as the table, because a routing table kept apart from the rules it routes is a second thing to keep in
+  step, and the rule that forgot its row is the one nobody finds.
+- Derived adapters, because two harnesses given two hand-kept lists of rules will disagree by the end of the week.
 
 ## Consequences
 
 - `CLAUDE.md` sheds its "what to read" guidance to this extension; the loop's file becomes a pointer.
-- `jig context`, [0008-jig-context.md][0008], includes the rules for the paths a change touches by calling this.
-- The `[discover]` table is validated by `jig policy check`: every rule file it names exists.
+- `jig context`, [0008-jig-context.md](0008-jig-context.md), includes the rules for the paths a change touches by calling this.
+- `jig policy check` validates every rule file's front matter: `scope` present, `applies` globs well formed.
 
 ## Open questions
 
 - Whether a rule file may declare a normative core that `--brief` prints alone, so that a session pays for the
   rule and not the argument; the shape of that declaration.
-- Whether the table lives in `jig.toml` or beside the rules it routes, one table per subtree.
+- Whether a rule file may also name other rule files it entails, so a general rule can pull a specific one in
+  without the specific one repeating the globs.
 
-[0008]: https://github.com/empowerite/jig/issues/13
