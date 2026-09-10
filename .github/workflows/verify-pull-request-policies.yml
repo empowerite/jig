@@ -99,7 +99,6 @@ jobs:
               refuse 'every issue this pull request closes is already closed or belongs to another repository'
             else
               closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
-              echo "closes ${closes}"
-              printf '✅ Closes %s.\n' "${closes}" >> "${GITHUB_STEP_SUMMARY}"
+              printf '✅ Closes %s.\n' "${closes}" | tee --append "${GITHUB_STEP_SUMMARY}"
             fi
           fi
