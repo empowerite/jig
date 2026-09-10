@@ -1,0 +1,21 @@
+# actionlint.yml - see: https://github.com/rhysd/actionlint/blob/main/docs/config.md
+#
+# actionlint knows GitHub's own runner labels and reports every other `runs-on` value as unknown. The workflows
+# here run on a Blacksmith runner, so its labels are declared, which is the remedy actionlint's own finding names.
+#
+# see: https://www.blacksmith.sh/pricing
+# see: https://docs.blacksmith.sh/blacksmith-runners/overview
+
+self-hosted-runner:
+  labels:
+    - blacksmith-2vcpu-ubuntu-2404        # 8 GiB
+    - blacksmith-4vcpu-ubuntu-2404        # 16 GiB
+    - blacksmith-8vcpu-ubuntu-2404        # 32 GiB
+    - blacksmith-16vcpu-ubuntu-2404       # 64 GiB
+    - blacksmith-32vcpu-ubuntu-2404       # 128 GiB
+
+    - blacksmith-2vcpu-ubuntu-2404-arm    # 6 GiB
+    - blacksmith-4vcpu-ubuntu-2404-arm    # 12 GiB
+    - blacksmith-8vcpu-ubuntu-2404-arm    # 24 GiB
+    - blacksmith-16vcpu-ubuntu-2404-arm   # 48 GiB
+    - blacksmith-32vcpu-ubuntu-2404-arm   # 96 GiB
