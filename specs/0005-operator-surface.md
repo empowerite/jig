@@ -18,7 +18,11 @@ transition an actor takes, every one addressed by the number the provider gave t
 - `jig draft`, `jig propose`, `jig land`: the change's acted transitions.
 - `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [0004-engine.md](0004-engine.md).
 - `jig board`: the view, as a table; `jig show <N>`: one item with its changes, verdicts and bindings.
-- `jig policy check`, `jig policy plan`: as in [0003-policy.md](0003-policy.md).
+- `jig policy check`, `jig policy plan`: as in [0003-policy.md](0003-policy.md). Beside them, `jig policy set
+  <key> <value>`, `jig policy unset <key>` and `jig policy explain <key>`: the first two edit `jig.toml` in the
+  working tree, run the check and print the plan in the same breath, and commit nothing; the third says what a
+  key means and which values the ports actually offer. They are conveniences over the file, and the file, edited
+  by hand, stays the truth.
 - `jig rules <path>` and `jig brief <N>`: the two extensions of [0007-jig-discovery.md][0007] and
   [0008-jig-context.md][0008].
 - `jig init`, which writes the first `jig.toml` from what the ports find; `jig doctor`, which reports every port's
