@@ -31,3 +31,4 @@ can; until then it is kept by hand.
 - [0003-policy.md](0003-policy.md): what a repository declares (draft)
 - [0004-engine.md](0004-engine.md): ticking, batching, landing (draft)
 - [0005-operator-surface.md](0005-operator-surface.md): CLI, API, GUI (draft)
+- [0006-extensions.md](0006-extensions.md): extension points, what they expose (draft)
