@@ -51,7 +51,8 @@ jobs:
           )
           refs=$(gh api graphql --field owner="${GITHUB_REPOSITORY_OWNER}" --field name="${GITHUB_REPOSITORY#*/}" \
             --field number="${number}" --raw-field query="${query}" \
-            --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[] | "\(.number) \(.state) \(.repository.nameWithOwner)"')
+            --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
+                  | "\(.number) \(.state) \(.repository.nameWithOwner)"')
 
           if [[ -z "${refs}" ]]
           then
@@ -80,4 +81,5 @@ jobs:
             refuse 'none of the tickets this pull request will close is an open ticket of this repository' \
               'Name an open ticket of this repository; the ones named are closed or belong elsewhere.'
           fi
-          echo "will close $(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')from branch '${GITHUB_HEAD_REF}'"
+          closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')
+          echo "will close ${closes}from branch '${GITHUB_HEAD_REF}'"
