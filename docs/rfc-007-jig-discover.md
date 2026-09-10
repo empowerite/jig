@@ -37,7 +37,7 @@ person's decision, made by adding a row.
 
 ### Delivery
 
-The harness port of [0002-ports.md](0002-ports.md) carries the answer to the session without being asked: a Claude
+The harness port of [rfc-002-ports.md](rfc-002-ports.md) carries the answer to the session without being asked: a Claude
 Code hook runs `jig discover` after every read and edit and hands the session the files it names, each once per
 session; a
 Cursor rule file is generated from the front matter, one glob-attached rule per rule file. The rule files are the
@@ -45,7 +45,7 @@ one source and the adapters are derived from them.
 
 ### The seat
 
-`jig-discover` attaches at the rule-source point of [0006-extensions.md](0006-extensions.md). It runs in a tick
+`jig-discover` attaches at the rule-source point of [rfc-006-extensions.md](rfc-006-extensions.md). It runs in a tick
 only to answer `jig context`'s question about the paths a change touches; it takes no transition.
 
 ## Why
@@ -65,7 +65,7 @@ only to answer `jig context`'s question about the paths a change touches; it tak
 ## Consequences
 
 - `CLAUDE.md` sheds its "what to read" guidance to this extension; the loop's file becomes a pointer.
-- `jig context`, [0008-jig-context.md](0008-jig-context.md), includes the rules for the paths a change touches by
+- `jig context`, [rfc-008-jig-context.md](rfc-008-jig-context.md), includes the rules for the paths a change touches by
   calling this.
 - `jig policy check` validates every rule file's front matter: `scope` present, `applies` globs well formed.
 

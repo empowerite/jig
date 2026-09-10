@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-A port is the typed interface between the model in [0001-world-model.md](0001-world-model.md) and one provider. It
+A port is the typed interface between the model in [rfc-001-world-model.md](rfc-001-world-model.md) and one provider. It
 translates the provider's objects into the model's types and the model's actions into the provider's calls, and it
 is the only code in jig that speaks to a provider. The engine, the policy and the operator surface see ports and
 never a provider.
@@ -86,11 +86,11 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 ## Consequences
 
-- The engine, [0004-engine.md](0004-engine.md), reaches every provider through these operations and no other, and
-  its lease lives in the scm port's compare-and-swap on a ref.
-- Policy, [0003-policy.md](0003-policy.md), chooses among the capabilities a port declares and cannot name a path a
-  port does not offer.
-- The operator surface, [0005-operator-surface.md](0005-operator-surface.md), shows the metrics every port
+- The engine, [rfc-004-engine.md](rfc-004-engine.md), reaches every provider through these operations and no other,
+  and its lease lives in the scm port's compare-and-swap on a ref.
+- Policy, [rfc-003-policy.md](rfc-003-policy.md), chooses among the capabilities a port declares and cannot name a
+  path a port does not offer.
+- The operator surface, [rfc-005-operator-surface.md](rfc-005-operator-surface.md), shows the metrics every port
   reports.
 - A scratch repository per provider, for the live suite, is provisioned outside this repository.
 
