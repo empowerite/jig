@@ -1,5 +1,5 @@
-# Verifies the policies a pull request into the default branch must satisfy, one job per policy. A job's key is
-# the check's name, the one the branch ruleset requires; renaming it breaks the requirement.
+# Verifies the policies a pull request must satisfy: one job per scope, one step per policy. A job's key is the
+# check's name, the one the branch ruleset requires; renaming it breaks the requirement.
 
 name: verify-pull-request-policies
 
@@ -12,12 +12,13 @@ permissions:
   pull-requests: read
 
 jobs:
-  # The pull request will close at least one open issue belonging to this repository.
-  must-close-open-issue:
+  # The policies for a pull request into the default branch.
+  default-branch:
     if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
-      - name: Verify pull request closes an open issue
+      # The pull request will close at least one open issue belonging to this repository.
+      - name: must-close-open-issue
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
