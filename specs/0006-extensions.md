@@ -15,15 +15,16 @@ surface.md](0005-operator-surface.md) publishes it, and nothing else.
 
 An extension attaches at fixed points, and a point is a typed contract:
 
-- A gate: a verdict source. Given a change and its tree, it returns a verdict, keyed by tree, with artifacts.
-  A review by a model, a policy check no provider runs, a cost estimate.
-- A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may
-  act after one is taken. It cannot take one.
+- A gate: a verdict source. Given a change and its tree, it returns a verdict, keyed by tree, with artifacts. A review
+  by a model, a policy check no provider runs, a cost estimate.
+- A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may act
+  after one is taken. It cannot take one.
 - A presenter: a new surface over the same API, a chat integration, a status page.
-- A port: a provider jig does not ship, written to the contract of [0002-ports.md](0002-ports.md) and proven by its own
-  conformance suite before policy may name it.
-- A brief source and a rule source: the two points [0008-jig-context.md][0008] and [0007-jig-discover.md][0007]
-  attach to, which is the test of this spec: if the seam cannot carry those two, it is the wrong seam.
+- A port: a provider jig does not ship, written to the contract of [0002-ports.md](0002-ports.md) and proven by its
+  own conformance suite before policy may name it.
+- A brief source and a rule source: the two points [0008-jig-context.md](0008-jig-context.md) and [0007-jig-
+  discover.md](0007-jig-discover.md) attach to, which is the test of this spec: if the seam cannot carry those two, it
+  is the wrong seam.
 
 ### What it sees
 
@@ -67,6 +68,3 @@ beside its name. `jig doctor` reports every declared extension it cannot start.
   to write an extension against; the second is one contract instead of two.
 - Whether a gate extension may run on a runner as a check, so that a provider reports its verdict, or only in a
   tick.
-
-[0007]: https://github.com/empowerite/jig/issues/12
-[0008]: https://github.com/empowerite/jig/issues/13

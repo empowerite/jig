@@ -63,5 +63,3 @@ except as the landing step of a batch that policy gave it.
 - Whether the view ref is one commit per tick over the previous, or replaced each tick, and how far back a desk
   needs to read.
 - Whether jigbot may bring current the branches its own actor owns, and only those, under strictness.
-
-[0007]: https://github.com/empowerite/jig/issues/12
