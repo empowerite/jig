@@ -1,4 +1,4 @@
-# Verifies that a pull request into main will close an open ticket of this repository. A pull request may close
+# Verifies that a pull request into the default branch will close an open ticket of this repository. A pull request may close
 # several; the branch is named however its author likes.
 # GitHub resolves a closing keyword in the body and a link made under Development into one list, the pull
 # request's closingIssuesReferences, and that list is what is checked. One job, `ticket`, which is the name the
@@ -8,7 +8,6 @@ name: ticket
 
 on:
   pull_request:
-    branches: [main]
     types: [opened, edited, reopened, synchronize]
 
 permissions:
@@ -18,6 +17,7 @@ permissions:
 jobs:
   ticket:
     name: ticket
+    if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
       - name: Verify the pull request will close an open ticket
