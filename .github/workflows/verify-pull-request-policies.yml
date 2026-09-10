@@ -12,7 +12,6 @@ permissions:
   pull-requests: read
 
 jobs:
-  # The job's name is the check the branch ruleset requires. Renaming it breaks the requirement.
   # The pull request will close at least one open issue belonging to this repository.
   must-close-open-issue:
     if: github.event.pull_request.base.ref == github.event.repository.default_branch
