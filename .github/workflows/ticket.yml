@@ -1,9 +1,7 @@
-# Verifies that a pull request into the default branch will close an open ticket of this repository. A pull
-# request may close several, and its branch is named however its author likes. GitHub resolves a closing keyword
-# in the body and a link made under Development into one list, the pull request's closingIssuesReferences, and
-# that list is what is checked. One job, `ticket`, which is the name the branch ruleset requires once this has
-# reported green.
-name: ticket
+# policy gate: verifies a pull request closes at least one open ticket of this repository. Applies only to pull
+# requests into the default branch.
+
+name: verify-pr-closes-open-ticket
 
 on:
   pull_request:
@@ -14,26 +12,32 @@ permissions:
   pull-requests: read
 
 jobs:
+  # The job's name is the check the branch ruleset requires. Renaming it breaks the requirement.
   ticket:
     name: ticket
     if: github.event.pull_request.base.ref == github.event.repository.default_branch
     runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
-      - name: Verify the pull request will close an open ticket
+      - name: Verify pull request closes an open ticket
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -o errexit -o nounset -o pipefail
 
-          number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
-          pull="https://github.com/${GITHUB_REPOSITORY}/pull/${number}"
+          repo_slug="${GITHUB_REPOSITORY}"
+          repo_owner="${repo_slug%%/*}"
+          repo_name="${repo_slug#*/}"
+          pr_number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
+
+          pull="https://github.com/${repo_slug}/pull/${pr_number}"
+          tickets="https://github.com/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
-          # An annotation is plain text, so the links go into the job summary, which renders Markdown.
+          # An annotation is plain text. The remedy, with its links, goes to the job summary, which renders
+          # Markdown and is the Details click beside the annotation.
           refuse() {
             echo "::error::$1"
-            printf '**%s.** %s\n\nSee [the pull request](%s) and [linking a pull request to an issue](%s).\n' \
-              "$1" "$2" "${pull}" "${docs}" >> "${GITHUB_STEP_SUMMARY}"
+            printf '**%s.** %s\n' "$1" "$2" >> "${GITHUB_STEP_SUMMARY}"
             exit 1
           }
 
@@ -49,21 +53,27 @@ jobs:
           }
           GRAPHQL
           )
-          refs=$(gh api graphql --field owner="${GITHUB_REPOSITORY_OWNER}" --field name="${GITHUB_REPOSITORY#*/}" \
-            --field number="${number}" --raw-field query="${query}" \
+
+          refs=$(gh api graphql \
+            --field owner="${repo_owner}" \
+            --field name="${repo_name}" \
+            --field number="${pr_number}" \
+            --raw-field query="${query}" \
             --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
                   | "\(.number) \(.state) \(.repository.nameWithOwner)"')
 
           if [[ -z "${refs}" ]]
           then
-            refuse 'the pull request will close no ticket' \
-              'Write "Closes #<N>" in its body, or link the ticket under Development in its sidebar.'
+            remedy="Write \"Closes #<N>\" in [the pull request's body](${pull}), or link the ticket under"
+            remedy+=" Development in its sidebar. Pick one of the [open tickets](${tickets});"
+            remedy+=" see [linking a pull request to an issue](${docs})."
+            refuse 'the pull request will close no ticket' "${remedy}"
           fi
 
           open_local=0
           while read -r n state repo
           do
-            if [[ "${repo}" != "${GITHUB_REPOSITORY}" ]]
+            if [[ "${repo}" != "${repo_slug}" ]]
             then
               echo "::warning::${repo}#${n} belongs to another repository and is not checked here"
               continue
@@ -78,8 +88,11 @@ jobs:
 
           if (( open_local == 0 ))
           then
-            refuse 'none of the tickets this pull request will close is an open ticket of this repository' \
-              'Name an open ticket of this repository; the ones named are closed or belong elsewhere.'
+            remedy="The tickets named are closed or belong to another repository. Name one of the"
+            remedy+=" [open tickets](${tickets}) of this one, in [the pull request's body](${pull}) or under"
+            remedy+=" Development in its sidebar."
+            refuse 'none of the tickets this pull request will close is an open ticket of this repository' "${remedy}"
           fi
-          closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')
-          echo "will close ${closes}from branch '${GITHUB_HEAD_REF}'"
+
+          closes=$(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | paste --serial --delimiters=' ')
+          echo "will close ${closes} in ${repo_slug}"
