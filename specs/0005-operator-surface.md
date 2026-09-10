@@ -23,8 +23,10 @@ transition an actor takes, every one addressed by the number the provider gave t
   working tree, run the check and print the plan in the same breath, and commit nothing; the third says what a
   key means and which values the ports actually offer. They are conveniences over the file, and the file, edited
   by hand, stays the truth.
-- `jig rules <path>` and `jig brief <N>`: the two extensions of [0007-jig-discovery.md][0007] and
-  [0008-jig-context.md][0008].
+- `jig discover <path>` and `jig context <N>`: the two extensions of
+  [0007-jig-discover.md](0007-jig-discover.md) and [0008-jig-context.md](0008-jig-context.md). Any `jig-<name>` on
+  the `PATH` runs as `jig <name>`, with the rest of the line passed through, and an unknown verb is looked up that
+  way before it is refused; see [0006-extensions.md](0006-extensions.md).
 - `jig init`, which writes the first `jig.toml` from what the ports find; `jig doctor`, which reports every port's
   reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface.
 
@@ -53,8 +55,8 @@ the same API.
 ### Exposure
 
 Three presenters, the command line, GraphQL and MCP, sit on one internal API in Go. The presenters are thin; the
-internal API is where behavior lives, and it is not public. An extension, [0006-extensions.md][0006], sees the
-schema and the verbs, never the internal API.
+internal API is where behavior lives, and it is not public. An extension, [0006-extensions.md](0006-extensions.md),
+sees the schema and the verbs, never the internal API.
 
 ## Why
 
@@ -80,7 +82,3 @@ schema and the verbs, never the internal API.
   with jig's landing reserved to the batch. The policy's actor table decides per repository; the verb exists so
   that the choice is available.
 - The service host: when, and whether it is this binary with a flag or a separate spec.
-
-[0006]: https://github.com/empowerite/jig/issues/11
-[0007]: https://github.com/empowerite/jig/issues/12
-[0008]: https://github.com/empowerite/jig/issues/13
