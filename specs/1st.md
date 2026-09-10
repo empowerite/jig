@@ -21,5 +21,7 @@ this directory; an extender needs both.
 
 ## Index
 
-One line per spec, in number order: the file, its subject, its status. Empty until the first spec lands.
-jig will generate this index once it can; until then it is kept by hand.
+One line per spec, in number order: the file, its subject, its status. jig will generate this index once it
+can; until then it is kept by hand.
+
+- [0001-world-model.md](0001-world-model.md): world model and lifecycle (draft)
