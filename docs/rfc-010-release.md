@@ -19,10 +19,10 @@ A release is a git tag, `vMAJOR.MINOR.PATCH`, and what it carries:
 
 ### The version
 
-The lifecycle of [0001-world-model.md](0001-world-model.md) is versioned with the code, and the version number says
-what changed. A change to the states or their transitions is a major release; a new gate kind, verb, port
-capability or extension point is a minor one; a fix that changes no contract is a patch. A lifecycle change lands
-only after its spec is accepted, so a major release is announced by a spec before it is cut.
+The lifecycle of [rfc-001-world-model.md](rfc-001-world-model.md) is versioned with the code, and the version number
+says what changed. A change to the states or their transitions is a major release; a new gate kind, verb, port
+capability or extension point is a minor one; a fix that changes no contract is a patch. A lifecycle change lands only
+after its spec is accepted, so a major release is announced by a spec before it is cut.
 
 ### A consumer
 

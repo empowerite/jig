@@ -82,6 +82,6 @@ Policy names port roles, not products. The same mechanism moves a repository bet
 
 Pre-alpha. The repository will run on jig as soon as jig can run it.
 
-- `docs/` will describe how to install, use and extend jig, in the present tense.
-- `specs/` will hold the design record: one numbered spec per part, each with a status line, written before the code
-  and used to check it. When a spec and the code disagree, the spec is corrected or superseded.
+- `docs/` holds the pages, how to install, use and extend jig, in the present tense, and the record: one RFC per
+  part, `rfc-NNN-<slug>.md`, each with a status line, written before the code. An accepted RFC is the spec the code
+  is checked against; when they disagree, the RFC is corrected or superseded.

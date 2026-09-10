@@ -5,10 +5,10 @@ Status: draft
 ## Decision
 
 A repository declares its SDLC in one committed file at its root, `jig.toml`. The file is data: it names choices among
-what the model in [0001-world-model.md](0001-world-model.md) and the ports in [0002-ports.md](0002-ports.md) already
-offer, and it can name nothing else. jig reads it at every tick, validates it with `jig policy check`, and shows what
-a change to it would do to work in flight with `jig policy plan`. A change to the file is a change like any other and
-goes through the loop the file describes.
+what the model in [rfc-001-world-model.md](rfc-001-world-model.md) and the ports in
+[rfc-002-ports.md](rfc-002-ports.md) already offer, and it can name nothing else. jig reads it at every tick,
+validates it with `jig policy check`, and shows what a change to it would do to work in flight with `jig policy plan`.
+A change to the file is a change like any other and goes through the loop the file describes.
 
 ### What the file names
 
@@ -56,11 +56,11 @@ what "changes to the SDLC are a managed process" means in practice.
 
 ## Consequences
 
-- The engine, [0004-engine.md](0004-engine.md), evaluates every transition's gate and actor from this file and nothing
-  else.
-- The operator surface, [0005-operator-surface.md](0005-operator-surface.md), carries `jig policy check` and `jig
-  policy plan`, and `jig init` writes the first file from what the ports find.
-- An extension, [0006-extensions.md](0006-extensions.md), is declared here, never discovered.
+- The engine, [rfc-004-engine.md](rfc-004-engine.md), evaluates every transition's gate and actor from this file and
+  nothing else.
+- The operator surface, [rfc-005-operator-surface.md](rfc-005-operator-surface.md), carries `jig policy check` and
+  `jig policy plan`, and `jig init` writes the first file from what the ports find.
+- An extension, [rfc-006-extensions.md](rfc-006-extensions.md), is declared here, never discovered.
 - The check that validates the file joins the policy workflow as a step.
 
 ## Open questions

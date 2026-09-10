@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-jigbot is the engine of [0004-engine.md](0004-engine.md) run board-wide, hosted by the repository's own CI through
+jigbot is the engine of [rfc-004-engine.md](rfc-004-engine.md) run board-wide, hosted by the repository's own CI through
 the gate port's provider, as its own actor. It is optional the way an automated dependency updater is optional: a
 repository adds one workflow file and has a jigbot; a repository without one has people and sessions running the
 same verbs by hand.
@@ -13,7 +13,7 @@ same verbs by hand.
 
 jigbot runs as a bot account of its own, a GitHub App on GitHub, never as a person. That is what makes an
 `accepted` label set by a person distinguishable from one set by a machine, what lets the ownership rule of
-[0001-world-model.md](0001-world-model.md) apply to it like any other actor, and what gives its calls their own
+[rfc-001-world-model.md](rfc-001-world-model.md) apply to it like any other actor, and what gives its calls their own
 rate-limit budget.
 
 ### The tick
@@ -52,7 +52,7 @@ except as the landing step of a batch that policy gave it.
 
 - The App and its permissions are provisioned outside this repository, beside the scratch repositories of the
   live suites.
-- The batch of `0004` lands only from jigbot's tick, since it holds the lease; a desk's `jig land` is a person's
+- The batch of `rfc-004` lands only from jigbot's tick, since it holds the lease; a desk's `jig land` is a person's
   own merge.
 - Under a strict ruleset, a change must be current with the default branch before it merges, and jigbot never
   rebases a member; the batch's landing path satisfies strictness by construction, and a change outside a batch is

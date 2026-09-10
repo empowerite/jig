@@ -91,7 +91,7 @@ The name of a state says what kind of state it is.
 The transitions whose action reads "none; observed" are the silent ones, Milner's τ: the engine takes them by
 looking, never by acting. A ground state has no τ enabled. A derived or excited state is one the engine may leave
 without anyone doing anything, and a tick is the execution of every τ that is enabled; see
-[0004-engine.md](0004-engine.md).
+[rfc-004-engine.md](rfc-004-engine.md).
 
 A provider realizes each step in its own way, a draft pull request, a merge train, a build-validation policy, and
 its port carries those paths, with sub-states of its own. Policy chooses among the paths and attaches gates, actors
@@ -144,15 +144,16 @@ Each decision above follows from one of the charter's four principles.
 ## Consequences
 
 - The public GraphQL schema is derived from the types above; nothing reaches the interface that is not here.
-  See: [0005-operator-surface.md](0005-operator-surface.md).
+  See: [rfc-005-operator-surface.md](rfc-005-operator-surface.md).
 - Every port implements, for the types it binds, three operations: read since cursor, resync, and act.
-  See: [0002-ports.md](0002-ports.md).
+  See: [rfc-002-ports.md](rfc-002-ports.md).
 - Policy names roles, paths, gates, actors and attributes over these types and nothing else.
-  See: [0003-policy.md](0003-policy.md).
-- The engine is `next(policy, view) → actions` over this model. See: [0004-engine.md](0004-engine.md).
+  See: [rfc-003-policy.md](rfc-003-policy.md).
+- The engine is `next(policy, view) → actions` over this model. See: [rfc-004-engine.md](rfc-004-engine.md).
 
 ## Open questions
 
-- Where the inter-instance lease lives. Settled in [0004-engine.md](0004-engine.md).
-- Which slot each provider uses for `due` and for the identity. Settled in [0002-ports.md](0002-ports.md), per port.
-- Whether `realized` gates `resolved` by default or by opt-in. Settled in [0003-policy.md](0003-policy.md).
+- Where the inter-instance lease lives. Settled in [rfc-004-engine.md](rfc-004-engine.md).
+- Which slot each provider uses for `due` and for the identity. Settled in [rfc-002-ports.md](rfc-002-ports.md), per
+  port.
+- Whether `realized` gates `resolved` by default or by opt-in. Settled in [rfc-003-policy.md](rfc-003-policy.md).
