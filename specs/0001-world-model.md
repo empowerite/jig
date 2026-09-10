@@ -44,19 +44,19 @@ One lifecycle, jig's, versioned with the code. A transition has a gate, what mus
 the port does to take it; and an actor policy, who may take it, which is the repository's to set. The tables give
 the gate and the action.
 
-A work item is in one of three states: it exists; it is assigned, an actor having taken it; it is resolved, closed
-in the provider.
+A work item is in one of three states: filed; assigned, an actor having taken it; resolved, closed in the provider.
 
 | From | To | Gate | Action |
 | --- | --- | --- | --- |
-| exists | assigned | `accepted` is set; neither `rejected` nor `parked` is | the actor takes the assignment |
+| | filed | | a person or a session files it |
+| filed | assigned | `accepted` is set; neither `rejected` nor `parked` is | the actor takes the assignment |
 | assigned | resolved | every change for it is realized, or integrated if policy says so | the item is closed |
 
-A change is in one of five states: drafted, a draft pull request exists, opened at the start of the work so that the
+A change is in one of six states: drafted, a draft pull request exists, opened at the start of the work so that the
 work is visible; proposed, the draft marked ready; admissible, every gate green and nothing holding it, so it may
-land, on its own or in a batch; integrated, landed on the default branch; realized, its post-integration verdict
-green. Verdicts are facts on the change in every state; a red one keeps a change out of admissible and sends it
-back if it was there.
+land, on its own or in a batch; integrating, a batch holding it while the batch's tree is tested and landed;
+integrated, landed on the default branch; realized, its post-integration verdict green. Verdicts are facts on the
+change in every state; a red one keeps a change out of admissible and sends it back if it was there.
 
 | From | To | Gate | Action |
 | --- | --- | --- | --- |
@@ -65,8 +65,28 @@ back if it was there.
 | proposed | admissible | every gate policy names has reported green; `parked` is not set | none; observed |
 | admissible | proposed | a verdict turns red, `parked` is set, or a new commit arrives | none; observed |
 | proposed | drafted | a verdict is red and policy returns red changes to draft | the change is marked draft again |
-| admissible | integrated | none beyond the state itself | the integrate path lands it: a merge, by a person or by the batch, as policy says, and never otherwise |
+| admissible | integrated | policy lets a person land it alone | the merge, by that person, never otherwise |
+| admissible | integrating | a batch admits it | the batch builds and tests its tree with this change in it |
+| integrating | integrated | the batch's verdict is green | the landing, by the batch |
+| integrating | admissible | the batch's verdict is red and this change is not the culprit | none; observed |
+| integrating | proposed | this change is the culprit | the batch ejects it and records why |
 | integrated | realized | the post-integration verdict is green | none; observed |
+
+### Naming states
+
+The name of a state says what kind of state it is.
+
+- A state in `-ed` is a ground state: entered by an action, at rest until the next one. filed, assigned, resolved;
+  drafted, proposed, integrated, realized.
+- A state in `-able` is derived: the engine enters it, and leaves it, by observing facts, with no actor and no
+  action. It names a permission, and it holds while its condition holds. admissible is "may land."
+- A state in `-ing` is excited: an action is under way, owned by the engine or a port, and the state decays on its
+  own, into a ground state when the action completes or back to where it came from when it fails. integrating.
+
+The transitions whose action reads "none; observed" are the silent ones, Milner's τ: the engine takes them by
+looking, never by acting. A ground state has no τ enabled. A derived or excited state is one the engine may leave
+without anyone doing anything, and a tick is the execution of every τ that is enabled; see
+[0004-engine.md](0004-engine.md).
 
 A provider realizes each step in its own way, a draft pull request, a merge train, a build-validation policy, and
 its port carries those paths, with sub-states of its own. Policy chooses among the paths and attaches gates, actors
@@ -101,6 +121,9 @@ Each decision above follows from one of the charter's four principles.
   lost at that moment would force a second run for nothing.
 - Attributes are not states because a person sets them freely, in the provider, at any time; a state is where the
   lifecycle puts a thing, and only a transition moves it.
+- A state's suffix is a rule because a reader should know from the name alone whether a thing waits for an
+  actor, is a permission the engine computed, or is in flight; and because the silent transitions are the
+  ones a tick executes, so telling them apart from the acted ones is the engine's whole job.
 - Admissible is a state, not a gate, because it is the state a batch admits from and the state a board shows as
   waiting to land; a person and a batch both need to ask "may this merge?" and get one answer.
 - A change is drafted before it is proposed because a draft pull request opened at the start of the work is what
