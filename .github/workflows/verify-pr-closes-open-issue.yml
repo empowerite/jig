@@ -1,5 +1,5 @@
-# policy gate: verifies a pull request closes at least one open ticket of this repository. Applies only to pull
-# requests into the default branch.
+# Verifies a pull request closes at least one open ticket belonging to this repository.
+# Applies only to pull requests into the default branch.
 
 name: verify-pr-closes-open-ticket
 
