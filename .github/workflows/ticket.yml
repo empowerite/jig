@@ -26,6 +26,17 @@ jobs:
           set -o errexit -o nounset -o pipefail
 
           number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
+          pull="https://github.com/${GITHUB_REPOSITORY}/pull/${number}"
+          docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
+
+          # An annotation is plain text, so the links go into the job summary, which renders Markdown.
+          refuse() {
+            echo "::error::$1"
+            printf '**%s.** %s\n\nSee [the pull request](%s) and [linking a pull request to an issue](%s).\n' \
+              "$1" "$2" "${pull}" "${docs}" >> "${GITHUB_STEP_SUMMARY}"
+            exit 1
+          }
+
           query=$(cat <<'GRAPHQL'
           query($owner: String!, $name: String!, $number: Int!) {
             repository(owner: $owner, name: $name) {
@@ -44,31 +55,38 @@ jobs:
 
           if [[ -z "${refs}" ]]
           then
-            echo '::error::the pull request will close no ticket; write "Closes #<N>" in its body, or link the issue under Development'
-            exit 1
+            refuse 'the pull request will close no ticket' \
+              'Write "Closes #<N>" in its body, or link the ticket under Development in its sidebar.'
           fi
 
+          open_local=0
           named=false
           while read -r n state repo
           do
             if [[ "${repo}" != "${GITHUB_REPOSITORY}" ]]
             then
-              echo "::error::${repo}#${n} is not a ticket of this repository"
-              exit 1
+              echo "::warning::${repo}#${n} belongs to another repository and is not checked here"
+              continue
             fi
             if [[ "${state}" != OPEN ]]
             then
-              echo "::error::#${n} is ${state}; a pull request closes an open ticket"
-              exit 1
+              echo "::warning::#${n} is ${state}; merging will not change it"
+              continue
             fi
+            open_local=$(( open_local + 1 ))
             case "${GITHUB_HEAD_REF}" in
               ("${n}"-*) named=true
             esac
           done <<< "${refs}"
 
+          if (( open_local == 0 ))
+          then
+            refuse 'none of the tickets this pull request will close is an open ticket of this repository' \
+              'Name an open ticket of this repository; the ones named are closed or belong elsewhere.'
+          fi
           if [[ "${named}" != true ]]
           then
-            echo "::error::branch '${GITHUB_HEAD_REF}' is not named <N>-<slug> for a ticket this pull request will close"
-            exit 1
+            refuse "branch '${GITHUB_HEAD_REF}' is not named <N>-<slug> for an open ticket this pull request will close" \
+              'Rename the branch to "<N>-<slug>" for one of the open tickets it closes.'
           fi
           echo "will close $(cut --delimiter=' ' --fields=1 <<< "${refs}" | sed 's/^/#/' | tr '\n' ' ')from branch '${GITHUB_HEAD_REF}'"
