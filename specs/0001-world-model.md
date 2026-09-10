@@ -40,24 +40,30 @@ rebuilt from the providers alone.
 
 ### The lifecycle
 
-One lifecycle, jig's, versioned with the code.
+One lifecycle, jig's, versioned with the code. A transition has a gate, what must be true before it; an action, what
+the port does to take it; and an actor policy, who may take it, which is the repository's to set. The tables give
+the gate and the action.
 
-A work item is in one of three states: it exists; it is committed to, an actor having taken it up; it is resolved.
+A work item is in one of three states: it exists; it is assigned, an actor having taken it; it is resolved, closed
+in the provider.
 
-A change is in one of five: authored, on a branch; proposed, as a pull request or its provider's equivalent;
-judged, its gates having reported; integrated, landed on the default branch; realized, its post-integration verdict
-green.
+| From | To | Gate | Action |
+| --- | --- | --- | --- |
+| exists | assigned | `accepted` is set; neither `rejected` nor `parked` is | the actor takes the assignment |
+| assigned | resolved | every change for it is realized, or integrated if policy says so | the item is closed |
 
-The transitions, and the gate on each:
+A change is in one of five states: drafted, a draft pull request exists, opened at the start of the work so that the
+work is visible; proposed, the draft marked ready; judged, its gates having reported; integrated, landed on the
+default branch; realized, its post-integration verdict green.
 
-| From | To | Gate |
-| --- | --- | --- |
-| exists | committed to | `accepted` is set and `parked` is not; an actor claims it |
-| committed to | resolved | every change for it is realized, or policy says integrated suffices |
-| authored | proposed | the actor proposes |
-| proposed | judged | every gate policy names has reported |
-| judged | integrated | every verdict is green, `parked` is not set, and the integrate path lands it |
-| integrated | realized | the post-integration verdict is green |
+| From | To | Gate | Action |
+| --- | --- | --- | --- |
+| | drafted | its work item is assigned | the actor opens a draft pull request |
+| drafted | proposed | the actor says it is ready | the draft is marked ready for review |
+| proposed | judged | every gate policy names has reported | none; the verdicts are observed |
+| judged | drafted | a verdict is red | the change is marked draft again, for repair |
+| judged | integrated | every verdict is green and `parked` is not set | the integrate path lands it: a merge, by a person or by the batch, as policy says, and never otherwise |
+| integrated | realized | the post-integration verdict is green | none; the verdict is observed |
 
 A provider realizes each step in its own way, a draft pull request, a merge train, a build-validation policy, and
 its port carries those paths, with sub-states of its own. Policy chooses among the paths and attaches gates, actors
@@ -92,6 +98,8 @@ Each decision above follows from one of the charter's four principles.
   lost at that moment would force a second run for nothing.
 - Attributes are not states because a person sets them freely, in the provider, at any time; a state is where the
   lifecycle puts a thing, and only a transition moves it.
+- A change is drafted before it is proposed because a draft pull request opened at the start of the work is what
+  makes the work visible: it prevents a second actor taking the same item, and it shows the board what is in flight.
 - The lifecycle is fixed because every port must map to a known vocabulary, the interface must know what to draw,
   and a repository that could invent a state would be writing a workflow language.
 - Realized exists because merged is not done. An apply that failed after a merge is a change that has not
@@ -100,13 +108,15 @@ Each decision above follows from one of the charter's four principles.
 ## Consequences
 
 - The public GraphQL schema is derived from the types above; nothing reaches the interface that is not here.
-  See: `0005`.
-- Every port implements, for the types it binds, three operations: read since cursor, resync, and act. See: `0002`.
-- Policy names roles, paths, gates, actors and attributes over these types and nothing else. See: `0003`.
-- The engine is `next(policy, view) → actions` over this model. See: `0004`.
+  See: [0005-operator-surface.md](0005-operator-surface.md).
+- Every port implements, for the types it binds, three operations: read since cursor, resync, and act.
+  See: [0002-ports.md](0002-ports.md).
+- Policy names roles, paths, gates, actors and attributes over these types and nothing else.
+  See: [0003-policy.md](0003-policy.md).
+- The engine is `next(policy, view) → actions` over this model. See: [0004-engine.md](0004-engine.md).
 
 ## Open questions
 
-- Where the inter-instance lease lives. Settled in `0004`.
-- Which slot each provider uses for `due` and for the identity. Settled in `0002`, per port.
-- Whether `realized` gates `resolved` by default or by opt-in. Settled in `0003`.
+- Where the inter-instance lease lives. Settled in [0004-engine.md](0004-engine.md).
+- Which slot each provider uses for `due` and for the identity. Settled in [0002-ports.md](0002-ports.md), per port.
+- Whether `realized` gates `resolved` by default or by opt-in. Settled in [0003-policy.md](0003-policy.md).
