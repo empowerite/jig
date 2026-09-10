@@ -19,3 +19,4 @@ decisions behind it are the job of `specs/`, and a user never needs to open that
 ## Index
 
 One line per page: the file and what a reader gets from it. Empty until the first page lands.
+jig will generate this index once it can; until then it is kept by hand.
