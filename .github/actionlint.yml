@@ -1,8 +1,10 @@
 # actionlint.yml - see: https://github.com/rhysd/actionlint/blob/main/docs/config.md
 #
 # actionlint knows GitHub's own runner labels and reports every other `runs-on` value as unknown. The workflows
-# here run on a Blacksmith runner, so its label is declared, which is the remedy actionlint's own finding names.
+# here run on a Blacksmith runner, so its labels are declared, which is the remedy actionlint's own finding names.
 
 self-hosted-runner:
   labels:
     - blacksmith-2vcpu-ubuntu-2404
+    - blacksmith-4vcpu-ubuntu-2404
+    - blacksmith-8vcpu-ubuntu-2404
