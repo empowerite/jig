@@ -17,7 +17,7 @@ permissions:
 jobs:
   ticket:
     name: ticket
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     steps:
       - name: Verify the pull request will close an open ticket, from a branch named for it
         env:
