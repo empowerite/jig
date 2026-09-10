@@ -29,7 +29,6 @@ jobs:
           pr_number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
 
           pull="${GITHUB_SERVER_URL}/${repo_slug}/pull/${pr_number}"
-          issues="${GITHUB_SERVER_URL}/${repo_slug}/issues?q=is%3Aissue+is%3Aopen"
           run="${GITHUB_SERVER_URL}/${repo_slug}/actions/runs/${GITHUB_RUN_ID}"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
@@ -56,17 +55,23 @@ jobs:
 
           refs=$(gh api graphql \
             --field owner="${repo_owner}" \
-            --field name="${repo_name}" \
+            --field name="${repo_name}"   \
             --field number="${pr_number}" \
-            --raw-field query="${query}" \
+            --raw-field query="${query}"  \
             --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
                   | "\(.number) \(.state) \(.repository.nameWithOwner)"')
 
           if [[ -z "${refs}" ]]
           then
             refuse 'this pull request closes no issue' <<REMEDY
-          Link one under **Development** in [the sidebar](${pull}); pick from the [open issues](${issues}).
-          Then [re-run this check](${run}): linking fires no event. See [linking a pull request to an issue](${docs}).
+          Link an issue under **Development** in [the sidebar](${pull}):
+
+          * click the gear beside **Development** and pick the issue
+          * [re-run this check](${run})
+
+          Linking does not fire any event, so the check must be re-run.
+
+          See: [linking a pull request to an issue](${docs}).
           REMEDY
           fi
 
@@ -89,8 +94,12 @@ jobs:
           if (( open_local == 0 ))
           then
             refuse 'every issue this pull request closes is already closed or belongs to another repository' <<REMEDY
-          Link an open issue of this repository under **Development** in [the sidebar](${pull}); pick from the
-          [open issues](${issues}). Then [re-run this check](${run}): linking fires no event.
+          Link an open issue of this repository under **Development** in [the sidebar](${pull}):
+
+          * click the gear beside **Development** and pick an open issue of this repository
+          * [re-run this check](${run})
+
+          Linking does not fire any event, so the check must be re-run.
           REMEDY
           fi
 
