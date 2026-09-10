@@ -26,19 +26,19 @@ jobs:
           repo_slug="${GITHUB_REPOSITORY}"
           repo_owner="${repo_slug%%/*}"
           repo_name="${repo_slug#*/}"
-          pr_number=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
+          pr=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
 
-          pull="${GITHUB_SERVER_URL}/${repo_slug}/pull/${pr_number}"
+          pull="${GITHUB_SERVER_URL}/${repo_slug}/pull/${pr}"
           run="${GITHUB_SERVER_URL}/${repo_slug}/actions/runs/${GITHUB_RUN_ID}"
           docs='https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue'
 
-          # error + remedy: one remedy for every refusal, Markdown, printed to the log and appended to the step
-          # summary, where it renders with its links
+          # error + remedy: same markdown remedy for every refusal
           remedy=$(cat <<REMEDY
           Link an open issue of this repository under **Development** in [the sidebar](${pull}):
 
-          * click the gear beside **Development** and pick the issue
-          * [re-run this check](${run})
+          1. click the gear (⚙) button beside **Development**
+          2. pick one or more issues
+          3. [re-run this check](${run})
 
           Linking does not fire any event, so the check must be re-run.
 
@@ -52,11 +52,12 @@ jobs:
             exit 1
           }
 
+          # first: 100 is the API's page maximum. Past it only a false refusal is possible, never a false pass.
           query=$(cat <<'GRAPHQL'
           query($owner: String!, $name: String!, $number: Int!) {
             repository(owner: $owner, name: $name) {
               pullRequest(number: $number) {
-                closingIssuesReferences(first: 20) {
+                closingIssuesReferences(first: 100) {
                   nodes { number state repository { nameWithOwner } }
                 }
               }
@@ -68,7 +69,7 @@ jobs:
           refs=$(gh api graphql \
             --field owner="${repo_owner}" \
             --field name="${repo_name}"   \
-            --field number="${pr_number}" \
+            --field number="${pr}"        \
             --raw-field query="${query}"  \
             --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
                   | "\(.number) \(.state) \(.repository.nameWithOwner)"')
