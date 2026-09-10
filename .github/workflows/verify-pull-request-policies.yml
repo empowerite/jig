@@ -132,57 +132,25 @@ jobs:
             return 1
           }
 
-          # GitHub's heading slug: lowercase, punctuation dropped, spaces to hyphens.
-          slug() { tr '[:upper:]' '[:lower:]' | sed --expression='s/[^[:alnum:] -]//g' --expression='s/ /-/g'; }
-          headings() { sed --quiet --expression='s/^#\{1,6\} \{1,\}//p' "$1" | slug; }
-
-          # Every link outside a fenced block, as line<TAB>target.
-          links() {
-            awk '
-              /^```/ { fence = !fence; next }
-              !fence {
-                while (match($0, /\]\([^)]+\)/)) {
-                  print FNR "\t" substr($0, RSTART + 2, RLENGTH - 3)
-                  $0 = substr($0, RSTART + RLENGTH)
-                }
-              }' "$1"
-          }
-
-          files=$(gh pr diff "${pr}" --name-only)
-          broken=0
+          files=$(gh pr diff "${pr}" --name-only | grep --extended-regexp '\.md$' || :)
+          present=()
           while IFS= read -r file
           do
-            [[ "${file}" == *.md && -f "${file}" ]] || continue
-            found=$(links "${file}")
-            [[ -n "${found}" ]] || continue
-            while IFS=$'\t' read -r line target
-            do
-              case "${target}" in
-                (http://*|https://*|mailto:*) continue
-              esac
-              path=${target%%#*}
-              fragment=""
-              [[ "${target}" == *#* ]] && fragment=${target#*#}
-              if [[ -z "${path}" ]]
-              then
-                resolved=${file}
-              else
-                resolved=$(realpath --canonicalize-missing --relative-to=. "$(dirname "${file}")/${path}")
-              fi
-              if [[ ! -f "${resolved}" ]]
-              then
-                echo "::error file=${file},line=${line}::link to a file that is not there: ${target}"
-                broken=$(( broken + 1 ))
-                continue
-              fi
-              if [[ -n "${fragment}" ]] \
-                && ! headings "${resolved}" | grep --quiet --line-regexp --fixed-strings "${fragment}"
-              then
-                echo "::error file=${file},line=${line}::link to a heading that is not there: ${target}"
-                broken=$(( broken + 1 ))
-              fi
-            done <<< "${found}"
+            [[ -n "${file}" && -f "${file}" ]] && present+=("${file}")
           done <<< "${files}"
+
+          broken=0
+          if (( ${#present[@]} > 0 ))
+          then
+            # lychee reports the file and the target, not the line; --offline resolves local targets only.
+            if ! lychee --offline --include-fragments --no-progress --format json "${present[@]}" > lychee.json
+            then
+              jq --raw-output '.fail_map | to_entries[] | .key as $file | .value[]
+                | "::error file=\($file)::link does not resolve: \(.url)"' lychee.json
+              broken=$(jq '[.fail_map[] | length] | add' lychee.json)
+            fi
+            rm --force lychee.json
+          fi
 
           if (( broken > 0 ))
           then
