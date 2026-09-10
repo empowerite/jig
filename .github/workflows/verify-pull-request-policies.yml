@@ -37,10 +37,10 @@ jobs:
           Link an open issue of this repository under **Development** in [the sidebar](${pull}):
 
           1. click the gear (⚙) button beside **Development**
-          2. pick one or more issues
+          2. pick one or more open issues
           3. [re-run this check](${run})
 
-          Linking does not fire any event, so the check must be re-run.
+          Linking does not fire any event, so the check **must** be re-run.
 
           See: [linking a pull request to an issue](${docs}).
           REMEDY
