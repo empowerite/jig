@@ -30,6 +30,29 @@ type itself: its location is the repository's policy, its shape is the six thing
 declaration. A type named rfc is the example a repository declares for itself: one directory, a name regex, a template
 as its shape from which the creating action expands a new instance, and the states draft, accepted and superseded.
 
+```cue
+// the repository's own link: the type named rfc, all six things, in the form jig-002 fixes
+package policy
+
+import "jig.dev/std"
+
+types: rfc: std.#Type & {
+	identity: "number"
+	location: {port: "scm", place: "docs/rfcs"}
+	name:     #"^jig-(?P<number>\d{3})-[a-z][a-z-]*\.md$"#
+	#shape: status: "draft" | "accepted" | =~#"^superseded by jig-\d{3}$"#
+	lifecycle: {
+		initial: "draft"
+		states: {draft: kind: "ground", accepted: kind: "ground", superseded: kind: "ground"}
+		transitions: {
+			accept:    {from: "draft", to: "accepted", kind: "acted", action: "write", actor: "maintainer"}
+			supersede: {from: "accepted", to: "superseded", kind: "acted", action: "write", actor: "maintainer"}
+		}
+	}
+	actions: create: {action: "write", template: "templates/rfc.md.j2"}
+}
+```
+
 ### The kinds
 
 A state has one of three kinds.
@@ -57,6 +80,26 @@ A lifecycle is well formed when it has one initial state; every state has exactl
 derived state has a condition; every excited state has a completion edge and a failure edge; every acted transition
 names a capability its type's port offers; and no silent transition leaves a ground state. `jig policy check` refuses
 a lifecycle that is not.
+
+```cue
+// the standard change, cut to the states that show each kind and the transitions that show both
+lifecycle: {
+	initial: "drafted"
+	states: {
+		drafted:     kind: "ground"                                                 // entered by an action, at rest
+		proposed:    kind: "ground"
+		admissible:  {kind: "derived", condition: "std.admissible"}                // holds while integrate's guard is met
+		integrating: {kind: "excited", completes: "integrated", fails: "proposed"} // the merge under way, the port's
+		integrated:  kind: "ground"
+	}
+	transitions: {
+		propose:   {from: "drafted", to: "proposed", kind: "acted", action: "ready", actor: "author"}
+		withdraw:  {from: "admissible", to: "drafted", kind: "silent", when: "input.change.draft"}
+		integrate: {from: "admissible", to: "integrating", kind: "acted", action: "merge", actor: "maintainer"}
+		integrate: gates: tests: run: "just test"
+	}
+}
+```
 
 With those fixed, a tick has one shape whatever the lifecycle says: compute the derived states, take the enabled
 silent transitions, request the verdicts a guard is missing, and queue the acted transitions whose guard is met and
@@ -95,6 +138,24 @@ evaluate until it is fixed. When a team publishes what an rfc is after a reposit
 declarations of rfc; the repository turns its declaration into a refinement of the team's or adopts the team's
 outright, and its existing instances are then judged by the team's rules.
 
+```cue
+// the organization's link, github.com/empowerite/policy: refines the standard change and narrows only
+types: change: lifecycle: transitions: {
+	propose:   gates: "signed-commits": rule: "std.signed_commits" // a gate added: every repository below carries it
+	integrate: gates: tests: run: "just test"                     // a gate added, with the command that produces it
+}
+
+// the repository's link, ./policy.cue: pulls both in, and declares the same gate a second way
+types: change: lifecycle: transitions: integrate: gates: tests: run: "make test"
+```
+
+```text
+$ jig policy check
+types.change.lifecycle.transitions.integrate.gates.tests.run: conflicting values "make test" and "just test":
+    ./policy.cue:9:71
+    github.com/empowerite/policy@v0.1.2/change.cue:4:41
+```
+
 ### The verdict
 
 A verdict is the result of evaluating one gate over one subject, keyed by the gate's identity and the subject's
@@ -114,11 +175,47 @@ the remedy; the evaluator, which is jig's version for a rule gate and the tool a
 every link of the chain in force, by digest; the time; and a signature by the actor that produced it, a person's key
 on a desk and the bot's key for a jigbot.
 
+```json
+{
+  "subject":    {"type": "change", "identity": "github.com/empowerite/jig#98", "digest": "tree:9a3f2c1e…"},
+  "gate":       {"name": "tests", "link": "github.com/empowerite/policy@v0.1.2", "digest": "sha256:e07a…"},
+  "conclusion": "fail",
+  "evidence": {
+    "annotations": [{"path": "docs/1st.md", "line": 43, "message": "link does not resolve: ../CLAUDE.md#setup"}],
+    "artifacts":   ["https://github.com/empowerite/jig/actions/runs/34569964919"],
+    "remedy":      "fix the link, or write the file it names, then re-run"
+  },
+  "evaluator":  {"tool": "lychee", "version": "0.24.0"},
+  "chain":      ["jig.dev/std@v0.3.0 sha256:4b1c…",
+                 "github.com/empowerite/policy@v0.1.2 sha256:e07a…",
+                 "./ sha256:91d0…"],
+  "time":       "2026-09-11T06:12:40Z",
+  "signature":  {"by": "jeffrey-aguilera", "key": "24BCD9AB0BC427A1", "sig": "…"}
+}
+```
+
 An attestation is a verdict written as an in-toto statement and signed in the DSSE envelope, so that anything outside
 jig can verify it. A transition taken is attested once more, as a statement naming the verdicts its guard required.
 Both are stored through the port in the slot the provider offers: an attestation store keyed by digest where the
 provider has one, a ref or a note where it does not, a comment last. The provider owns them, as it owns every other
 fact.
+
+```json
+{
+  "_type":         "https://in-toto.io/Statement/v1",
+  "subject":       [{"name": "github.com/empowerite/jig#98", "digest": {"gitTree": "9a3f2c1e…"}}],
+  "predicateType": "https://jig.dev/verdict/v1",
+  "predicate":     {"gate": "…", "conclusion": "fail", "evidence": "…", "evaluator": "…", "chain": "…", "time": "…"}
+}
+```
+
+```json
+{
+  "payloadType": "application/vnd.in-toto+json",
+  "payload":     "eyJfdHlwZSI6Imh0dHBzOi8vaW4tdG90by5pby9TdGF0ZW1lbnQvdjEiLCJzdWJqZWN0Ijpb…",
+  "signatures":  [{"keyid": "24BCD9AB0BC427A1", "sig": "…"}]
+}
+```
 
 Whether every aspect of the policy was applied to a subject is then a query and not a search: the transition's
 statement, the chain digests it names, and the verdicts it names, each signed.
@@ -183,6 +280,9 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 - Whether a link may ever mark a declaration as advisory, so that a link below may drop it. Deferred, not refused: it
   would be a marking on the upstream declaration and would not change the rules above.
 - The identity of a file-backed instance across a rename or a move.
+- Whether a silent transition may enter a ground state. The drip of jig-004 does, carrying the creating action, and
+  the withdraw transition in the example above does by observing a person's act; the kinds say a ground state is
+  entered by an action.
 
 [ports]: https://github.com/empowerite/jig/issues/69
 [engine]: https://github.com/empowerite/jig/issues/70

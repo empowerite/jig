@@ -32,6 +32,9 @@ this repository is [README.md](../README.md).
   marks it superseded and writes the successor, in the same pull request. An RFC never rots silently.
 - A link to an RFC that has not landed names the RFC's issue, and the pull request that lands the RFC rewrites
   every such link to the file. A link to a file that is not there is a red check.
+- An example in an RFC is fenced with its language and sits beside the prose it illustrates. It shows one thing that
+  satisfies the prose and decides nothing on its own; where the two disagree the prose is right and the example is a
+  bug. Once jig can check it, an example is a fixture the code is checked against.
 
 The writing rules in [CLAUDE.md](../CLAUDE.md) apply to pages and RFCs alike: plain sentences, lists where the
 content is a list, a blank line after every block.
