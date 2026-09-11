@@ -30,6 +30,29 @@ An extension attaches at fixed points, and a point is a typed contract:
   what it started. It takes no transition; the actor it started takes them, as itself. jig starts no actor, so the
   dispatcher is outside the engine and inside the seam.
 
+```json
+// jig-007: a gate extension's request, on its stdin
+{"subject": {"type": "rfc", "identity": "003", "digest": "blob:5e21a0f…"}}
+```
+
+```json
+// jig-007: the verdict it returns, on its stdout: the record of jig-001, keyed by this gate and digest
+{"gate": {"name": "links", "link": "./policy.cue", "digest": "sha256:e07a…"}, "conclusion": "pass",
+ "evidence": {"annotations": [], "artifacts": [], "remedy": ""},
+ "evaluator": {"tool": "lychee", "version": "0.24.0"}}
+```
+
+```json
+// jig-007: a hook refusing a transition before it is taken, with a reason
+{"transition": "accept", "subject": {"type": "rfc", "identity": "003"}, "refused": true,
+ "reason": "no second maintainer has reviewed this rfc"}
+```
+
+```text
+$ jig claude --once
+started work item 42, worktree worktrees/42-slug, claude-code session 8f1c2d3a
+```
+
 The brief source and the dispatcher are the test of this spec: they are the two jig needs to develop itself with
 agents, and if the seam cannot carry them it is the wrong seam.
 
@@ -49,6 +72,11 @@ serves. jig refuses an extension whose schema version it does not serve, by name
 
 An extension is installed the way jig is, by `mise`, and pinned the same way. Its version rides in the policy
 beside its name. `jig doctor` reports every declared extension it cannot start.
+
+```cue
+// jig-007: the policy stanza that seats an extension, named, pinned by version, at its point
+extensions: "model-review": {version: "v0.4.0", point: "gate"}
+```
 
 ## Why
 
