@@ -181,13 +181,13 @@ jobs:
             return 1
           }
 
-          duplicates=$(printf '%s\n' docs/rfc-*.md \
-            | sed --expression='s|^docs/rfc-||' --expression='s|-.*||' | sort | uniq --repeated || :)
+          duplicates=$(printf '%s\n' docs/rfcs/jig-*.md \
+            | sed --expression='s|^docs/rfcs/jig-||' --expression='s|-.*||' | sort | uniq --repeated || :)
           if [[ -n "${duplicates}" ]]
           then
             while IFS= read -r number
             do
-              echo "::error::rfc-${number} is two files: $(printf '%s ' docs/rfc-"${number}"-*.md)"
+              echo "::error::jig-${number} is two files: $(printf '%s ' docs/rfcs/jig-"${number}"-*.md)"
             done <<< "${duplicates}"
             refuse "$(wc --lines <<< "${duplicates}" | tr --delete ' ') RFC number(s) used twice"
           else

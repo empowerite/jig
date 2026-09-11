@@ -8,24 +8,24 @@ An extension is a separate executable named `jig-<name>`. Being on the `PATH` gi
 `jig-<name>`, the way `git ls` runs `git-ls`, with the rest of the line passed through. Being named in the
 repository's policy gives it its seat: jig starts it inside a tick only when the policy names it, speaks to it over a
 JSON protocol on its standard streams, and stops it when the tick ends. It runs in its own process, in any language,
-and it sees the public model of [rfc-001-types.md](rfc-001-types.md) as the schema of
-[rfc-006-operator-surface.md](rfc-006-operator-surface.md) publishes it, and nothing else.
+and it sees the public model of [jig-001-types.md](jig-001-types.md) as the schema of
+[jig-006-operator-surface.md](jig-006-operator-surface.md) publishes it, and nothing else.
 
 ### The points
 
 An extension attaches at fixed points, and a point is a typed contract:
 
 - A gate: a verdict producer. Given a subject at a digest, it returns the verdict record of
-  [rfc-001-types.md](rfc-001-types.md), keyed by the gate and the digest, with its evidence. A review by a model, a
+  [jig-001-types.md](jig-001-types.md), keyed by the gate and the digest, with its evidence. A review by a model, a
   policy check no provider runs, a cost estimate. Beside its executable, a gate extension may ship rule gates,
-  predicates in the decision language of [rfc-002-language.md](rfc-002-language.md) over facts jig already holds,
+  predicates in the decision language of [jig-002-language.md](jig-002-language.md) over facts jig already holds,
   which the engine evaluates in the guard without starting a process.
 - A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may act
   after one is taken. It cannot take one.
 - A presenter: a new surface over the same API, a chat integration, a status page.
-- A port: a provider jig does not ship, written to the contract of [rfc-003-ports.md](rfc-003-ports.md) and proven by
+- A port: a provider jig does not ship, written to the contract of [jig-003-ports.md](jig-003-ports.md) and proven by
   its own conformance suite before policy may name it.
-- A brief source: the point [rfc-008-jig-context.md](rfc-008-jig-context.md) attaches to.
+- A brief source: the point [jig-008-jig-context.md](jig-008-jig-context.md) attaches to.
 - A dispatcher: given the needs jig publishes, it starts an actor in a harness with the instance's brief, and reports
   what it started. It takes no transition; the actor it started takes them, as itself. jig starts no actor, so the
   dispatcher is outside the engine and inside the seam.
@@ -73,7 +73,7 @@ beside its name. `jig doctor` reports every declared extension it cannot start.
 - The schema version becomes a fact every extension names, so a schema change is a release that can count what it
   breaks.
 - The repository's policy names each extension, its version and its point, and a rule gate an extension ships is
-  attached to a guard like any gate of [rfc-001-types.md](rfc-001-types.md).
+  attached to a guard like any gate of [jig-001-types.md](jig-001-types.md).
 
 ## Open questions
 

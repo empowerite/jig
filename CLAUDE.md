@@ -43,10 +43,10 @@ Anyone may file an issue; a person decides. Until jig enforces it, a session set
 
 ## RFC first
 
-The charter names the parts. Each part gets an RFC in `docs/`, `rfc-NNN-<slug>.md`, before its code, and an accepted
-RFC is the spec the code is checked against. The pages beside it describe how to install, use and extend jig, in the
-present tense and without history. An RFC the code has left behind is corrected, or marked superseded, in the same
-change that left it.
+The charter names the parts. Each part gets an RFC in `docs/rfcs/`, `jig-NNN-<slug>.md`, before its code, and an
+accepted RFC is the spec the code is checked against. The pages in `docs/` describe how to install, use and extend
+jig, in the present tense and without history. An RFC the code has left behind is corrected, or marked superseded, in
+the same change that left it.
 
 ## Writing
 

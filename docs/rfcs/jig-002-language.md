@@ -11,7 +11,7 @@ none of them.
 
 ### Declarations, in CUE
 
-A type of [rfc-001-types.md](rfc-001-types.md) is a CUE definition. Its identity, its location as a port and a place,
+A type of [jig-001-types.md](jig-001-types.md) is a CUE definition. Its identity, its location as a port and a place,
 its name rule as a regular-expression constraint, its shape as a definition with constraints, its lifecycle as a value
 built from the kinds, and its actions naming the capabilities they take and the templates they fill are all fields of
 that definition, and an instance is validated by unifying what the port read with the definition.
@@ -32,7 +32,7 @@ its own, and the gates it attaches. It writes no rule.
 
 The exported document is OPA's `data` and the view is its `input`. jig ships the standard rules: the guard of every
 acted transition, the actor rules, the well-formedness of a lifecycle, the structural checks of the chain, and the
-rule gates the standard types need. The engine's `next` of [rfc-005-engine.md](rfc-005-engine.md) is a query over
+rule gates the standard types need. The engine's `next` of [jig-005-engine.md](jig-005-engine.md) is a query over
 them, and a tick calls it once.
 
 A rule gate, a predicate over facts jig already holds, is Rego. jig ships those the standard types need; an extension
@@ -51,16 +51,16 @@ since a template that leans on a Python-side filter will not render.
 
 ### The seam
 
-The exported document has a schema jig fixes and versions with the model; the types of rfc-001 are its shape. `jig
+The exported document has a schema jig fixes and versions with the model; the types of jig-001 are its shape. `jig
 policy check` runs CUE first, vet and export, then the structural rules over the export, and reports whichever fails
 first with that language's own error: a CUE error names positions, a Rego refusal names the rule and the facts. `jig
 policy plan` evaluates the standard rules over both exports against the view and prints the difference.
 
 ## Why
 
-- Two languages with a seam, because each requirement of rfc-001 has a native home in one of them and a convention in
+- Two languages with a seam, because each requirement of jig-001 has a native home in one of them and a convention in
   the other, and a seam between two native homes costs less than a convention for the lattice or for the decisions.
-- CUE for declarations, because unification is the composition rule of rfc-001 as a language semantics rather than a
+- CUE for declarations, because unification is the composition rule of jig-001 as a language semantics rather than a
   check, and its registry is the marketplace a published policy needs.
 - Rego for decisions, because a refusal that names the rule and the facts is the property asked for first, and a rule
   gate over the whole board needs joins that a constraint language does not have.
@@ -73,14 +73,14 @@ policy plan` evaluates the standard rules over both exports against the view and
 
 ## Consequences
 
-- The declarations of [rfc-001-types.md](rfc-001-types.md) have a concrete form: the standard policy is a CUE module
+- The declarations of [jig-001-types.md](jig-001-types.md) have a concrete form: the standard policy is a CUE module
   and the standard rules are a Rego bundle, both versioned and released with the binary; see
-  [rfc-010-release.md](rfc-010-release.md).
-- The ports of [rfc-003-ports.md](rfc-003-ports.md) read a repository's bindings from the exported document.
-- The tick of [rfc-005-engine.md](rfc-005-engine.md) calls `next` as a query over the standard rules.
-- The verbs of [rfc-006-operator-surface.md](rfc-006-operator-surface.md) run CUE then Rego for `policy check` and
+  [jig-010-release.md](jig-010-release.md).
+- The ports of [jig-003-ports.md](jig-003-ports.md) read a repository's bindings from the exported document.
+- The tick of [jig-005-engine.md](jig-005-engine.md) calls `next` as a query over the standard rules.
+- The verbs of [jig-006-operator-surface.md](jig-006-operator-surface.md) run CUE then Rego for `policy check` and
   `policy plan`, and `explain` renders a declaration through Jinja2.
-- An extension of [rfc-007-extensions.md](rfc-007-extensions.md) may ship rule gates in Rego and templates in Jinja2.
+- An extension of [jig-007-extensions.md](jig-007-extensions.md) may ship rule gates in Rego and templates in Jinja2.
 - The install page gains nothing: a consumer installs `jig` and no evaluator.
 
 ## Open questions

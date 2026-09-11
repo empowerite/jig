@@ -17,10 +17,10 @@ code is checked against. A user reads the pages and skips the RFCs; an extender 
 
 ## The record
 
-- An RFC is a file named `rfc-NNN-<slug>.md`. `NNN` is three digits, and a new RFC takes the next free number. Once an
-  RFC has been accepted its number is never reused, so a superseded RFC keeps its place in the record.
+- An RFC is a file in `rfcs/` named `jig-NNN-<slug>.md`. `NNN` is three digits, and a new RFC takes the next free
+  number. Once an RFC has been accepted its number is never reused, so a superseded RFC keeps its place in the record.
 - The first line after the title is the status: `Status: draft`, `Status: accepted`, or
-  `Status: superseded by rfc-NNN`. A person accepts an RFC the way a person accepts an issue, by reading it and
+  `Status: superseded by jig-NNN`. A person accepts an RFC the way a person accepts an issue, by reading it and
   saying so; the status changes in a pull request a maintainer merges.
 - The sections come in this order, so the decision is read first and the argument only by someone who questions it:
   `## Decision`, what is decided, stated declaratively with the thing decided as its subject; `## Why`, the argument;
@@ -40,14 +40,14 @@ One line per file: the pages, then the RFCs in number order with their status. j
 it can; until then it is kept by hand.
 
 - [install.md](install.md): the pinned toolchain and how a desk or a runner installs it.
-- [rfc-001-types.md](rfc-001-types.md): the unit of policy is a declared entity type; the kinds, the chain, the
-  attested verdict (draft)
-- [rfc-002-language.md](rfc-002-language.md): what a policy is written in (draft)
-- [rfc-003-ports.md](rfc-003-ports.md): port contracts, proofs, metrics (draft)
-- [rfc-004-composition.md](rfc-004-composition.md): several providers, moving between them (draft)
-- [rfc-005-engine.md](rfc-005-engine.md): ticking, batching, landing (draft)
-- [rfc-006-operator-surface.md](rfc-006-operator-surface.md): CLI, API, GUI (draft)
-- [rfc-007-extensions.md](rfc-007-extensions.md): extension points, what they expose (draft)
-- [rfc-008-jig-context.md](rfc-008-jig-context.md): state to brief (draft)
-- [rfc-009-jigbot.md](rfc-009-jigbot.md): ticking in the cloud (draft)
-- [rfc-010-release.md](rfc-010-release.md): jig's own lifecycle, releases (draft)
+- [rfcs/jig-001-types.md](rfcs/jig-001-types.md): the unit of policy is a declared entity type; the kinds, the chain,
+  the attested verdict (draft)
+- [rfcs/jig-002-language.md](rfcs/jig-002-language.md): what a policy is written in (draft)
+- [rfcs/jig-003-ports.md](rfcs/jig-003-ports.md): port contracts, proofs, metrics (draft)
+- [rfcs/jig-004-composition.md](rfcs/jig-004-composition.md): several providers, moving between them (draft)
+- [rfcs/jig-005-engine.md](rfcs/jig-005-engine.md): ticking, batching, landing (draft)
+- [rfcs/jig-006-operator-surface.md](rfcs/jig-006-operator-surface.md): CLI, API, GUI (draft)
+- [rfcs/jig-007-extensions.md](rfcs/jig-007-extensions.md): extension points, what they expose (draft)
+- [rfcs/jig-008-jig-context.md](rfcs/jig-008-jig-context.md): state to brief (draft)
+- [rfcs/jig-009-jigbot.md](rfcs/jig-009-jigbot.md): ticking in the cloud (draft)
+- [rfcs/jig-010-release.md](rfcs/jig-010-release.md): jig's own lifecycle, releases (draft)

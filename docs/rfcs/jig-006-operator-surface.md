@@ -28,13 +28,13 @@ with the type word dropped for the standard types where the id form is unambiguo
   instance's text is never jig's. There is no delete verb: deleting is a provider act jig observes, or a terminal
   transition the lifecycle declares.
 - `jig verify [<id>]`: produce the verdicts the next transition of the change at hand is missing, here, now, through
-  the gate port of [rfc-003-ports.md](rfc-003-ports.md), and report each.
-- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [rfc-005-engine.md](rfc-005-engine.md).
-- `jig policy check` and `jig policy plan`: as in [rfc-001-types.md](rfc-001-types.md) and
-  [rfc-002-language.md](rfc-002-language.md).
-- `jig context <N>`: the brief, the extension of [rfc-008-jig-context.md](rfc-008-jig-context.md). Any `jig-<name>` on
+  the gate port of [jig-003-ports.md](jig-003-ports.md), and report each.
+- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [jig-005-engine.md](jig-005-engine.md).
+- `jig policy check` and `jig policy plan`: as in [jig-001-types.md](jig-001-types.md) and
+  [jig-002-language.md](jig-002-language.md).
+- `jig context <N>`: the brief, the extension of [jig-008-jig-context.md](jig-008-jig-context.md). Any `jig-<name>` on
   the `PATH` runs as `jig <name>`, with the rest of the line passed through, and an unknown verb is looked up that way
-  before it is refused; see [rfc-007-extensions.md](rfc-007-extensions.md).
+  before it is refused; see [jig-007-extensions.md](jig-007-extensions.md).
 - `jig init`, which writes the first policy from what the ports find; `jig doctor`, which reports every port's
   reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface; `jig mcp`,
   which serves the tools.
@@ -66,7 +66,7 @@ learns a repository's gates and attributes from the policy it reads through the 
 
 Three presenters, the command line, GraphQL and MCP, sit on one internal API in Go. The presenters are thin; the
 internal API is where behavior lives, and it is not public. An extension,
-[rfc-007-extensions.md](rfc-007-extensions.md), sees the schema and the verbs, never the internal API.
+[jig-007-extensions.md](jig-007-extensions.md), sees the schema and the verbs, never the internal API.
 
 ## Why
 
@@ -89,13 +89,13 @@ internal API is where behavior lives, and it is not public. An extension,
   every day.
 - `mise.toml` in this repository pins the Go and Node toolchains the release needs; a consumer pins only `jig`.
 - The docs pages install and use are written against these verbs.
-- `jig explain` renders through the template language of [rfc-002-language.md](rfc-002-language.md).
+- `jig explain` renders through the template language of [jig-002-language.md](jig-002-language.md).
 - A name rule that includes a sequence, the next free number, says so in its declaration, because `new` must compute
-  the name and a regex alone cannot; the name rule of [rfc-001-types.md](rfc-001-types.md) gains that clause when it
+  the name and a regex alone cannot; the name rule of [jig-001-types.md](jig-001-types.md) gains that clause when it
   is next amended.
 - A desk's `jig new` for a type the repository declares on the branch it stands on reads the working tree's policy for
   the repository's own types, while the chain above stays pinned; the base-policy rule of
-  [rfc-005-engine.md](rfc-005-engine.md) is about admission, not about what a desk may create.
+  [jig-005-engine.md](jig-005-engine.md) is about admission, not about what a desk may create.
 
 ## Open questions
 
