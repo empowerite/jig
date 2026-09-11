@@ -6,7 +6,7 @@ Status: draft
 
 A work item may be bound to several providers at once, and policy names each provider's role: `origin`, where work
 is born; `work`, where the loop runs; `report`, where status is told. Composition is bindings plus roles, and it
-needs no mechanism the model of [rfc-001-world-model.md](rfc-001-world-model.md) does not already have.
+needs no mechanism the model of [rfc-001-types.md](rfc-001-types.md) does not already have.
 
 ### One fact, one owner
 
@@ -40,7 +40,7 @@ Nothing stops and nothing is lost, because no item ever depended on which provid
 
 A second work port, Azure DevOps or Linear, dripping into GitHub, and a second change host, GitLab, receiving a
 drain from GitHub, each on scratch repositories, each proven by the live suites of
-[rfc-002-ports.md](rfc-002-ports.md). The abstraction holds when both run and nothing in the engine changed.
+[rfc-003-ports.md](rfc-003-ports.md). The abstraction holds when both run and nothing in the engine changed.
 
 ## Why
 

@@ -17,8 +17,8 @@ code is checked against. A user reads the pages and skips the RFCs; an extender 
 
 ## The record
 
-- An RFC is a file named `rfc-NNN-<slug>.md`. `NNN` is three digits in the order the designs were made, and a
-  number is never reused, so a superseded RFC keeps its place in the record.
+- An RFC is a file named `rfc-NNN-<slug>.md`. `NNN` is three digits, and a new RFC takes the next free number. Once an
+  RFC has been accepted its number is never reused, so a superseded RFC keeps its place in the record.
 - The first line after the title is the status: `Status: draft`, `Status: accepted`, or
   `Status: superseded by rfc-NNN`. A person accepts an RFC the way a person accepts an issue, by reading it and
   saying so; the status changes in a pull request a maintainer merges.
@@ -40,18 +40,13 @@ One line per file: the pages, then the RFCs in number order with their status. j
 it can; until then it is kept by hand.
 
 - [install.md](install.md): the pinned toolchain and how a desk or a runner installs it.
-- [rfc-001-world-model.md](rfc-001-world-model.md): world model and lifecycle (draft)
-- [rfc-002-ports.md](rfc-002-ports.md): port contracts, proofs, metrics (draft)
-- [rfc-003-policy.md](rfc-003-policy.md): what a repository declares (draft)
+- [rfc-001-types.md](rfc-001-types.md): the unit of policy is a declared entity type; the kinds, the chain, the
+  attested verdict (draft)
+- [rfc-003-ports.md](rfc-003-ports.md): port contracts, proofs, metrics (draft)
 - [rfc-004-engine.md](rfc-004-engine.md): ticking, batching, landing (draft)
 - [rfc-005-operator-surface.md](rfc-005-operator-surface.md): CLI, API, GUI (draft)
 - [rfc-006-extensions.md](rfc-006-extensions.md): extension points, what they expose (draft)
-- [rfc-007-jig-discover.md](rfc-007-jig-discover.md): path to rules (draft)
-- [rfc-008-jig-context.md](rfc-008-jig-context.md): state to brief (draft)
-- [rfc-009-jigbot.md](rfc-009-jigbot.md): ticking in the cloud (draft)
-- [rfc-010-release.md](rfc-010-release.md): jig's own lifecycle, releases (draft)
-- [rfc-011-composition.md](rfc-011-composition.md): several providers, moving between them (draft)
-- [rfc-012-distribution.md](rfc-012-distribution.md): how gates, workflows and rulesets reach every repository (draft)
-- [rfc-013-controls.md](rfc-013-controls.md): a control judges a subject at a moment, from anywhere (draft)
-- [rfc-014-types.md](rfc-014-types.md): the unit of policy is a declared entity type; the kinds, the chain, the
-  attested verdict (draft)
+- [rfc-007-jig-context.md](rfc-007-jig-context.md): state to brief (draft)
+- [rfc-008-jigbot.md](rfc-008-jigbot.md): ticking in the cloud (draft)
+- [rfc-009-release.md](rfc-009-release.md): jig's own lifecycle, releases (draft)
+- [rfc-010-composition.md](rfc-010-composition.md): several providers, moving between them (draft)
