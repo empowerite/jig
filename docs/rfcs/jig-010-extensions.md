@@ -16,7 +16,7 @@ it, and nothing else.
 An extension attaches at fixed points, and a point is a typed contract:
 
 - A gate: a verdict producer. Given a subject at a digest, it returns the verdict record of
-  [jig-001-types.md](jig-001-types.md), keyed by the gate and the digest, with its evidence. A review by a model, a
+  [jig-003-gates.md](jig-003-gates.md), keyed by the gate and the digest, with its evidence. A review by a model, a
   policy check no provider runs, a cost estimate. Beside its executable, a gate extension may ship rule gates,
   predicates in the decision language of [jig-009-language.md](jig-009-language.md) over facts jig already holds,
   which the engine evaluates in the guard without starting a process.
@@ -36,7 +36,7 @@ An extension attaches at fixed points, and a point is a typed contract:
 ```
 
 ```json
-// jig-010: the verdict it returns, on its stdout: the record of jig-001, keyed by this gate and digest
+// jig-010: the verdict it returns, on its stdout: the record of jig-003, keyed by this gate and digest
 {"gate": {"name": "links", "link": "./policy.cue", "digest": "sha256:e07a…"}, "conclusion": "pass",
  "evidence": {"annotations": [], "artifacts": [], "remedy": ""},
  "evaluator": {"tool": "lychee", "version": "0.24.0"}}
@@ -101,7 +101,7 @@ extensions: "model-review": {version: "v0.4.0", point: "gate"}
 - The schema version becomes a fact every extension names, so a schema change is a release that can count what it
   breaks.
 - The repository's policy names each extension, its version and its point, and a rule gate an extension ships is
-  attached to a guard like any gate of [jig-001-types.md](jig-001-types.md).
+  attached to a guard like any gate of [jig-003-gates.md](jig-003-gates.md).
 - The schema an extension sees is the one [jig-011-operator-surface.md](jig-011-operator-surface.md) publishes, and
   the brief source is the point [jig-012-jig-context.md](jig-012-jig-context.md) attaches to.
 

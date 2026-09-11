@@ -13,8 +13,8 @@ running the same verbs by hand.
 
 jigbot runs as a bot account of its own, a GitHub App on GitHub, never as a person, and so does a session on a desk.
 That is what makes an `accepted` label set by a person distinguishable from one set by a machine, what lets the
-ownership rule of [jig-001-types.md](jig-001-types.md) apply to either like any other actor, and what gives their
-calls their own rate-limit budget.
+ownership rule of [jig-004-lifecycles.md](jig-004-lifecycles.md) apply to either like any other actor, and what gives
+their calls their own rate-limit budget.
 
 A session acts as a GitHub App on every desk and never as the person's login, and a session started through the
 harness port with no App to act as is refused before it posts anything. The App is the organization's, and a broker

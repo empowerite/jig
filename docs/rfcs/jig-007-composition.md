@@ -108,7 +108,7 @@ drain from GitHub, each on scratch repositories, each proven by the live suites 
 - Ports declare which roles they can play; `jig policy check` refuses a role a port cannot fill.
 - The identity of `jig-001` is what survives a drain; provider numbers are bindings and change.
 - The interface of `jig-011` shows an instance's bindings, so a person sees where each thing lives.
-- Bindings are declared by the repository's own policy and by no link above it, as the chain of `jig-001` has it.
+- Bindings are declared by the repository's own policy and by no link above it, as the chain of `jig-005` has it.
 
 ## Open questions
 

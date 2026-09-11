@@ -209,7 +209,7 @@ over the board:
 
 - Two languages with a seam, because each requirement of jig-001 has a native home in one of them and a convention in
   the other, and a seam between two native homes costs less than a convention for the lattice or for the decisions.
-- CUE for declarations, because unification is the composition rule of jig-001 as a language semantics rather than a
+- CUE for declarations, because unification is the composition rule of jig-005 as a language semantics rather than a
   check, and its registry is the marketplace a published policy needs.
 - Rego for decisions, because a refusal that names the rule and the facts is the property asked for first, and a rule
   gate over the whole board needs joins that a constraint language does not have.
@@ -241,7 +241,7 @@ over the board:
   the engine.
 - How a CUE error and a Rego refusal are shown as one kind of thing on the operator surface.
 - How a link narrows the actors of a transition in CUE. A disjunction of logins does not export and a list does not
-  unify, so the examples above give a transition one role and leave the intersection of jig-001 to a per-link list the
+  unify, so the examples above give a transition one role and leave the intersection of jig-005 to a per-link list the
   export carries and jig intersects.
 - The module path of the standard policy and the predicate type of a verdict, written as `jig.dev` in the examples
   until the registry question above is settled.

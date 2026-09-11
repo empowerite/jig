@@ -5,10 +5,10 @@ Status: draft
 ## Decision
 
 The engine is one function, `next(policy, view) → actions`, and it is generic over the lifecycles the policy declares:
-it knows the kinds of [jig-001-types.md](jig-001-types.md), ground, derived and excited states, silent and acted
-transitions, and the capabilities a port offers, and it knows no state by name. It takes the policy and the view and
-returns the actions that are due. It reads no provider and writes nothing. A tick calls it once and executes what it
-returns through the ports of [jig-006-ports.md](jig-006-ports.md).
+it knows the kinds of [jig-004-lifecycles.md](jig-004-lifecycles.md), ground, derived and excited states, silent and
+acted transitions, and the capabilities a port offers, and it knows no state by name. It takes the policy and the view
+and returns the actions that are due. It reads no provider and writes nothing. A tick calls it once and executes what
+it returns through the ports of [jig-006-ports.md](jig-006-ports.md).
 
 ```text
 // next is pure: it reads the policy and the view and returns the actions that are due, and calls no port

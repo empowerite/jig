@@ -63,7 +63,7 @@ links  pass  blob:0c4f9d2…, evaluator lychee 0.24.0
 ```
 
 - `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [jig-008-engine.md](jig-008-engine.md).
-- `jig policy check` and `jig policy plan`: as in [jig-001-types.md](jig-001-types.md) and
+- `jig policy check` and `jig policy plan`: as in [jig-005-policies.md](jig-005-policies.md) and
   [jig-009-language.md](jig-009-language.md).
 - `jig context <N>`: the brief, an extension. Any `jig-<name>` on the `PATH` runs as `jig <name>`, with the rest of
   the line passed through, and an unknown verb is looked up that way before it is refused; see
