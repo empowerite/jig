@@ -32,15 +32,16 @@ A change to the file is a change like any other and goes through the loop the fi
 
 ### Per subtree
 
-A `jig.toml` in a directory governs the subtree rooted there. The engine reads the union of every file above a
-path, general before specific: the root's, then each nearer one. A subtree's file may add gates, attributes and
-paths, and may remove nothing the root declares. The root adds, the subtree adds, nobody removes, the same
-sentence that governs an organization's policy against a repository's. This is the rule rule files and controls
-already follow; policy is not the one thing that cannot be per subtree.
+A `jig.toml` in a directory governs the subtree rooted there. The engine reads every file above a path, the
+root's and each nearer one, and composes them by union: the gates and attributes of all of them apply, and a value
+that only one of them sets, a path for a step, is the value. A union has no subtraction, so a subtree's file cannot
+remove what the root declares; it can only add, or conflict, by setting a value the root already set, and a
+conflict is refused. This is the rule rule files and controls already follow; policy is not the one thing that
+cannot be per subtree.
 
 ### Validation
 
-`jig policy check` refuses a subtree file that removes anything the root declares, and a file that names a port jig
+`jig policy check` refuses a subtree file that sets a value the root already set, and a file that names a port jig
 lacks, a path the port does not offer, a gate no port can
 report, an actor the lifecycle does not know, or an attribute slot the port cannot read. It runs as a policy step
 on every pull request that touches the file, and on a desk before a commit.
