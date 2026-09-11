@@ -53,3 +53,5 @@ it can; until then it is kept by hand.
 - [rfc-011-composition.md](rfc-011-composition.md): several providers, moving between them (draft)
 - [rfc-012-distribution.md](rfc-012-distribution.md): how gates, workflows and rulesets reach every repository (draft)
 - [rfc-013-controls.md](rfc-013-controls.md): a control judges a subject at a moment, from anywhere (draft)
+- [rfc-014-types.md](rfc-014-types.md): the unit of policy is a declared entity type; the kinds, the chain, the
+  attested verdict (draft)
