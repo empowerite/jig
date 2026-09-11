@@ -22,12 +22,47 @@ For a session scoped to one item, standing in that change's worktree, the brief 
 the session stands on, its state, the legal moves, and what each requires, so the session reads no written procedure
 and is never told a step the machine can tell it.
 
+```text
+$ jig context 97
+work item 97  assigned  holder: jeffrey-aguilera
+
+change github.com/empowerite/jig#142  admissible  tree:7c88b2e1…
+  tests    fail
+  review   no verdict at this tree
+
+legal moves:
+  integrate  admissible -> integrating, as maintainer, once tests and review are green
+
+blocked: gate "tests" is fail; gate "review" has no verdict yet
+```
+
+```json
+// jig-008: the same brief, as `jig context 97 --json`
+{
+  "item": {"identity": 97, "state": "assigned", "holder": "jeffrey-aguilera"},
+  "changes": [{
+    "identity": "github.com/empowerite/jig#142", "state": "admissible", "digest": "tree:7c88b2e1…",
+    "verdicts": {"tests": {"conclusion": "fail"}, "review": null}
+  }],
+  "moves": [{
+    "transition": "integrate", "to": "integrating", "actor": "maintainer",
+    "gates": {"tests": "fail", "review": "missing"}
+  }]
+}
+```
+
 ### The needs
 
 `jig context --needs` prints what the board wants done and has no one doing: a change whose verdict is red and
 whose owner has not moved; a work item whose blockers all closed; a change admissible and waiting for a person's
 landing. Each need names the item, the state, and what would satisfy it. jig publishes needs; who acts on a need
 is never its decision, and this extension starts nothing.
+
+```text
+$ jig context --needs
+change github.com/empowerite/jig#150  admissible, waiting for a maintainer to land it
+work item 133                         every blocker closed, waiting for an assignee
+```
 
 ### Where it is served
 
