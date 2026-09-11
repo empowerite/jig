@@ -46,6 +46,23 @@ jigbot publishes the view it computed on a hidden ref, `refs/jig/view`, one comm
 desk reads the board by fetching one ref instead of re-reading the provider, and a person can `git show` what
 jigbot saw. The ref is outside `refs/heads`, so it triggers no workflow and is fetched by nothing by default.
 
+```text
+$ git show refs/jig/view
+commit 9f1c3a7e2b8d4f605a1e9c3b7d2f8a4e6c1b9d3a
+Author: empowerite-jig[bot] <empowerite-jig[bot]@users.noreply.github.com>
+Date:   Fri Sep 11 06:13:02 2026 +0000
+
+    tick 214: change #98 admissible -> integrating
+
+diff --git a/change-98.json b/change-98.json
+index 2f6a1c9..7b3d4e0 100644
+--- a/change-98.json
++++ b/change-98.json
+@@ -1 +1 @@
+-{"identity": "github.com/empowerite/jig#98", "digest": "tree:9a3f2c1e…", "state": "admissible"}
++{"identity": "github.com/empowerite/jig#98", "digest": "tree:9a3f2c1e…", "state": "integrating"}
+```
+
 ### What it needs
 
 The App's token, with the permissions the ports need and no more; the pinned `jig` from `mise`; and the workflow
@@ -67,9 +84,34 @@ the ID an organization variable, `JIG_APP_ID`, shared with the repositories and 
 [jig-010-release.md](jig-010-release.md) under those names. A repository with an App of its own sets the same two at
 its own level, and its own win. A personal account, having no organization secrets, sets them per repository.
 
+```yaml
+# .github/workflows/jigbot.yml: what a repository adds; the two names are the organization's secret and variable
+name: jigbot
+on:
+  issues: {types: [opened, edited, labeled, closed]}
+  pull_request: {types: [opened, edited, labeled, closed]}
+  check_run: {types: [completed]}
+  push:
+  schedule: [{cron: "*/15 * * * *"}]
+jobs:
+  tick:
+    uses: empowerite/jig/.github/workflows/jigbot.yml@v1
+    secrets:
+      JIG_APP_PRIVATE_KEY: ${{ secrets.JIG_APP_PRIVATE_KEY }}
+    with:
+      JIG_APP_ID: ${{ vars.JIG_APP_ID }}
+```
+
 `jig doctor` reports the join. On a runner it says whether the workflow found the two and what the token cannot do. On
 a desk it says which App the session acts as, from the key the keychain holds under the App's slug, and refuses a
 session that has none.
+
+```text
+$ jig doctor
+JIG_APP_ID:          found (512034, empowerite-jig)
+JIG_APP_PRIVATE_KEY: found
+token:               missing the scope the gate port needs to attach a verdict to a check run
+```
 
 ### What it does not do
 

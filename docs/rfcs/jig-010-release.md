@@ -28,6 +28,14 @@ on during a long stabilization, it is cut at the first rc instead and the rcs ta
 changes. In the model a release is a type: its location is the scm port's tags, its name rule is the version pattern,
 its creating action tags a commit, and the guard on that action reads the branch.
 
+```text
+# one minor, 1.2: v1.2.0 tags main where release/1.2 is cut; each patch tags the branch after a cherry-pick from main
+main:        ──A──────B────────C──────▶
+              v1.2.0    \        \
+release/1.2:  └──────────B'───────C'
+                        v1.2.1   v1.2.2
+```
+
 ### The version
 
 The lifecycle is data and is versioned with the policy that declares it, never with the binary. The binary's version
@@ -41,9 +49,22 @@ an RFC before it is cut.
 ### A consumer
 
 A consumer pins three things and may update each on its own: the binary in its `mise.toml`, the standard policy as a
-link of its chain, and the reusable workflow it invokes. `jig doctor` reports the binary's version, the standard
-policy's version the chain pins, and whether the binary serves that policy's schema. `jig policy plan` is run before
-an update to the standard policy, since such an update is a policy change.
+link of its chain, and the reusable workflow it invokes.
+
+```toml
+# mise.toml, a consumer's own: the pinned binary; the toolchain that builds jig is not the consumer's concern
+[tools]
+jig = "1.4.2"
+```
+
+```cue
+// cue.mod/module.cue, a consumer's own: the standard policy pinned as a link, updated on its own from the binary
+deps: "jig.dev/std@v0": v: "v0.4.0"
+```
+
+`jig doctor` reports the binary's version, the standard policy's version the chain pins, and whether the binary serves
+that policy's schema. `jig policy plan` is run before an update to the standard policy, since such an update is a
+policy change.
 
 ## Why
 
