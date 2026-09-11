@@ -19,23 +19,34 @@ A port is of one kind per model type it binds, and one provider may be several p
   such as `just test`, run on a desk.
 - An integrate port lands a change on the default branch by one of the paths its provider offers: a merge through
   the provider's own API, a merge queue or train, or a batch built by jig.
-- An scm port binds branches, refs and trees to git: the one provider every host shares, spoken to directly.
-- A harness port delivers a brief and the rules for a path to an agent harness: a Claude Code hook, a Cursor rule.
+- An scm port binds branches, refs and trees to git: the one provider every host shares, spoken to directly. It is
+  also the location port for a file-backed type: an instance of such a type is whatever it reads at a path in a tree,
+  at that blob's digest.
+- A harness port delivers the brief to an agent harness: a Claude Code hook, a Cursor rule.
 
 ### The contract
 
 Every port keeps one contract, in five parts.
 
-- The three operations the model needs, per type it binds: read what changed since a cursor; resync, a full read;
-  and act, one call per action in the lifecycle's tables. An action that the provider refuses is reported as
-  refused, with the provider's reason, never retried in silence.
+- The operations the model needs, per type it binds: read what changed since a cursor; resync, a full read; act, one
+  call per action in the lifecycle's tables; and, for a gate port, request a verdict for one gate over one subject at
+  a digest. On a desk the port runs the command now. On the provider it triggers the check, or waits for the one a
+  push already raised. For a gate that is an extension, it invokes the extension in the tick. The engine's guard reads
+  a verdict and never runs a gate; a missing verdict is requested through this operation and the transition waits. The
+  verdict a gate port produces is the record of [rfc-001-types.md](rfc-001-types.md), one shape for a command, a check
+  and an extension. An action that the provider refuses is reported as refused, with the provider's reason, never
+  retried in silence.
 - Capabilities: the canonical paths this port offers for each lifecycle step, with their sub-states, so policy can
-  choose among them and the interface can draw them.
+  choose among them and the interface can draw them. A change port also declares which tree its provider tests for a
+  change, the merge of head onto base on GitHub. The guard for admissible reads verdicts keyed by that tree; the guard
+  for integrating reads verdicts keyed by the batch's speculative tree; a file-backed instance's verdicts are keyed by
+  its blob. A verdict on any other tree is a fact about that tree and satisfies no guard.
 - Constraints: the facts the engine must respect before it acts, read from the provider and not assumed. For an
   integrate port: whether fast-forward is allowed, whether signatures are required, whether a review must attach
   at the merge event, which merge methods the branch's rules accept. For a work port: page maxima and rate limits.
-- Slots: where in this provider each of jig's own facts lives, the identity and the correspondence between
-  bindings, and where each attribute lives, `due` above all, since a label cannot hold a date.
+- Slots: where in this provider each of jig's own facts lives, the identity and the correspondence between bindings,
+  where each attribute lives, `due` above all, since a label cannot hold a date, and where an attestation is stored:
+  an attestation store keyed by digest where the provider has one, a ref or a note where it does not, a comment last.
 - Metrics: every call counted and timed, labeled by port, operation and outcome, with the provider's rate-limit
   budget read and reported, so the cost of a tick is a number and not a feeling.
 
@@ -98,6 +109,4 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 - Which slot each provider uses for the identity and for `due`: a body line, a milestone, a project field, a tag.
   Settled per port, in that port's own section of this spec as it is written.
-- Whether a gate port's local form, a command on a desk, reports through the same verdict type as a hosted one, or
-  a narrower one without artifacts.
 - How the rate-limit budget is spent when several jigs share one provider account.
