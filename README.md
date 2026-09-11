@@ -36,7 +36,7 @@ git config commit.gpgsign true
 Work here moves by the loop in [CLAUDE.md](CLAUDE.md): an issue, the `accepted` label, a branch checked out in a
 worktree under `worktrees/`, a signed commit, a pull request linked to its issue, a maintainer's merge. The checks a
 pull request must pass are the steps of the workflow in `.github/workflows/`, one per policy. The record behind every
-rule is `docs/rfcs/`, indexed in [docs/1st.md](docs/1st.md).
+rule is `docs/rfcs/`, indexed in [docs/rfcs/1st.md](docs/rfcs/1st.md).
 
 ## Status
 

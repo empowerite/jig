@@ -270,7 +270,7 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 - What a policy is written in, and how a published policy is packaged and pinned, is
   [jig-002-language.md](jig-002-language.md).
 - This repository declares rfc as its first type, in its own policy, once the language exists, and the record rules of
-  `docs/1st.md` become that declaration.
+  `docs/rfcs/1st.md` become that declaration.
 
 ## Open questions
 
