@@ -13,7 +13,9 @@ way.
 2. Wait for `accepted`. A person reads the issue and labels it `accepted` or `rejected`, and work begins only on an
    accepted one. A session that reaches an issue without the label stops there and says so. Before starting, it
    says in one line what it is about to build, so a misread issue is caught before the work.
-3. Branch from `main`. Name the branch as you like; `<N>-<slug>` is a habit, not a rule. A worktree is fine.
+3. Branch from `main` and check the branch out in a worktree, `worktrees/<N>-<slug>`, made with `git worktree add`.
+   The directory is ignored, so it never appears in a status or a commit. Name the branch as you like; `<N>-<slug>` is
+   a habit, not a rule.
 4. Commit with a signed commit. The subject is `#<N> <what changed>`, under 72 characters. The body says why, in
    plain prose. The branch ruleset rejects an unsigned commit, so a fresh clone needs this once:
 
