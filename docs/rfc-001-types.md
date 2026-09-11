@@ -25,9 +25,10 @@ A type is the unit of policy. Every type declares six things.
 
 An instance is whatever the port reads at the location, and it is judged against the name rule and the shape from the
 moment it is read. A file-backed type and a provider-backed type are one model, because a location is a port either
-way. Work item and change are two declarations in the standard policy jig ships, with a provider behind each. A type
-named rfc is the example a repository declares for itself: one directory, a name regex, a template as its shape from
-which the creating action expands a new instance, and the states draft, accepted and superseded.
+way. Work item and change are two declarations in the standard policy jig ships, with a provider behind each. So is
+type itself: its location is the repository's policy, its shape is the six things, and its creating action writes a
+declaration. A type named rfc is the example a repository declares for itself: one directory, a name regex, a template
+as its shape from which the creating action expands a new instance, and the states draft, accepted and superseded.
 
 ### The kinds
 
