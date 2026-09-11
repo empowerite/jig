@@ -8,8 +8,8 @@ An extension is a separate executable named `jig-<name>`. Being on the `PATH` gi
 `jig-<name>`, the way `git ls` runs `git-ls`, with the rest of the line passed through. Being named in the
 repository's policy gives it its seat: jig starts it inside a tick only when the policy names it, speaks to it over a
 JSON protocol on its standard streams, and stops it when the tick ends. It runs in its own process, in any language,
-and it sees the public model of [jig-001-types.md](jig-001-types.md) as the schema of
-[jig-006-operator-surface.md](jig-006-operator-surface.md) publishes it, and nothing else.
+and it sees the public model of [jig-001-types.md](jig-001-types.md) as the schema the operator surface publishes
+it, and nothing else.
 
 ### The points
 
@@ -18,32 +18,32 @@ An extension attaches at fixed points, and a point is a typed contract:
 - A gate: a verdict producer. Given a subject at a digest, it returns the verdict record of
   [jig-001-types.md](jig-001-types.md), keyed by the gate and the digest, with its evidence. A review by a model, a
   policy check no provider runs, a cost estimate. Beside its executable, a gate extension may ship rule gates,
-  predicates in the decision language of [jig-002-language.md](jig-002-language.md) over facts jig already holds,
+  predicates in the decision language of [jig-009-language.md](jig-009-language.md) over facts jig already holds,
   which the engine evaluates in the guard without starting a process.
 - A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may act
   after one is taken. It cannot take one.
 - A presenter: a new surface over the same API, a chat integration, a status page.
-- A port: a provider jig does not ship, written to the contract of [jig-003-ports.md](jig-003-ports.md) and proven by
+- A port: a provider jig does not ship, written to the contract of [jig-006-ports.md](jig-006-ports.md) and proven by
   its own conformance suite before policy may name it.
-- A brief source: the point [jig-008-jig-context.md](jig-008-jig-context.md) attaches to.
+- A brief source: the point an extension that writes an instance's brief attaches to.
 - A dispatcher: given the needs jig publishes, it starts an actor in a harness with the instance's brief, and reports
   what it started. It takes no transition; the actor it started takes them, as itself. jig starts no actor, so the
   dispatcher is outside the engine and inside the seam.
 
 ```json
-// jig-007: a gate extension's request, on its stdin
+// jig-010: a gate extension's request, on its stdin
 {"subject": {"type": "rfc", "identity": "003", "digest": "blob:5e21a0f…"}}
 ```
 
 ```json
-// jig-007: the verdict it returns, on its stdout: the record of jig-001, keyed by this gate and digest
+// jig-010: the verdict it returns, on its stdout: the record of jig-001, keyed by this gate and digest
 {"gate": {"name": "links", "link": "./policy.cue", "digest": "sha256:e07a…"}, "conclusion": "pass",
  "evidence": {"annotations": [], "artifacts": [], "remedy": ""},
  "evaluator": {"tool": "lychee", "version": "0.24.0"}}
 ```
 
 ```json
-// jig-007: a hook refusing a transition before it is taken, with a reason
+// jig-010: a hook refusing a transition before it is taken, with a reason
 {"transition": "accept", "subject": {"type": "rfc", "identity": "003"}, "refused": true,
  "reason": "no second maintainer has reviewed this rfc"}
 ```
@@ -74,7 +74,7 @@ An extension is installed the way jig is, by `mise`, and pinned the same way. It
 beside its name. `jig doctor` reports every declared extension it cannot start.
 
 ```cue
-// jig-007: the policy stanza that seats an extension, named, pinned by version, at its point
+// jig-010: the policy stanza that seats an extension, named, pinned by version, at its point
 extensions: "model-review": {version: "v0.4.0", point: "gate"}
 ```
 
@@ -102,6 +102,8 @@ extensions: "model-review": {version: "v0.4.0", point: "gate"}
   breaks.
 - The repository's policy names each extension, its version and its point, and a rule gate an extension ships is
   attached to a guard like any gate of [jig-001-types.md](jig-001-types.md).
+- The schema an extension sees is the one [jig-011-operator-surface.md](jig-011-operator-surface.md) publishes, and
+  the brief source is the point [jig-012-jig-context.md](jig-012-jig-context.md) attaches to.
 
 ## Open questions
 

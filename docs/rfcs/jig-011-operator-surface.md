@@ -23,7 +23,7 @@ with the type word dropped for the standard types where the id form is unambiguo
 $ jig new rfc
 title: docs: the record's own gate
 decision: an rfc's accept transition names a "links" gate; nothing else in this type changes
-wrote docs/rfcs/jig-011-docs-gate.md
+wrote docs/rfcs/jig-015-docs-gate.md
 ```
 
 - `jig list <type>` and `jig show <type> <id>`: the view, an instance with its state, its verdicts and its bindings.
@@ -32,7 +32,7 @@ wrote docs/rfcs/jig-011-docs-gate.md
 
 ```text
 $ jig show rfc 003
-rfc 003  docs/rfcs/jig-003-ports.md
+rfc 003  docs/rfcs/jig-006-ports.md
 state:    draft
 verdicts: links  fail  blob:5e21a0f…
 ```
@@ -46,28 +46,28 @@ verdicts: links  fail  blob:5e21a0f…
 
 ```text
 $ jig accept rfc 003
-refused: accept on rfc docs/rfcs/jig-003-ports.md at blob:5e21a0f…
+refused: accept on rfc docs/rfcs/jig-006-ports.md at blob:5e21a0f…
   gate "links" is fail at blob:5e21a0f…, attached by ./policy.cue
   rule jig.guard.refusal, over data.types.rfc.lifecycle.transitions.accept.gates and input.rfc.verdicts.links
 
 $ jig accept rfc 003
-accepted: rfc docs/rfcs/jig-003-ports.md, blob:5e21a0f…, by jeffrey-aguilera
+accepted: rfc docs/rfcs/jig-006-ports.md, blob:5e21a0f…, by jeffrey-aguilera
 ```
 
 - `jig verify [<id>]`: produce the verdicts the next transition of the change at hand is missing, here, now, through
-  the gate port of [jig-003-ports.md](jig-003-ports.md), and report each.
+  the gate port of [jig-006-ports.md](jig-006-ports.md), and report each.
 
 ```text
 $ jig verify rfc 004
 links  pass  blob:0c4f9d2…, evaluator lychee 0.24.0
 ```
 
-- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [jig-005-engine.md](jig-005-engine.md).
+- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [jig-008-engine.md](jig-008-engine.md).
 - `jig policy check` and `jig policy plan`: as in [jig-001-types.md](jig-001-types.md) and
-  [jig-002-language.md](jig-002-language.md).
-- `jig context <N>`: the brief, the extension of [jig-008-jig-context.md](jig-008-jig-context.md). Any `jig-<name>` on
-  the `PATH` runs as `jig <name>`, with the rest of the line passed through, and an unknown verb is looked up that way
-  before it is refused; see [jig-007-extensions.md](jig-007-extensions.md).
+  [jig-009-language.md](jig-009-language.md).
+- `jig context <N>`: the brief, an extension. Any `jig-<name>` on the `PATH` runs as `jig <name>`, with the rest of
+  the line passed through, and an unknown verb is looked up that way before it is refused; see
+  [jig-010-extensions.md](jig-010-extensions.md).
 - `jig init`, which writes the first policy from what the ports find; `jig doctor`, which reports every port's
   reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface; `jig mcp`,
   which serves the tools.
@@ -85,7 +85,7 @@ over the schema, and an agent over MCP and a person at the command line use one 
 interface, or any other client, that is not in the schema, and the schema is versioned with the model.
 
 ```graphql
-# jig-006: the schema for one declared type, derived from its policy and committed as a file
+# jig-011: the schema for one declared type, derived from its policy and committed as a file
 enum RfcState { DRAFT ACCEPTED SUPERSEDED }
 
 type Verdict { gate: String! conclusion: String! }
@@ -107,7 +107,7 @@ extend type Mutation {
 An agent calls jig; jig never calls an agent. The tools are the same functions the command line runs.
 
 ```json
-// jig-006: the MCP tool list, the verbs as tools; an agent and the command line share one declaration
+// jig-011: the MCP tool list, the verbs as tools; an agent and the command line share one declaration
 [
   {"name": "jig_verify", "description": "produce the verdicts a transition is missing"},
   {"name": "jig_tick",   "description": "one evaluation, board-wide or for one item"},
@@ -125,7 +125,7 @@ learns a repository's gates and attributes from the policy it reads through the 
 
 Three presenters, the command line, GraphQL and MCP, sit on one internal API in Go. The presenters are thin; the
 internal API is where behavior lives, and it is not public. An extension,
-[jig-007-extensions.md](jig-007-extensions.md), sees the schema and the verbs, never the internal API.
+[jig-010-extensions.md](jig-010-extensions.md), sees the schema and the verbs, never the internal API.
 
 ## Why
 
@@ -148,13 +148,14 @@ internal API is where behavior lives, and it is not public. An extension,
   every day.
 - `mise.toml` in this repository pins the Go and Node toolchains the release needs; a consumer pins only `jig`.
 - The docs pages install and use are written against these verbs.
-- `jig explain` renders through the template language of [jig-002-language.md](jig-002-language.md).
+- `jig explain` renders through the template language of [jig-009-language.md](jig-009-language.md).
 - A name rule that includes a sequence, the next free number, says so in its declaration, because `new` must compute
   the name and a regex alone cannot; the name rule of [jig-001-types.md](jig-001-types.md) gains that clause when it
   is next amended.
 - A desk's `jig new` for a type the repository declares on the branch it stands on reads the working tree's policy for
   the repository's own types, while the chain above stays pinned; the base-policy rule of
-  [jig-005-engine.md](jig-005-engine.md) is about admission, not about what a desk may create.
+  [jig-008-engine.md](jig-008-engine.md) is about admission, not about what a desk may create.
+- The brief `jig context <N>` renders is the extension of [jig-012-jig-context.md](jig-012-jig-context.md).
 
 ## Open questions
 

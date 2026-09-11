@@ -8,7 +8,7 @@ The engine is one function, `next(policy, view) → actions`, and it is generic 
 it knows the kinds of [jig-001-types.md](jig-001-types.md), ground, derived and excited states, silent and acted
 transitions, and the capabilities a port offers, and it knows no state by name. It takes the policy and the view and
 returns the actions that are due. It reads no provider and writes nothing. A tick calls it once and executes what it
-returns through the ports of [jig-003-ports.md](jig-003-ports.md).
+returns through the ports of [jig-006-ports.md](jig-006-ports.md).
 
 ```text
 // next is pure: it reads the policy and the view and returns the actions that are due, and calls no port
@@ -140,12 +140,12 @@ and metrics, in jig's own view. It rebases no member, edits no person's text, an
 
 ## Consequences
 
-- The engine's test suite runs against the fakes of [jig-003-ports.md](jig-003-ports.md) and covers every kind of
+- The engine's test suite runs against the fakes of [jig-006-ports.md](jig-006-ports.md) and covers every kind of
   state and transition over a declared lifecycle, and every branch of the batch: a red batch of k isolates its culprit
   in at most ⌈log₂ k⌉ rebuilds.
-- A jigbot, [jig-009-jigbot.md](jig-009-jigbot.md), is this engine run board-wide on a schedule and on events, holding
+- A jigbot, [jig-014-jigbot.md](jig-014-jigbot.md), is this engine run board-wide on a schedule and on events, holding
   the lease.
-- The operator surface, [jig-006-operator-surface.md](jig-006-operator-surface.md), shows a tick's record and the
+- The operator surface, [jig-011-operator-surface.md](jig-011-operator-surface.md), shows a tick's record and the
   batch's state.
 
 ## Open questions
@@ -153,4 +153,4 @@ and metrics, in jig's own view. It rebases no member, edits no person's text, an
 - Where a tick's record lives so that desks can read a jigbot's: a ref outside `refs/heads`, or the provider's own
   comment on the change, or both.
 - Whether an integrate path that is the provider's own queue, a merge train, replaces the batch entirely or feeds
-  it; the answer is per port and belongs to its section of `jig-003`.
+  it; the answer is per port and belongs to its section of `jig-006`.

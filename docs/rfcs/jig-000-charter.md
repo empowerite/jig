@@ -37,27 +37,27 @@ Each part has an RFC, and once accepted the RFC is the spec its code is checked 
   location, a name rule, a shape, a lifecycle and its actions. The kinds a state and a transition can be are jig's and
   change only with a release; the lifecycle made of them is data. Policies compose up a chain by pinned pulls, each
   link narrowing what the link above declared, and every gate evaluated yields a verdict that can be attested.
-- The language, [jig-002-language.md](jig-002-language.md). CUE declares and composes, Rego decides, Jinja2 renders
+- The language, [jig-009-language.md](jig-009-language.md). CUE declares and composes, Rego decides, Jinja2 renders
   every text jig emits, and all three are embedded in the binary.
-- Ports, [jig-003-ports.md](jig-003-ports.md). A port is the typed interface to a system jig does not own: the work
+- Ports, [jig-006-ports.md](jig-006-ports.md). A port is the typed interface to a system jig does not own: the work
   tracker, the change host, the gates, the integrator, source control, the agent harness. Each has a fake for tests, a
   conformance suite against the real provider, and metrics in production.
-- Composition, [jig-004-composition.md](jig-004-composition.md). An instance binds to several providers at once, one
+- Composition, [jig-007-composition.md](jig-007-composition.md). An instance binds to several providers at once, one
   per role, and the same bindings move a repository between hosts while work is in flight.
-- The engine, [jig-005-engine.md](jig-005-engine.md). One function from policy and view to actions, pure, tested as
+- The engine, [jig-008-engine.md](jig-008-engine.md). One function from policy and view to actions, pure, tested as
   one, and generic over every lifecycle a policy declares. A tick calls it once and acts through the ports, for one
   work item or for the whole board.
-- The operator surface, [jig-006-operator-surface.md](jig-006-operator-surface.md). One binary. Its verbs are the
+- The operator surface, [jig-011-operator-surface.md](jig-011-operator-surface.md). One binary. Its verbs are the
   transitions of the declared types, its GraphQL schema is the whole public contract, its MCP server is the same
   contract for agents, and its browser interface is embedded and used on a desk.
-- Extensions, [jig-007-extensions.md](jig-007-extensions.md). An executable named `jig-<name>` gets a verb by being on
+- Extensions, [jig-010-extensions.md](jig-010-extensions.md). An executable named `jig-<name>` gets a verb by being on
   the `PATH` and a seat in a tick by being named in policy, at fixed points: a gate, a hook, a presenter, a port, a
   brief source, a dispatcher.
 - Actors. People, agent sessions, CI jobs and bots do the work. jig briefs them, through
-  [jig-008-jig-context.md](jig-008-jig-context.md), and gates their moves. It starts none of them; a dispatcher that
-  does is an extension. jigbot, [jig-009-jigbot.md](jig-009-jigbot.md), is the engine run board-wide as an actor of
+  [jig-012-jig-context.md](jig-012-jig-context.md), and gates their moves. It starts none of them; a dispatcher that
+  does is an extension. jigbot, [jig-014-jigbot.md](jig-014-jigbot.md), is the engine run board-wide as an actor of
   its own, optional the way an automated dependency updater is.
-- Release, [jig-010-release.md](jig-010-release.md). This repository runs on jig. A release is a tag carrying the
+- Release, [jig-013-release.md](jig-013-release.md). This repository runs on jig. A release is a tag carrying the
   binary, the reusable workflow, the schema and the standard policy, the last versioned apart from the binary.
 
 ### The boundaries
@@ -108,8 +108,8 @@ Each part has an RFC, and once accepted the RFC is the spec its code is checked 
 ## Consequences
 
 - Every RFC's Why derives from a principle here and argues none of them again. jig-001 derives the type, the kinds,
-  the chain and the verdict; jig-002 the languages; jig-003 the ports; jig-004 the bindings; jig-005 the engine and
-  the tick; jig-006 the surface; jig-007 the extension points; jig-008 the brief; jig-009 the bot; jig-010 this
+  the chain and the verdict; jig-009 the languages; jig-006 the ports; jig-007 the bindings; jig-008 the engine and
+  the tick; jig-011 the surface; jig-010 the extension points; jig-012 the brief; jig-014 the bot; jig-013 this
   repository's own releases.
 - README.md is install, setup and getting started. It says what jig is in one sentence and points here for the rest.
 - This RFC is accepted before any other, since every other Why cites it. A change to a principle or a boundary is a

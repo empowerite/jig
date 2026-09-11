@@ -31,7 +31,7 @@ declaration. A type named rfc is the example a repository declares for itself: o
 as its shape from which the creating action expands a new instance, and the states draft, accepted and superseded.
 
 ```cue
-// the repository's own link: the type named rfc, all six things, in the form jig-002 fixes
+// the repository's own link: the type named rfc, all six things, in the form jig-009 fixes
 package policy
 
 import "jig.dev/std"
@@ -70,7 +70,7 @@ A transition has one of two kinds.
   action, which is a capability the type's port offers.
 
 The capabilities are a vocabulary jig names, and a port declares which of them it offers; which ones each port kind
-offers is settled in [jig-003-ports.md](jig-003-ports.md). An acted transition names one. A gate attaches to an acted
+offers is settled in [jig-006-ports.md](jig-006-ports.md). An acted transition names one. A gate attaches to an acted
 transition's guard and nowhere else.
 
 Time is a fact, so a state that changes by the clock alone is derived or excited over that fact, and there is no
@@ -252,35 +252,35 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 
 ## Consequences
 
-- The ports of [jig-003-ports.md](jig-003-ports.md) gain the scm port as a location, the production of a verdict on
+- The ports of [jig-006-ports.md](jig-006-ports.md) gain the scm port as a location, the production of a verdict on
   request, and a slot per provider for attestations; see [#69][ports].
-- The engine of [jig-005-engine.md](jig-005-engine.md) ticks over a declared lifecycle in the one shape above; see
+- The engine of [jig-008-engine.md](jig-008-engine.md) ticks over a declared lifecycle in the one shape above; see
   [#70][engine].
-- The verbs of [jig-006-operator-surface.md](jig-006-operator-surface.md) are the declared acted transitions plus the
+- The verbs of [jig-011-operator-surface.md](jig-011-operator-surface.md) are the declared acted transitions plus the
   engine's own, `jig verify` produces the verdicts a transition is missing, and the audit answer is a verb; see
   [#72][surface].
-- The extension points of [jig-007-extensions.md](jig-007-extensions.md) lose the rule source, gain a dispatcher, and
+- The extension points of [jig-010-extensions.md](jig-010-extensions.md) lose the rule source, gain a dispatcher, and
   a gate extension returns the verdict record above; see [#71][extensions].
-- The brief of [jig-008-jig-context.md](jig-008-jig-context.md) names the gates that will judge the paths a change
+- The brief of [jig-012-jig-context.md](jig-012-jig-context.md) names the gates that will judge the paths a change
   touches; see [#73][context].
-- The version rule of [jig-010-release.md](jig-010-release.md) changes, since the lifecycle is no longer in the
+- The version rule of [jig-013-release.md](jig-013-release.md) changes, since the lifecycle is no longer in the
   binary; see [#75][release].
-- The roles of [jig-004-composition.md](jig-004-composition.md) are bindings a repository declares; see
+- The roles of [jig-007-composition.md](jig-007-composition.md) are bindings a repository declares; see
   [#76][composition].
 - What a policy is written in, and how a published policy is packaged and pinned, is
-  [jig-002-language.md](jig-002-language.md).
+  [jig-009-language.md](jig-009-language.md).
 - This repository declares rfc as its first type, in its own policy, once the language exists, and the record rules of
   `docs/rfcs/1st.md` become that declaration.
 
 ## Open questions
 
-- Which capabilities each port kind offers, settled per port in jig-003.
-- Whose key signs a verdict and how a consumer verifies it; with releases, in jig-010.
+- Which capabilities each port kind offers, settled per port in jig-006.
+- Whose key signs a verdict and how a consumer verifies it; with releases, in jig-013.
 - What the in-toto statement's subject carries and what its predicate carries.
 - Whether a link may ever mark a declaration as advisory, so that a link below may drop it. Deferred, not refused: it
   would be a marking on the upstream declaration and would not change the rules above.
 - The identity of a file-backed instance across a rename or a move.
-- Whether a silent transition may enter a ground state. The drip of jig-004 does, carrying the creating action, and
+- Whether a silent transition may enter a ground state. The drip of jig-007 does, carrying the creating action, and
   the withdraw transition in the example above does by observing a person's act; the kinds say a ground state is
   entered by an action.
 
