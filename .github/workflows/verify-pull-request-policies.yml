@@ -1,4 +1,4 @@
-# Runs this repository's controls; see controls/1st.md. One job per event, and each job is one line of its own.
+# Invokes this repository's controls at their moments; see controls/1st.md. One job per moment, one line each.
 #
 # A job's key is the check's name, the one the branch ruleset requires; renaming it breaks the requirement.
 
@@ -22,7 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c  # v4.3.0
-      - run: controls/run pull-request
+      - run: controls/run admission
         env:
           GH_TOKEN: ${{ github.token }}
 
@@ -32,6 +32,6 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
       - uses: jdx/mise-action@c2a87611a18de5b3828c5652fe268e992400cb5c  # v4.3.0
-      - run: controls/run schedule
+      - run: controls/run sweep
         env:
           GH_TOKEN: ${{ github.token }}

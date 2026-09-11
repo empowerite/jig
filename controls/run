@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
-# run - runs the controls of one event, as the manifest in 1st.md names them
+# run - runs the controls of one moment, as the manifest in 1st.md names them
 #
-# `controls/run <event>`, with the event one of pre-commit, pull-request or schedule. The changed set is computed
-# once: the staged files on a desk, the pull request's files on a runner. Every control of the event runs and
-# reports; a control whose need failed is skipped and says so; the exit status is non-zero if any refused.
+# `controls/run <moment>`, with the moment one of drafting, admission or sweep. The subject is computed once: the
+# staged change on a desk, the pull request's change on a runner, the tree on the sweep. Every control of the
+# moment runs and reports; a control whose need refused is skipped and says so; the exit status is non-zero if any
+# refused.
 set -o errexit -o nounset -o pipefail
 here=$(cd "$(dirname "$0")" && pwd)
 cd "$(git rev-parse --show-toplevel)"
 
-event=${1:?usage: controls/run <pre-commit|pull-request|schedule>}
-case "${event}" in
-  (pre-commit|pull-request|schedule) ;;
+moment=${1:?usage: controls/run <drafting|admission|sweep>}
+case "${moment}" in
+  (drafting|admission|sweep) ;;
   (*)
-    echo "unknown event: ${event}" >&2
+    echo "unknown moment: ${moment}" >&2
     exit 2
 esac
 
-# The changed set, and whether the change deletes anything.
+# The change, and whether it deletes anything.
 changed=()
 deleted=false
-case "${event}" in
-  (pre-commit)
+case "${moment}" in
+  (drafting)
     listed=$(git diff --cached --name-only --diff-filter=ACMR)
     while IFS= read -r f
     do
@@ -31,7 +32,7 @@ case "${event}" in
       deleted=true
     fi
     ;;
-  (pull-request)
+  (admission)
     pr=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
     listed=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${pr}/files" --paginate --jq '.[] | "\(.status)\t\(.filename)"')
     while IFS=$'\t' read -r status f
@@ -47,7 +48,7 @@ case "${event}" in
     ;;
 esac
 
-# The manifest: one row per control, columns control | events | scope | needs.
+# The manifest: one row per control, columns control | moments | subject | needs.
 manifest=$(awk -F'|' '
   /^\| [a-z]/ && $2 !~ /control/ {
     for (i = 2; i <= 5; i++) { gsub(/^ +| +$/, "", $i) }
@@ -56,9 +57,9 @@ manifest=$(awk -F'|' '
 
 failed=()
 skipped=()
-while IFS=$'\t' read -r name events scope needs
+while IFS=$'\t' read -r name moments subject needs
 do
-  [[ ", ${events}, " == *", ${event}, "* ]] || continue
+  [[ ", ${moments}, " == *", ${moment}, "* ]] || continue
   blocked=""
   for need in ${needs//,/ }
   do
@@ -74,10 +75,10 @@ do
     continue
   fi
   args=()
-  case "${scope}" in
-    (all) args=(--all) ;;
-    (changed)
-      if [[ "${event}" == schedule || "${deleted}" == true ]]
+  case "${subject}" in
+    ("change, all") args=(--all) ;;
+    ("change, changed")
+      if [[ "${moment}" == sweep || "${deleted}" == true ]]
       then
         args=(--all)
       else
@@ -104,4 +105,4 @@ then
   echo "${report}"
   exit 1
 fi
-echo "every control of ${event} passed"
+echo "every control of ${moment} passed"
