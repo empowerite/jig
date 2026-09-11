@@ -18,17 +18,50 @@ with the type word dropped for the standard types where the id form is unambiguo
   read from the declaration; given on the command line they fill in, absent they are asked for. `jig new type <name>`
   is the same verb on the standard type named type, whose instances are declarations in the repository's policy, so a
   new type exists when its declaration lands through the loop and not when the prompt finishes.
+
+```text
+$ jig new rfc
+title: docs: the record's own gate
+decision: an rfc's accept transition names a "links" gate; nothing else in this type changes
+wrote docs/rfcs/jig-011-docs-gate.md
+```
+
 - `jig list <type>` and `jig show <type> <id>`: the view, an instance with its state, its verdicts and its bindings.
   `jig board` is the standard read, the work items and changes as a table. `jig show 42` stays, since a bare number is
   a work item.
+
+```text
+$ jig show rfc 003
+rfc 003  docs/rfcs/jig-003-ports.md
+state:    draft
+verdicts: links  fail  blob:5e21a0f…
+```
+
 - `jig explain <type>`: the declaration as prose, the location, the name rule, the shape, the lifecycle and the gates,
   rendered from the policy that enforces them, for a person or an agent.
 - The transitions, one verb per acted transition of each type's lifecycle, addressed by the number the provider gave
   the instance: `jig accept 42`, `jig propose 42`, `jig accept rfc 003`. Setting an attribute is a verb. Editing an
   instance's text is never jig's. There is no delete verb: deleting is a provider act jig observes, or a terminal
   transition the lifecycle declares.
+
+```text
+$ jig accept rfc 003
+refused: accept on rfc docs/rfcs/jig-003-ports.md at blob:5e21a0f…
+  gate "links" is fail at blob:5e21a0f…, attached by ./policy.cue
+  rule jig.guard.refusal, over data.types.rfc.lifecycle.transitions.accept.gates and input.rfc.verdicts.links
+
+$ jig accept rfc 003
+accepted: rfc docs/rfcs/jig-003-ports.md, blob:5e21a0f…, by jeffrey-aguilera
+```
+
 - `jig verify [<id>]`: produce the verdicts the next transition of the change at hand is missing, here, now, through
   the gate port of [jig-003-ports.md](jig-003-ports.md), and report each.
+
+```text
+$ jig verify rfc 004
+links  pass  blob:0c4f9d2…, evaluator lychee 0.24.0
+```
+
 - `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [jig-005-engine.md](jig-005-engine.md).
 - `jig policy check` and `jig policy plan`: as in [jig-001-types.md](jig-001-types.md) and
   [jig-002-language.md](jig-002-language.md).
@@ -51,10 +84,36 @@ subscriptions stream the events a tick produces; mutations are the verbs, so eac
 over the schema, and an agent over MCP and a person at the command line use one declaration. Nothing reaches the
 interface, or any other client, that is not in the schema, and the schema is versioned with the model.
 
+```graphql
+# jig-006: the schema for one declared type, derived from its policy and committed as a file
+enum RfcState { DRAFT ACCEPTED SUPERSEDED }
+
+type Verdict { gate: String! conclusion: String! }
+
+type Rfc {
+  number: String!
+  state: RfcState!
+  verdicts: [Verdict!]!
+}
+
+extend type Mutation {
+  acceptRfc(number: String!): Rfc!
+}
+```
+
 ### The MCP server
 
 `jig mcp` exposes the verbs as tools and the view as resources to an agent harness, over the standard transport.
 An agent calls jig; jig never calls an agent. The tools are the same functions the command line runs.
+
+```json
+// jig-006: the MCP tool list, the verbs as tools; an agent and the command line share one declaration
+[
+  {"name": "jig_verify", "description": "produce the verdicts a transition is missing"},
+  {"name": "jig_tick",   "description": "one evaluation, board-wide or for one item"},
+  {"name": "accept_rfc", "description": "the transition accept, draft to accepted, as maintainer"}
+]
+```
 
 ### The interface
 
