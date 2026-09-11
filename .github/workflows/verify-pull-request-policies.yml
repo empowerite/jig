@@ -166,12 +166,12 @@ jobs:
           set -o errexit -o nounset -o pipefail
 
           run="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          index="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_HEAD_REF}/docs/1st.md"
+          index="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/blob/${GITHUB_HEAD_REF}/docs/rfcs/1st.md"
 
           # error + remedy: same markdown remedy for every refusal
           remedy=$(cat <<REMEDY
           Two RFCs share a number. Renumber the newcomer to the next free number, rename its file and its line in
-          [docs/1st.md](${index}), and push; then [re-run this check](${run}).
+          [docs/rfcs/1st.md](${index}), and push; then [re-run this check](${run}).
           REMEDY
           )
 
