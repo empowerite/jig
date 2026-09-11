@@ -52,8 +52,8 @@ except as the landing step of a batch that policy gave it.
 
 - The App and its permissions are provisioned outside this repository, beside the scratch repositories of the
   live suites.
-- The batch of `rfc-004` lands only from jigbot's tick, since it holds the lease; a desk's `jig land` is a person's
-  own merge.
+- The batch of `rfc-004` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
+  and a desk's `jig land` is a person's own merge.
 - Under a strict ruleset, a change must be current with the default branch before it merges, and jigbot never
   rebases a member; the batch's landing path satisfies strictness by construction, and a change outside a batch is
   its owner's to bring current.
