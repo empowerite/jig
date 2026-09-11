@@ -107,10 +107,10 @@ Each part has an RFC, and once accepted the RFC is the spec its code is checked 
 
 ## Consequences
 
-- Every RFC's Why derives from a principle here and argues none of them again. jig-001 derives the type, the kinds,
-  the chain and the verdict; jig-009 the languages; jig-006 the ports; jig-007 the bindings; jig-008 the engine and
-  the tick; jig-011 the surface; jig-010 the extension points; jig-012 the brief; jig-014 the bot; jig-013 this
-  repository's own releases.
+- Every RFC's Why derives from a principle here and argues none of them again. jig-001 derives the type; jig-002
+  the value; jig-003 the verdict; jig-004 the kinds; jig-005 the chain; jig-009 the languages; jig-006 the ports;
+  jig-007 the bindings; jig-008 the engine and the tick; jig-011 the surface; jig-010 the extension points; jig-012
+  the brief; jig-014 the bot; jig-013 this repository's own releases.
 - README.md is install, setup and getting started. It says what jig is in one sentence and points here for the rest.
 - This RFC is accepted before any other, since every other Why cites it. A change to a principle or a boundary is a
   change here first, and the RFCs that derive from it are corrected in the same change.
@@ -118,6 +118,6 @@ Each part has an RFC, and once accepted the RFC is the spec its code is checked 
 ## Open questions
 
 - Whether the fifth principle stands on its own or follows from the second and the third. It is listed because the
-  verdict of jig-001 derives from nothing else here.
+  verdict of jig-003 derives from nothing else here.
 - Whether the rfc type this repository declares for itself becomes a second standard policy jig ships, and what else
   would.

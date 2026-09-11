@@ -33,7 +33,7 @@ Every port keeps one contract, in five parts.
   a digest. On a desk the port runs the command now. On the provider it triggers the check, or waits for the one a
   push already raised. For a gate that is an extension, it invokes the extension in the tick. The engine's guard reads
   a verdict and never runs a gate; a missing verdict is requested through this operation and the transition waits. The
-  verdict a gate port produces is the record of [jig-001-types.md](jig-001-types.md), one shape for a command, a check
+  verdict a gate port produces is the record of [jig-003-gates.md](jig-003-gates.md), one shape for a command, a check
   and an extension. An action that the provider refuses is reported as refused, with the provider's reason, never
   retried in silence.
 
@@ -141,7 +141,7 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 - The engine, [jig-008-engine.md](jig-008-engine.md), reaches every provider through these operations and no other,
   and its lease lives in the scm port's compare-and-swap on a ref.
-- Policy, [jig-001-types.md](jig-001-types.md), chooses among the capabilities a port declares and cannot name a
+- Policy, [jig-005-policies.md](jig-005-policies.md), chooses among the capabilities a port declares and cannot name a
   path a port does not offer.
 - The operator surface, [jig-011-operator-surface.md](jig-011-operator-surface.md), shows the metrics every port
   reports.

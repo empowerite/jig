@@ -39,12 +39,12 @@ release/1.2:  └──────────B'───────C'
 ### The version
 
 The lifecycle is data and is versioned with the policy that declares it, never with the binary. The binary's version
-says what changed in its contracts: a change to a kind of [jig-001-types.md](jig-001-types.md), to the port contract
-of [jig-006-ports.md](jig-006-ports.md), or to the schema is a major release; a new port capability, verb, extension
-point or standard rule is a minor one; a fix that changes no contract is a patch. The standard policy is versioned on
-its own, the same way, and a change to the standard lifecycle is a major release of the standard policy and never of
-the binary. A change to a kind lands only after its RFC is accepted, so a major release of the binary is announced by
-an RFC before it is cut.
+says what changed in its contracts: a change to a kind of [jig-004-lifecycles.md](jig-004-lifecycles.md), to the port
+contract of [jig-006-ports.md](jig-006-ports.md), or to the schema is a major release; a new port capability, verb,
+extension point or standard rule is a minor one; a fix that changes no contract is a patch. The standard policy is
+versioned on its own, the same way, and a change to the standard lifecycle is a major release of the standard policy
+and never of the binary. A change to a kind lands only after its RFC is accepted, so a major release of the binary is
+announced by an RFC before it is cut.
 
 ### A consumer
 
@@ -83,10 +83,10 @@ policy change.
 - A schema change is a release that can count what it breaks, since every extension names the schema version it
   was written against.
 - The standard policy's release is what an organization's link pins beneath its own, as the chain of
-  [jig-001-types.md](jig-001-types.md) has it.
-- A patch is a change whose target is not the default branch, and integrated as [jig-001-types.md](jig-001-types.md)
-  has it means landed on the default branch; the change type gains its target as a declared parameter when jig-001 is
-  next amended.
+  [jig-005-policies.md](jig-005-policies.md) has it.
+- A patch is a change whose target is not the default branch, and integrated as
+  [jig-004-lifecycles.md](jig-004-lifecycles.md) has it means landed on the default branch; the change type gains its
+  target as a declared parameter when jig-001 is next amended.
 
 ## Open questions
 
