@@ -8,9 +8,9 @@ jig is a policy engine over declared entity types. A policy declares types, and 
 declares because the binary fixes the kinds a state and a transition can be and the capabilities a port can offer. The
 work item and the change of the SDLC are two types jig's standard policy declares, and a repository declares types of
 its own the same way. Policies compose up a chain by pinned pulls, each link narrowing what the link above declared.
-Every evaluation of a gate yields a verdict that carries its provenance and can be attested. The charter in
-[README.md](../../README.md) states the principles this follows from and says that the lifecycle is data within fixed
-kinds.
+Every evaluation of a gate yields a verdict that carries its provenance and can be attested. The charter,
+[jig-000-charter.md](jig-000-charter.md), states the principles this follows from and says that the lifecycle is data
+within fixed kinds.
 
 ### The type
 

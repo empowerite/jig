@@ -1,8 +1,9 @@
 # Docs
 
-How to install, use and extend jig, in the present tense, and the record of the decisions behind it. A page
-describes what jig is and does today. An RFC says what was decided and why, and once accepted it is the spec the
-code is checked against. A user reads the pages and skips the RFCs; an extender reads both.
+How to install, use and extend jig, in the present tense, and the record of the decisions behind it. A page describes
+what jig is and does today. An RFC says what was decided and why, and once accepted it is the spec the code is checked
+against. A user reads the pages and skips the RFCs; an extender reads both. Setting up a desk or a runner to work in
+this repository is [README.md](../README.md).
 
 ## Pages
 
@@ -17,8 +18,9 @@ code is checked against. A user reads the pages and skips the RFCs; an extender 
 
 ## The record
 
-- An RFC is a file in `rfcs/` named `jig-NNN-<slug>.md`. `NNN` is three digits, and a new RFC takes the next free
-  number. Once an RFC has been accepted its number is never reused, so a superseded RFC keeps its place in the record.
+- An RFC is a file in `rfcs/` named `jig-NNN-<slug>.md`. `NNN` is three digits, 000 is the charter, and a new RFC
+  takes the next free number. Once an RFC has been accepted its number is never reused, so a superseded RFC keeps its
+  place in the record.
 - The first line after the title is the status: `Status: draft`, `Status: accepted`, or
   `Status: superseded by jig-NNN`. A person accepts an RFC the way a person accepts an issue, by reading it and
   saying so; the status changes in a pull request a maintainer merges.
@@ -39,7 +41,7 @@ content is a list, a blank line after every block.
 One line per file: the pages, then the RFCs in number order with their status. jig will generate this index once
 it can; until then it is kept by hand.
 
-- [install.md](install.md): the pinned toolchain and how a desk or a runner installs it.
+- [rfcs/jig-000-charter.md](rfcs/jig-000-charter.md): what jig is and is not (draft)
 - [rfcs/jig-001-types.md](rfcs/jig-001-types.md): the unit of policy is a declared entity type; the kinds, the chain,
   the attested verdict (draft)
 - [rfcs/jig-002-language.md](rfcs/jig-002-language.md): what a policy is written in (draft)
