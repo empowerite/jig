@@ -10,9 +10,12 @@ repository.
 
 ### The engine
 
-`jig verify` reads every policy that applies to a repository, runs the gates those policies name, and reports each
-one as an annotation, a log line and a summary. It carries no gate of its own. A gate is an extension or a script,
-and the engine knows how to run both and nothing about what either checks.
+A gate hangs on a transition of the lifecycle in [rfc-001-world-model.md](rfc-001-world-model.md), and
+`jig verify` evaluates the gates that the applicable policies attach to the transition at hand, reporting each
+verdict as an annotation, a log line and a summary. On a pull request that transition is proposed to admissible;
+the gates on other transitions are evaluated where those transitions are taken. The engine carries no gate of its
+own. A gate is an extension or a script, and the engine knows how to run both and nothing about what either
+checks.
 
 ### Two classes of gate
 
@@ -28,8 +31,8 @@ gate and in what may run it; the engine treats them alike.
   teams. Nothing about it is copied anywhere, and debugging it never means releasing jig. Whether it is required
   is the repository's own branch ruleset to say.
 
-The organization adds, the repository adds, nobody removes. The engine runs the union, and a refusal names the
-policy its gate came from.
+The organization adds, the repository adds, nobody removes. On a transition the engine runs the union of the
+gates both policies attach to it, and a refusal names the policy its gate came from.
 
 ### What a repository holds
 
