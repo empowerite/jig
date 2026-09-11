@@ -27,13 +27,13 @@ is never its decision, and this extension starts nothing.
 ### Where it is served
 
 On the command line, as text and as `--json`; over the MCP server of
-[rfc-005-operator-surface.md](rfc-005-operator-surface.md), as a tool and as a resource per item; and through the
+[rfc-006-operator-surface.md](rfc-006-operator-surface.md), as a tool and as a resource per item; and through the
 harness port at session start, so a session that opens with an item in hand is handed its brief before its first
 question.
 
 ### The seat
 
-`jig-context` attaches at the brief-source point of [rfc-006-extensions.md](rfc-006-extensions.md). It reads the view
+`jig-context` attaches at the brief-source point of [rfc-007-extensions.md](rfc-007-extensions.md). It reads the view
 and the policy through the public model and calls `jig discover` for the rules; it takes no transition and writes
 nothing.
 
@@ -49,7 +49,7 @@ nothing.
 ## Consequences
 
 - `CLAUDE.md` sheds its account of states and moves; the loop's file becomes a pointer.
-- The interface's item view of `rfc-005` is this brief drawn.
+- The interface's item view of `rfc-006` is this brief drawn.
 - A future dispatcher, whoever writes one, polls `jig context --needs` and is outside jig.
 
 ## Open questions

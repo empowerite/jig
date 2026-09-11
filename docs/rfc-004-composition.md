@@ -55,7 +55,7 @@ drain from GitHub, each on scratch repositories, each proven by the live suites 
 
 - Ports declare which roles they can play; `jig policy check` refuses a role a port cannot fill.
 - The identity of `rfc-001` is what survives a drain; provider numbers are bindings and change.
-- The interface of `rfc-005` shows an item's bindings, so a person sees where each thing lives.
+- The interface of `rfc-006` shows an item's bindings, so a person sees where each thing lives.
 
 ## Open questions
 

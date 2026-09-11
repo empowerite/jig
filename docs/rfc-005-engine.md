@@ -87,9 +87,9 @@ the cursors and metrics, in jig's own view. It rebases no member, edits no perso
 
 - The engine's test suite runs against the fakes of [rfc-003-ports.md](rfc-003-ports.md) and covers every transition
   and every branch of the batch: a red batch of k isolates its culprit in at most ⌈log₂ k⌉ rebuilds.
-- A jigbot, [rfc-008-jigbot.md](rfc-008-jigbot.md), is this engine run board-wide on a schedule and on events, holding
+- A jigbot, [rfc-009-jigbot.md](rfc-009-jigbot.md), is this engine run board-wide on a schedule and on events, holding
   the lease.
-- The operator surface, [rfc-005-operator-surface.md](rfc-005-operator-surface.md), shows a tick's record and the
+- The operator surface, [rfc-006-operator-surface.md](rfc-006-operator-surface.md), shows a tick's record and the
   batch's state.
 
 ## Open questions
