@@ -50,3 +50,4 @@ it can; until then it is kept by hand.
 - [rfc-009-jigbot.md](rfc-009-jigbot.md): ticking in the cloud (draft)
 - [rfc-010-release.md](rfc-010-release.md): jig's own lifecycle, releases (draft)
 - [rfc-011-composition.md](rfc-011-composition.md): several providers, moving between them (draft)
+- [rfc-012-distribution.md](rfc-012-distribution.md): how gates, workflows and rulesets reach every repository (draft)
