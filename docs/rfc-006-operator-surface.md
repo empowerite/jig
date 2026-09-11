@@ -16,7 +16,7 @@ transition an actor takes, every one addressed by the number the provider gave t
 
 - `jig file`, `jig accept`, `jig reject`, `jig park`, `jig take`: the work item's transitions and its attributes.
 - `jig draft`, `jig propose`, `jig land`: the change's acted transitions.
-- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [rfc-004-engine.md](rfc-004-engine.md).
+- `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [rfc-005-engine.md](rfc-005-engine.md).
 - `jig board`: the view, as a table; `jig show <N>`: one item with its changes, verdicts and bindings.
 - `jig policy check`, `jig policy plan`: as in [rfc-001-types.md](rfc-001-types.md). Beside them, `jig policy set
   <key> <value>`, `jig policy unset <key>` and `jig policy explain <key>`: the first two edit `jig.toml` in the
@@ -24,9 +24,9 @@ transition an actor takes, every one addressed by the number the provider gave t
   means and which values the ports actually offer. They are conveniences over the file, and the file, edited by hand,
   stays the truth.
 - `jig discover <path>` and `jig context <N>`: the two extensions of jig-discover and
-  [rfc-007-jig-context.md](rfc-007-jig-context.md). Any `jig-<name>` on the `PATH` runs as `jig <name>`, with the rest
+  [rfc-008-jig-context.md](rfc-008-jig-context.md). Any `jig-<name>` on the `PATH` runs as `jig <name>`, with the rest
   of the line passed through, and an unknown verb is looked up that way before it is refused; see
-  [rfc-006-extensions.md](rfc-006-extensions.md).
+  [rfc-007-extensions.md](rfc-007-extensions.md).
 - `jig init`, which writes the first `jig.toml` from what the ports find; `jig doctor`, which reports every port's
   reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface.
 
@@ -56,7 +56,7 @@ the same API.
 
 Three presenters, the command line, GraphQL and MCP, sit on one internal API in Go. The presenters are thin; the
 internal API is where behavior lives, and it is not public. An extension,
-[rfc-006-extensions.md](rfc-006-extensions.md), sees the schema and the verbs, never the internal API.
+[rfc-007-extensions.md](rfc-007-extensions.md), sees the schema and the verbs, never the internal API.
 
 ## Why
 

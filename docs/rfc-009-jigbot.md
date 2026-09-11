@@ -4,10 +4,10 @@ Status: draft
 
 ## Decision
 
-jigbot is the engine of [rfc-004-engine.md](rfc-004-engine.md) run board-wide, hosted by the repository's own CI through
-the gate port's provider, as its own actor. It is optional the way an automated dependency updater is optional: a
-repository adds one workflow file and has a jigbot; a repository without one has people and sessions running the
-same verbs by hand.
+jigbot is the engine of [rfc-005-engine.md](rfc-005-engine.md) run board-wide, hosted by the repository's own CI
+through the gate port's provider, as its own actor. It is optional the way an automated dependency updater is
+optional: a repository adds one workflow file and has a jigbot; a repository without one has people and sessions
+running the same verbs by hand.
 
 ### The actor
 
@@ -52,7 +52,7 @@ except as the landing step of a batch that policy gave it.
 
 - The App and its permissions are provisioned outside this repository, beside the scratch repositories of the
   live suites.
-- The batch of `rfc-004` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
+- The batch of `rfc-005` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
   and a desk's `jig land` is a person's own merge.
 - Under a strict ruleset, a change must be current with the default branch before it merges, and jigbot never
   rebases a member; the batch's landing path satisfies strictness by construction, and a change outside a batch is

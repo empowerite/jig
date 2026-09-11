@@ -156,18 +156,18 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 
 - The ports of [rfc-003-ports.md](rfc-003-ports.md) gain the scm port as a location, the production of a verdict on
   request, and a slot per provider for attestations; see [#69][ports].
-- The engine of [rfc-004-engine.md](rfc-004-engine.md) ticks over a declared lifecycle in the one shape above; see
+- The engine of [rfc-005-engine.md](rfc-005-engine.md) ticks over a declared lifecycle in the one shape above; see
   [#70][engine].
-- The verbs of [rfc-005-operator-surface.md](rfc-005-operator-surface.md) are the declared acted transitions plus the
+- The verbs of [rfc-006-operator-surface.md](rfc-006-operator-surface.md) are the declared acted transitions plus the
   engine's own, `jig verify` produces the verdicts a transition is missing, and the audit answer is a verb; see
   [#72][surface].
-- The extension points of [rfc-006-extensions.md](rfc-006-extensions.md) lose the rule source, gain a dispatcher, and
+- The extension points of [rfc-007-extensions.md](rfc-007-extensions.md) lose the rule source, gain a dispatcher, and
   a gate extension returns the verdict record above; see [#71][extensions].
-- The brief of [rfc-007-jig-context.md](rfc-007-jig-context.md) names the gates that will judge the paths a change
+- The brief of [rfc-008-jig-context.md](rfc-008-jig-context.md) names the gates that will judge the paths a change
   touches; see [#73][context].
-- The version rule of [rfc-009-release.md](rfc-009-release.md) changes, since the lifecycle is no longer in the
+- The version rule of [rfc-010-release.md](rfc-010-release.md) changes, since the lifecycle is no longer in the
   binary; see [#75][release].
-- The roles of [rfc-010-composition.md](rfc-010-composition.md) are bindings a repository declares; see
+- The roles of [rfc-004-composition.md](rfc-004-composition.md) are bindings a repository declares; see
   [#76][composition].
 - What a policy is written in, and how a published policy is packaged and pinned, is [rfc-002][language].
 - This repository declares rfc as its first type, in its own policy, once the language exists, and the record rules of
@@ -176,7 +176,7 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 ## Open questions
 
 - Which capabilities each port kind offers, settled per port in rfc-003.
-- Whose key signs a verdict and how a consumer verifies it; with releases, in rfc-009.
+- Whose key signs a verdict and how a consumer verifies it; with releases, in rfc-010.
 - What the in-toto statement's subject carries and what its predicate carries.
 - Whether a link may ever mark a declaration as advisory, so that a link below may drop it. Deferred, not refused: it
   would be a marking on the upstream declaration and would not change the rules above.

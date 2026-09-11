@@ -86,11 +86,11 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 ## Consequences
 
-- The engine, [rfc-004-engine.md](rfc-004-engine.md), reaches every provider through these operations and no other,
+- The engine, [rfc-005-engine.md](rfc-005-engine.md), reaches every provider through these operations and no other,
   and its lease lives in the scm port's compare-and-swap on a ref.
 - Policy, [rfc-001-types.md](rfc-001-types.md), chooses among the capabilities a port declares and cannot name a
   path a port does not offer.
-- The operator surface, [rfc-005-operator-surface.md](rfc-005-operator-surface.md), shows the metrics every port
+- The operator surface, [rfc-006-operator-surface.md](rfc-006-operator-surface.md), shows the metrics every port
   reports.
 - A scratch repository per provider, for the live suite, is provisioned outside this repository.
 
