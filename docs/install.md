@@ -10,6 +10,8 @@ a runner install from the same two files, so a check that passes on one passes o
 1. Install `mise`; see: [mise.jdx.dev](https://mise.jdx.dev/getting-started.html).
 2. In the clone, once: `mise trust`.
 3. Then: `mise install`.
+4. And: `git config core.hooksPath controls/hooks`, so that every commit runs the pre-commit controls; see
+   [controls/1st.md](../controls/1st.md).
 
 Activate `mise` in the shell, or prefix a command with `mise exec --`, and the pinned tools answer by their bare
 names. A runner does the same through `jdx/mise-action` in the workflow; nothing is installed by hand there.

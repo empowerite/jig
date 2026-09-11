@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# unique-rfc-numbers - no two files under docs/ share an rfc-NNN prefix
+set -o errexit -o nounset -o pipefail
+cd "$(git rev-parse --show-toplevel)"
+source controls/common.bash
+scope "$@"
+
+remedy=$(cat <<REMEDY
+Two RFCs share a number. Renumber the newcomer to the next free number, rename its file and its line in
+docs/1st.md, and push; then [re-run this check]($(run_url)).
+REMEDY
+)
+
+duplicates=$(for f in docs/rfc-*.md
+do
+  n=${f#docs/rfc-}
+  printf '%s\n' "${n%%-*}"
+done | sort | uniq --repeated || :)
+
+if [[ -n "${duplicates}" ]]
+then
+  count=0
+  while IFS= read -r number
+  do
+    echo "::error::rfc-${number} is two files: $(printf '%s ' docs/rfc-"${number}"-*.md)"
+    count=$(( count + 1 ))
+  done <<< "${duplicates}"
+  refuse "${count} RFC number(s) used twice"
+else
+  pass "Every RFC number is used once."
+fi

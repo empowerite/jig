@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# run - runs the controls of one event, as the manifest in 1st.md names them
+#
+# `controls/run <event>`, with the event one of pre-commit, pull-request or schedule. The changed set is computed
+# once: the staged files on a desk, the pull request's files on a runner. Every control of the event runs and
+# reports; a control whose need failed is skipped and says so; the exit status is non-zero if any refused.
+set -o errexit -o nounset -o pipefail
+here=$(cd "$(dirname "$0")" && pwd)
+cd "$(git rev-parse --show-toplevel)"
+
+event=${1:?usage: controls/run <pre-commit|pull-request|schedule>}
+case "${event}" in
+  (pre-commit|pull-request|schedule) ;;
+  (*)
+    echo "unknown event: ${event}" >&2
+    exit 2
+esac
+
+# The changed set, and whether the change deletes anything.
+changed=()
+deleted=false
+case "${event}" in
+  (pre-commit)
+    listed=$(git diff --cached --name-only --diff-filter=ACMR)
+    while IFS= read -r f
+    do
+      [[ -n "${f}" ]] && changed+=("${f}")
+    done <<< "${listed}"
+    if [[ -n "$(git diff --cached --name-only --diff-filter=D)" ]]
+    then
+      deleted=true
+    fi
+    ;;
+  (pull-request)
+    pr=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH}")
+    listed=$(gh api "repos/${GITHUB_REPOSITORY}/pulls/${pr}/files" --paginate --jq '.[] | "\(.status)\t\(.filename)"')
+    while IFS=$'\t' read -r status f
+    do
+      if [[ "${status}" == removed ]]
+      then
+        deleted=true
+      elif [[ -n "${f}" ]]
+      then
+        changed+=("${f}")
+      fi
+    done <<< "${listed}"
+    ;;
+esac
+
+# The manifest: one row per control, columns control | events | scope | needs.
+manifest=$(awk -F'|' '
+  /^\| [a-z]/ && $2 !~ /control/ {
+    for (i = 2; i <= 5; i++) { gsub(/^ +| +$/, "", $i) }
+    print $2 "\t" $3 "\t" $4 "\t" $5
+  }' "${here}/1st.md")
+
+failed=()
+skipped=()
+while IFS=$'\t' read -r name events scope needs
+do
+  [[ ", ${events}, " == *", ${event}, "* ]] || continue
+  blocked=""
+  for need in ${needs//,/ }
+  do
+    for f in ${failed[@]+"${failed[@]}"}
+    do
+      [[ "${need}" == "${f}" ]] && blocked=${need}
+    done
+  done
+  if [[ -n "${blocked}" ]]
+  then
+    echo "::notice::${name} skipped: it needs ${blocked}, which refused"
+    skipped+=("${name}")
+    continue
+  fi
+  args=()
+  case "${scope}" in
+    (all) args=(--all) ;;
+    (changed)
+      if [[ "${event}" == schedule || "${deleted}" == true ]]
+      then
+        args=(--all)
+      else
+        args=(--changed ${changed[@]+"${changed[@]}"})
+      fi
+      ;;
+  esac
+  echo "==> ${name} ${args[*]:-}"
+  if "${here}/${name}" ${args[@]+"${args[@]}"}
+  then
+    :
+  else
+    failed+=("${name}")
+  fi
+done <<< "${manifest}"
+
+if (( ${#failed[@]} > 0 ))
+then
+  echo "refused: ${failed[*]}${skipped[@]+; skipped: ${skipped[*]}}"
+  exit 1
+fi
+echo "every control of ${event} passed"

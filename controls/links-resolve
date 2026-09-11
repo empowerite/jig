@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# links-resolve - every relative link in the Markdown it is given names a file that exists and a heading that exists
+set -o errexit -o nounset -o pipefail
+cd "$(git rev-parse --show-toplevel)"
+source controls/common.bash
+scope "$@"
+
+remedy=$(cat <<REMEDY
+Each line above names the file, the line and the target that did not resolve. Fix the link, or write the file or
+heading it names, and push; then [re-run this check]($(run_url)).
+REMEDY
+)
+
+targets=()
+if [[ "${mode}" == --all ]]
+then
+  targets=(docs README.md CLAUDE.md controls/1st.md)
+else
+  for f in ${files[@]+"${files[@]}"}
+  do
+    if [[ "${f}" == *.md && -f "${f}" ]]
+    then
+      targets+=("${f}")
+    fi
+  done
+fi
+
+if (( ${#targets[@]} == 0 ))
+then
+  pass "No Markdown changed; nothing to resolve."
+  exit 0
+fi
+
+report=$(mktemp)
+if lychee --offline --include-fragments --no-progress --format json "${targets[@]}" > "${report}"
+then
+  rm --force "${report}" 2>/dev/null || rm -f "${report}"
+  pass "Every link in ${#targets[@]} Markdown file(s) resolves."
+else
+  jq --raw-output --arg root "file://${PWD}/" '.error_map | to_entries[] | .key as $file | .value[]
+    | "::error file=\($file),line=\(.span.line)::link does not resolve: \(.url | ltrimstr($root))"' "${report}"
+  broken=$(jq '[.error_map[] | length] | add' "${report}")
+  rm -f "${report}"
+  refuse "${broken} link(s) do not resolve"
+fi

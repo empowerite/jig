@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# must-close-open-issue - the pull request will close at least one open issue of this repository
+#
+# Reads the pull request from the runner's event, or from `--pull-request <N>` on a desk. GitHub resolves a link
+# made under Development into closingIssuesReferences, and that list is what is read; nothing in the body is.
+set -o errexit -o nounset -o pipefail
+cd "$(git rev-parse --show-toplevel)"
+source controls/common.bash
+
+if [[ "${1:-}" == --pull-request ]]
+then
+  pr=${2:?usage: ${0##*/} --pull-request <N>}
+else
+  pr=$(jq --raw-output '.pull_request.number' "${GITHUB_EVENT_PATH:?no pull request: pass --pull-request <N>}")
+fi
+repo_slug=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+repo_owner=${repo_slug%%/*}
+repo_name=${repo_slug#*/}
+pull="https://github.com/${repo_slug}/pull/${pr}"
+
+remedy=$(cat <<REMEDY
+Link an open issue of this repository under **Development** in [the sidebar](${pull}):
+
+1. click the gear (⚙) button beside **Development**
+2. pick one or more open issues
+3. [re-run this check]($(run_url))
+
+Linking does not fire any event, so the check **must** be re-run.
+
+See: [linking a pull request to an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue).
+REMEDY
+)
+
+query=$(cat <<'GRAPHQL'
+query($owner: String!, $name: String!, $number: Int!) {
+  repository(owner: $owner, name: $name) {
+    pullRequest(number: $number) {
+      closingIssuesReferences(first: 100) {
+        nodes { number state repository { nameWithOwner } }
+      }
+    }
+  }
+}
+GRAPHQL
+)
+refs=$(gh api graphql \
+  --field owner="${repo_owner}" \
+  --field name="${repo_name}" \
+  --field number="${pr}" \
+  --raw-field query="${query}" \
+  --jq '.data.repository.pullRequest.closingIssuesReferences.nodes[]
+        | "\(.number) \(.state) \(.repository.nameWithOwner)"')
+
+if [[ -z "${refs}" ]]
+then
+  refuse 'this pull request does not close any issues'
+else
+  open_local=0
+  while read -r n state repo
+  do
+    if [[ "${repo}" != "${repo_slug}" ]]
+    then
+      echo "::warning::skipping foreign issue ${repo}#${n}"
+      continue
+    fi
+    if [[ "${state}" != OPEN ]]
+    then
+      echo "::warning::${repo}#${n} is ${state}; merging will not change it"
+      continue
+    fi
+    open_local=$(( open_local + 1 ))
+  done <<< "${refs}"
+
+  if (( open_local == 0 ))
+  then
+    refuse 'every issue this pull request closes is already closed or belongs to another repository'
+  else
+    closes=$(awk '{ printf "#%s ", $1 }' <<< "${refs}")
+    pass "Closes ${closes% }."
+  fi
+fi

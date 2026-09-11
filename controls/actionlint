@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# actionlint - every workflow parses, its expressions type, and the bash inside it passes shellcheck
+set -o errexit -o nounset -o pipefail
+cd "$(git rev-parse --show-toplevel)"
+source controls/common.bash
+scope "$@"
+
+remedy=$(cat <<REMEDY
+Each line above names the workflow, the line and the finding. Fix it and push; then [re-run this check]($(run_url)).
+REMEDY
+)
+
+if findings=$(actionlint -config-file .github/actionlint.yml .github/workflows/*.yml 2>&1)
+then
+  pass "Every workflow lints clean."
+else
+  printf '%s\n' "${findings}"
+  refuse "a workflow does not lint clean"
+fi

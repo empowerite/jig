@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# pre-commit - runs the pre-commit controls over the staged files; core.hooksPath points at this directory
+exec "$(git rev-parse --show-toplevel)/controls/run" pre-commit
