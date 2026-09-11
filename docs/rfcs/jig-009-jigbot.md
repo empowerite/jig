@@ -17,17 +17,12 @@ ownership rule of [jig-001-types.md](jig-001-types.md) apply to either like any 
 calls their own rate-limit budget.
 
 A session acts as a GitHub App on every desk and never as the person's login, and a session started through the
-harness port with no App to act as is refused before it posts anything. Two ways put an App's key on a desk, both
-GitHub-native, and jig requires neither in particular.
-
-- A per-person App, the default. The person registers it, an owner of the organization approves its installation once,
-  and its key exists only on that person's desks. Its posts appear under the App's bot login, and an App's owner is a
-  fact GitHub publishes, so the author of a post is that person's agent with no line of configuration. A stolen desk
-  exposes one App, which the owner uninstalls.
-- One organization App and a broker, for a large organization. The organization holds the key where no desk is, a
-  service or a workflow, and the broker mints tokens narrowed to one repository for people it authenticates through
-  GitHub. Every session's posts appear under the organization's bot, and whose session it was is the broker's record.
-  jig ships a reference broker the way [jig-007-extensions.md](jig-007-extensions.md) ships a reference dispatcher.
+harness port with no App to act as is refused before it posts anything. The App is the organization's, and a broker
+puts its authority on a desk. The organization holds the key where no desk is, a service or a workflow, and the
+broker mints tokens narrowed to one repository for people it authenticates through GitHub. Every session's posts
+appear under the organization's bot, and whose session it was is the broker's record. A stolen desk exposes one
+broker token, which the broker revokes, and never the key. jig ships a reference broker the way
+[jig-007-extensions.md](jig-007-extensions.md) ships a reference dispatcher.
 
 A person typing a verb at their own keyboard is still the person: the verb is theirs, and the provider records the
 fact under their login. Commits stay the person's, authored and signed on the desk with the session named in a
@@ -128,8 +123,6 @@ except as the landing step of a batch that policy gave it.
   place that needs no service.
 - A session as an App on every desk, because a session acting as a person is not distinguishable from the person, and
   telling who decided is what the record is for.
-- Per-person Apps as the default, because a key on a laptop should open one App and not an organization, and because
-  an App's owner is a fact GitHub publishes, so attribution costs no configuration.
 - The manifest flow, because a form of a dozen fields is filled in wrong once per organization, and a binary can hold
   the listener the flow needs where a script cannot.
 
@@ -138,9 +131,6 @@ except as the landing step of a batch that policy gave it.
 - The App is registered in the organization's settings by `jig app create`, and its key and ID are provisioned as the
   organization's secret and variable. Nothing about it is committed, and the install page says what it is, what it may
   do, and how a desk or a runner authenticates as it.
-- The actor rule of [jig-001-types.md](jig-001-types.md) gains a predicate over the owner of the App that posted, so
-  that a policy allows an agent of a maintainer to propose and forbids it to accept without naming anyone. That clause
-  is jig-001's, made in its own amendment.
 - The batch of `jig-005` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
   and a desk's `jig land` is a person's own merge.
 - Under a strict ruleset, a change must be current with the default branch before it merges, and jigbot never
@@ -155,3 +145,5 @@ except as the landing step of a batch that policy gave it.
 - Whether a session may author commits as its App through GitHub's commit API, signed by GitHub and attributed to the
   bot, which would retire the trailer, or commits stay the person's.
 - What the reference broker is, a workflow or a service, and where it runs.
+- How the person behind a session is carried: in the broker's record alone, by the App acting on the person's behalf
+  through a user-to-server token, or only in the signature on the verdict and the attestation.
