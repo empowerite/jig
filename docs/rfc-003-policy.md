@@ -4,7 +4,8 @@ Status: draft
 
 ## Decision
 
-A repository declares its SDLC in one committed file at its root, `jig.toml`. The file is data: it names choices among
+A repository declares its SDLC in `jig.toml` at its root, and a directory that needs more declares it in a `jig.toml`
+of its own, which governs the subtree rooted there and adds to the root's. The file is data: it names choices among
 what the model in [rfc-001-world-model.md](rfc-001-world-model.md) and the ports in
 [rfc-002-ports.md](rfc-002-ports.md) already offer, and it can name nothing else. jig reads it at every tick,
 validates it with `jig policy check`, and shows what a change to it would do to work in flight with `jig policy plan`.
@@ -29,9 +30,19 @@ A change to the file is a change like any other and goes through the loop the fi
   `integrated` alone.
 - The lifecycle version the file was written against.
 
+### Per subtree
+
+A `jig.toml` in a directory governs the subtree rooted there. The engine reads every file above a path, the
+root's and each nearer one, and composes them by union: the gates and attributes of all of them apply, and a value
+that only one of them sets, a path for a step, is the value. A union has no subtraction, so a subtree's file cannot
+remove what the root declares; it can only add, or conflict, by setting a value the root already set, and a
+conflict is refused. This is the rule rule files and controls already follow; policy is not the one thing that
+cannot be per subtree.
+
 ### Validation
 
-`jig policy check` refuses a file that names a port jig lacks, a path the port does not offer, a gate no port can
+`jig policy check` refuses a subtree file that sets a value the root already set, and a file that names a port jig
+lacks, a path the port does not offer, a gate no port can
 report, an actor the lifecycle does not know, or an attribute slot the port cannot read. It runs as a policy step
 on every pull request that touches the file, and on a desk before a commit.
 
