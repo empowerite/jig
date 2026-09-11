@@ -36,14 +36,21 @@ jig rests on four principles.
 
 ## The lifecycle
 
-jig owns one lifecycle and versions it with the code. A work item is filed, assigned, and resolved. A change is
-drafted, proposed, admissible, integrating, integrated, and realized; admissible is the state from which it may
-land, on its own or in a batch. A merge does not end the lifecycle. The verdict after integration does, once the
-apply has run or the deployment is up.
+jig fixes what a lifecycle is made of and ships a standard one as the default. A state is ground, derived or excited:
+entered by an action and at rest until the next, computed from facts and holding while they hold, or in flight and
+decaying on its own. A transition is silent, taken by observing, or acted, taken by an actor through a capability a
+port offers: opening, marking ready, merging, deploying, closing. The kinds and the capabilities are jig's and change
+only with a release. The lifecycle itself, which states there are and which transitions join them, is data a policy
+declares.
+
+In the standard lifecycle a work item is filed, assigned, and resolved. A change is drafted, proposed, admissible,
+integrating, integrated, and realized; admissible is the state from which it may land, on its own or in a batch. A
+merge does not end the lifecycle. The verdict after integration does, once the apply has run or the deployment is up.
 
 Each provider realizes these steps in its own way: a draft pull request, a merge train, a build-validation policy. Its
-port carries those paths. A repository chooses among them and attaches gates, actors and attributes. It cannot add a
-state. A state jig lacks is a change to jig, made through a spec.
+port carries those paths. A repository chooses among them and attaches gates, actors and attributes. It never declares
+a lifecycle of its own. An organization may, once, for every repository under it, so a platform component can move
+through a lifecycle an application service does not.
 
 ## Boundaries
 
@@ -53,8 +60,8 @@ state. A state jig lacks is a change to jig, made through a spec.
 - jig is not an agent framework. Agents call jig to learn where they are, what they may do, and what a path requires.
   jig publishes needs, such as a repair wanted or an item unblocked. It does not prompt, choose a model, or dispatch.
   Who acts on a need is not its decision.
-- jig is not a workflow language. The lifecycle is fixed. A repository varies gates, attributes, port paths and batch
-  formation. The shape changes only with a release.
+- jig is not a workflow language. The lifecycle is data within fixed kinds, declared and never programmed. A
+  repository varies gates, attributes, port paths and batch formation. The kinds change only with a release.
 - jig is not a git host. Git is the substrate every provider shares, and jig uses it directly.
 - jig does not own your state. Whatever a person can see and change belongs to the provider. The few facts jig keeps
   have no human surface, and each is written back into a provider.
