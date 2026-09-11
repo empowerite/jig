@@ -38,19 +38,19 @@ this repository's own workflow is a stand-in until its controls arrive; see [rfc
 
 ### The workflow
 
-This repository ships one workflow with `workflow_call`. It checks out, installs the pinned jig, and runs
-`jig verify` over both policies. An organization requires it through an organization-level ruleset that names the
-workflow, which runs it in every repository with no file in any of them, beside the branch ruleset that requires
-the check. A repository outside that requirement, or one that wants its own gates alone, writes a five-line
-caller, `uses: empowerite/jig/.github/workflows/verify.yml@v1`, against its own file. Both rulesets are
-Terraform. Maintenance is one file, and rollout is a tag.
+This repository publishes one reusable workflow: a workflow that other repositories invoke rather than copy,
+which GitHub allows a workflow to declare. It checks out, installs the pinned jig, and runs `jig verify` over both
+policies. An organization requires it through an organization-level ruleset that names the workflow, which runs
+it in every repository with no file in any of them, beside the branch ruleset that requires the check. A
+repository outside that requirement, or one that wants its own gates alone, invokes the workflow from a caller of
+a few lines, against its own file. Both rulesets are Terraform. Maintenance is one file, and rollout is a tag.
 
 ### Releases
 
 A GitHub Release carries the `jig` binary for each platform with the interface embedded, the schema file, and
-checksums. `mise` installs it from the release with no registry entry, `"ubi:empowerite/jig" = "<version>"`; a
-desk pins it in `mise.toml`, and the workflow installs the same pin through `mise-action`, so both run the same
-bytes. An extension, `jig-<name>`, is a release of its own, installed and pinned the same way; see
+checksums. `mise` installs it straight from the release, by a backend that needs no registry entry, only the
+release's location and a version; a desk pins it in `mise.toml`, and the workflow installs the same pin, so both
+run the same bytes. An extension, `jig-<name>`, is a release of its own, installed and pinned the same way; see
 [rfc-006-extensions.md](rfc-006-extensions.md).
 
 ### What this repository keeps
