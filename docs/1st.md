@@ -51,4 +51,4 @@ it can; until then it is kept by hand.
 - [rfc-010-release.md](rfc-010-release.md): jig's own lifecycle, releases (draft)
 - [rfc-011-composition.md](rfc-011-composition.md): several providers, moving between them (draft)
 - [rfc-012-distribution.md](rfc-012-distribution.md): how gates, workflows and rulesets reach every repository (draft)
-- [rfc-013-controls.md](rfc-013-controls.md): a control is one file, run anywhere, in changed or all scope (draft)
+- [rfc-013-controls.md](rfc-013-controls.md): a control judges a subject at a moment, from anywhere (draft)
