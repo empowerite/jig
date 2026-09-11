@@ -20,6 +20,14 @@ A release is a git tag, `vMAJOR.MINOR.PATCH`, and what it carries:
   version, so that a consumer can pin it as a link of the chain.
 - Checksums over every artifact. A consumer's `mise` installs the binary straight from the release by them.
 
+Where a tag points: a major or a minor is a tag on `main`, at the commit that becomes `vX.Y.0`. A patch is a tag on
+that minor's release branch, `release/X.Y`, cut from `main` at the same commit and carrying only fixes, each landed on
+`main` first and cherry-picked. A pre-release is a tag on `main` before the `.0`, `vX.Y.0-rc.N`, since no branch
+exists yet and an rc's fixes are ordinary commits. The branch is cut at the `.0`; if a minor ever needs `main` to move
+on during a long stabilization, it is cut at the first rc instead and the rcs tag the branch, and nothing else
+changes. In the model a release is a type: its location is the scm port's tags, its name rule is the version pattern,
+its creating action tags a commit, and the guard on that action reads the branch.
+
 ### The version
 
 The lifecycle is data and is versioned with the policy that declares it, never with the binary. The binary's version
@@ -55,9 +63,13 @@ an update to the standard policy, since such an update is a policy change.
   was written against.
 - The standard policy's release is what an organization's link pins beneath its own, as the chain of
   [rfc-001-types.md](rfc-001-types.md) has it.
+- A patch is a change whose target is not the default branch, and integrated as [rfc-001-types.md](rfc-001-types.md)
+  has it means landed on the default branch; the change type gains its target as a declared parameter when rfc-001 is
+  next amended.
 
 ## Open questions
 
 - How release artifacts are signed and with what key, and whose key signs a verdict and how a consumer verifies both,
   so that what `mise` installed and what an attestation claims can each be checked.
-- Whether the action and the reusable workflow live in this repository or in one of their own.
+- Whether the action, the reusable workflow and the standard policy live in this repository or in one of their own; a
+  standard policy versioned on its own inside this repository needs a tag namespace of its own, `policy/vX.Y.Z`.
