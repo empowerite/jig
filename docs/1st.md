@@ -42,6 +42,7 @@ it can; until then it is kept by hand.
 - [install.md](install.md): the pinned toolchain and how a desk or a runner installs it.
 - [rfc-001-types.md](rfc-001-types.md): the unit of policy is a declared entity type; the kinds, the chain, the
   attested verdict (draft)
+- [rfc-002-language.md](rfc-002-language.md): what a policy is written in (draft)
 - [rfc-003-ports.md](rfc-003-ports.md): port contracts, proofs, metrics (draft)
 - [rfc-004-composition.md](rfc-004-composition.md): several providers, moving between them (draft)
 - [rfc-005-engine.md](rfc-005-engine.md): ticking, batching, landing (draft)
