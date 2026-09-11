@@ -11,34 +11,45 @@ installed anywhere: Node exists in this repository as a build dependency of the 
 
 ### The verbs
 
-The command line is the transition relation of [rfc-001-types.md](rfc-001-types.md), one verb per
-transition an actor takes, every one addressed by the number the provider gave the object:
+The command line is the transition relation of the types the policy declares, verb first and generic over every type,
+with the type word dropped for the standard types where the id form is unambiguous.
 
-- `jig file`, `jig accept`, `jig reject`, `jig park`, `jig take`: the work item's transitions and its attributes.
-- `jig draft`, `jig propose`, `jig land`: the change's acted transitions.
+- `jig new <type> [parameters]`: the creating action the type declares. Its parameters are the template's variables,
+  read from the declaration; given on the command line they fill in, absent they are asked for. `jig new type <name>`
+  is the same verb on the standard type named type, whose instances are declarations in the repository's policy, so a
+  new type exists when its declaration lands through the loop and not when the prompt finishes.
+- `jig list <type>` and `jig show <type> <id>`: the view, an instance with its state, its verdicts and its bindings.
+  `jig board` is the standard read, the work items and changes as a table. `jig show 42` stays, since a bare number is
+  a work item.
+- `jig explain <type>`: the declaration as prose, the location, the name rule, the shape, the lifecycle and the gates,
+  rendered from the policy that enforces them, for a person or an agent.
+- The transitions, one verb per acted transition of each type's lifecycle, addressed by the number the provider gave
+  the instance: `jig accept 42`, `jig propose 42`, `jig accept rfc 003`. Setting an attribute is a verb. Editing an
+  instance's text is never jig's. There is no delete verb: deleting is a provider act jig observes, or a terminal
+  transition the lifecycle declares.
+- `jig verify [<id>]`: produce the verdicts the next transition of the change at hand is missing, here, now, through
+  the gate port of [rfc-003-ports.md](rfc-003-ports.md), and report each.
 - `jig tick`, board-wide, and `jig tick --item <N>`: one evaluation, as in [rfc-005-engine.md](rfc-005-engine.md).
-- `jig board`: the view, as a table; `jig show <N>`: one item with its changes, verdicts and bindings.
-- `jig policy check`, `jig policy plan`: as in [rfc-001-types.md](rfc-001-types.md). Beside them, `jig policy set
-  <key> <value>`, `jig policy unset <key>` and `jig policy explain <key>`: the first two edit `jig.toml` in the
-  working tree, run the check and print the plan in the same breath, and commit nothing; the third says what a key
-  means and which values the ports actually offer. They are conveniences over the file, and the file, edited by hand,
-  stays the truth.
-- `jig discover <path>` and `jig context <N>`: the two extensions of jig-discover and
-  [rfc-008-jig-context.md](rfc-008-jig-context.md). Any `jig-<name>` on the `PATH` runs as `jig <name>`, with the rest
-  of the line passed through, and an unknown verb is looked up that way before it is refused; see
-  [rfc-007-extensions.md](rfc-007-extensions.md).
-- `jig init`, which writes the first `jig.toml` from what the ports find; `jig doctor`, which reports every port's
-  reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface.
+- `jig policy check` and `jig policy plan`: as in [rfc-001-types.md](rfc-001-types.md) and
+  [rfc-002-language.md](rfc-002-language.md).
+- `jig context <N>`: the brief, the extension of [rfc-008-jig-context.md](rfc-008-jig-context.md). Any `jig-<name>` on
+  the `PATH` runs as `jig <name>`, with the rest of the line passed through, and an unknown verb is looked up that way
+  before it is refused; see [rfc-007-extensions.md](rfc-007-extensions.md).
+- `jig init`, which writes the first policy from what the ports find; `jig doctor`, which reports every port's
+  reachability, the toolchain, the signing setup and the version; `jig ui`, which serves the interface; `jig mcp`,
+  which serves the tools.
 
-Every verb answers in plain text for a person and in JSON with `--json` for a program; on a runner, a refusal is
-also a `::error::` annotation. A verb never renders jig's identity; every table speaks provider numbers.
+Every verb answers in plain text for a person and in JSON with `--json` for a program. On a runner a refusal is also a
+`::error::` annotation, and every refusal names the rule that fired and the facts it read. A verb never renders jig's
+identity; every table speaks provider numbers.
 
 ### The API
 
-The public contract is one GraphQL schema, derived from the model and committed as a file. `jig ui` serves it on
-the desk's loopback interface; a future service serves the same schema remotely. Queries read the view;
-subscriptions stream the events a tick produces; mutations are the verbs. Nothing reaches the interface, or any
-other client, that is not in the schema, and the schema is versioned with the lifecycle.
+The public contract is one GraphQL schema, derived from the declared types and committed as a file. `jig ui` serves it
+on the desk's loopback interface; a future service serves the same schema remotely. Queries read the view;
+subscriptions stream the events a tick produces; mutations are the verbs, so each verb above is a query or a mutation
+over the schema, and an agent over MCP and a person at the command line use one declaration. Nothing reaches the
+interface, or any other client, that is not in the schema, and the schema is versioned with the model.
 
 ### The MCP server
 
@@ -48,9 +59,8 @@ An agent calls jig; jig never calls an agent. The tools are the same functions t
 ### The interface
 
 The embedded interface is the board, the item, and the animation: what a tick observed and did, transition by
-transition, as it happens, fed by the subscription. It draws only the lifecycle of the model, which is fixed, so
-it never needs to learn a repository's states; it learns its gates and attributes from the policy it reads through
-the same API.
+transition, as it happens, fed by the subscription. It draws whatever lifecycle the policy declares, as a graph, and
+learns a repository's gates and attributes from the policy it reads through the same API.
 
 ### Exposure
 
@@ -68,6 +78,10 @@ internal API is where behavior lives, and it is not public. An extension,
   and a GUI that can only reach what the file names is a GUI that cannot leak an internal.
 - Loopback for the desk, because the desk's data is the desk's; a remote service is a deliberate later choice
   with its own spec.
+- Verb first, because the charter says the verbs are the transitions, and a transition reads as a verb before its
+  object.
+- One mechanism over every type, because a type that needed verbs of its own would be a second surface to learn and a
+  second one to keep in step.
 
 ## Consequences
 
@@ -75,6 +89,13 @@ internal API is where behavior lives, and it is not public. An extension,
   every day.
 - `mise.toml` in this repository pins the Go and Node toolchains the release needs; a consumer pins only `jig`.
 - The docs pages install and use are written against these verbs.
+- `jig explain` renders through the template language of [rfc-002-language.md](rfc-002-language.md).
+- A name rule that includes a sequence, the next free number, says so in its declaration, because `new` must compute
+  the name and a regex alone cannot; the name rule of [rfc-001-types.md](rfc-001-types.md) gains that clause when it
+  is next amended.
+- A desk's `jig new` for a type the repository declares on the branch it stands on reads the working tree's policy for
+  the repository's own types, while the chain above stays pinned; the base-policy rule of
+  [rfc-005-engine.md](rfc-005-engine.md) is about admission, not about what a desk may create.
 
 ## Open questions
 
@@ -82,3 +103,5 @@ internal API is where behavior lives, and it is not public. An extension,
   with jig's landing reserved to the batch. The policy's actor table decides per repository; the verb exists so
   that the choice is available.
 - The service host: when, and whether it is this binary with a flag or a separate spec.
+- Whether conveniences that edit the policy file, the old `set` and `unset`, are wanted once the file is CUE, or
+  whether the file edited by hand is enough.
