@@ -4,6 +4,10 @@
 # not a set of files; `scope` reads that into `mode` and `files`. `refuse` and `pass` print the same lines on a desk
 # and on a runner, and append to the step summary where one exists.
 
+# `files` is set here for the control that sourced this file, and `remedy` is set by that control before it calls
+# `refuse`; shellcheck reads one file at a time and cannot see either.
+# shellcheck disable=SC2034,SC2154
+
 summary=${GITHUB_STEP_SUMMARY:-/dev/null}
 
 scope() {

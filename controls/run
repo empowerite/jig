@@ -96,7 +96,12 @@ done <<< "${manifest}"
 
 if (( ${#failed[@]} > 0 ))
 then
-  echo "refused: ${failed[*]}${skipped[@]+; skipped: ${skipped[*]}}"
+  report="refused: ${failed[*]}"
+  if (( ${#skipped[@]} > 0 ))
+  then
+    report="${report}; skipped: ${skipped[*]}"
+  fi
+  echo "${report}"
   exit 1
 fi
 echo "every control of ${event} passed"
