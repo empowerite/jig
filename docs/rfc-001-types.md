@@ -46,7 +46,7 @@ A transition has one of two kinds.
   action, which is a capability the type's port offers.
 
 The capabilities are a vocabulary jig names, and a port declares which of them it offers; which ones each port kind
-offers is settled in [rfc-002-ports.md](rfc-002-ports.md). An acted transition names one. A gate attaches to an acted
+offers is settled in [rfc-003-ports.md](rfc-003-ports.md). An acted transition names one. A gate attaches to an acted
 transition's guard and nowhere else.
 
 Time is a fact, so a state that changes by the clock alone is derived or excited over that fact, and there is no
@@ -154,8 +154,7 @@ statement, the chain digests it names, and the verdicts it names, each signed.
 
 ## Consequences
 
-- rfc-001, rfc-003, rfc-007, rfc-012 and rfc-013 are superseded by this RFC; see [the supersession][supersede].
-- The ports of [rfc-002-ports.md](rfc-002-ports.md) gain the scm port as a location, the production of a verdict on
+- The ports of [rfc-003-ports.md](rfc-003-ports.md) gain the scm port as a location, the production of a verdict on
   request, and a slot per provider for attestations; see [#69][ports].
 - The engine of [rfc-004-engine.md](rfc-004-engine.md) ticks over a declared lifecycle in the one shape above; see
   [#70][engine].
@@ -164,26 +163,25 @@ statement, the chain digests it names, and the verdicts it names, each signed.
   [#72][surface].
 - The extension points of [rfc-006-extensions.md](rfc-006-extensions.md) lose the rule source, gain a dispatcher, and
   a gate extension returns the verdict record above; see [#71][extensions].
-- The brief of [rfc-008-jig-context.md](rfc-008-jig-context.md) names the gates that will judge the paths a change
+- The brief of [rfc-007-jig-context.md](rfc-007-jig-context.md) names the gates that will judge the paths a change
   touches; see [#73][context].
-- The version rule of [rfc-010-release.md](rfc-010-release.md) changes, since the lifecycle is no longer in the
+- The version rule of [rfc-009-release.md](rfc-009-release.md) changes, since the lifecycle is no longer in the
   binary; see [#75][release].
-- The roles of [rfc-011-composition.md](rfc-011-composition.md) are bindings a repository declares; see
+- The roles of [rfc-010-composition.md](rfc-010-composition.md) are bindings a repository declares; see
   [#76][composition].
-- What a policy is written in, and how a published policy is packaged and pinned, is [rfc-015][language].
+- What a policy is written in, and how a published policy is packaged and pinned, is [rfc-002][language].
 - This repository declares rfc as its first type, in its own policy, once the language exists, and the record rules of
   `docs/1st.md` become that declaration.
 
 ## Open questions
 
-- Which capabilities each port kind offers, settled per port in rfc-002.
-- Whose key signs a verdict and how a consumer verifies it; with releases, in rfc-010.
+- Which capabilities each port kind offers, settled per port in rfc-003.
+- Whose key signs a verdict and how a consumer verifies it; with releases, in rfc-009.
 - What the in-toto statement's subject carries and what its predicate carries.
 - Whether a link may ever mark a declaration as advisory, so that a link below may drop it. Deferred, not refused: it
   would be a marking on the upstream declaration and would not change the rules above.
 - The identity of a file-backed instance across a rename or a move.
 
-[supersede]: https://github.com/empowerite/jig/issues/68
 [ports]: https://github.com/empowerite/jig/issues/69
 [engine]: https://github.com/empowerite/jig/issues/70
 [extensions]: https://github.com/empowerite/jig/issues/71

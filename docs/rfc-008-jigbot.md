@@ -13,7 +13,7 @@ same verbs by hand.
 
 jigbot runs as a bot account of its own, a GitHub App on GitHub, never as a person. That is what makes an
 `accepted` label set by a person distinguishable from one set by a machine, what lets the ownership rule of
-[rfc-001-world-model.md](rfc-001-world-model.md) apply to it like any other actor, and what gives its calls their own
+[rfc-001-types.md](rfc-001-types.md) apply to it like any other actor, and what gives its calls their own
 rate-limit budget.
 
 ### The tick

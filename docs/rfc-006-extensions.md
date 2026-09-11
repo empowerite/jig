@@ -8,8 +8,8 @@ An extension is a separate executable named `jig-<name>`. Being on the `PATH` gi
 `jig-<name>`, the way `git ls` runs `git-ls`, with the rest of the line passed through. Being named in the
 repository's policy gives it its seat: jig starts it inside a tick only when the policy names it, speaks to it over a
 JSON protocol on its standard streams, and stops it when the tick ends. It runs in its own process, in any language,
-and it sees the public model of [rfc-001-world-model.md](rfc-001-world-model.md) as the schema of [rfc-005-operator-
-surface.md](rfc-005-operator-surface.md) publishes it, and nothing else.
+and it sees the public model of [rfc-001-types.md](rfc-001-types.md) as the schema of
+[rfc-005-operator-surface.md](rfc-005-operator-surface.md) publishes it, and nothing else.
 
 ### The points
 
@@ -20,11 +20,10 @@ An extension attaches at fixed points, and a point is a typed contract:
 - A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may act
   after one is taken. It cannot take one.
 - A presenter: a new surface over the same API, a chat integration, a status page.
-- A port: a provider jig does not ship, written to the contract of [rfc-002-ports.md](rfc-002-ports.md) and proven by
+- A port: a provider jig does not ship, written to the contract of [rfc-003-ports.md](rfc-003-ports.md) and proven by
   its own conformance suite before policy may name it.
-- A brief source and a rule source: the two points [rfc-008-jig-context.md](rfc-008-jig-context.md) and [rfc-007-jig-
-  discover.md](rfc-007-jig-discover.md) attach to, which is the test of this spec: if the seam cannot carry those two,
-  it is the wrong seam.
+- A brief source and a rule source: the two points [rfc-007-jig-context.md](rfc-007-jig-context.md) and jig-discover
+  attach to, which is the test of this spec: if the seam cannot carry those two, it is the wrong seam.
 
 ### What it sees
 
@@ -60,7 +59,7 @@ beside its name. `jig doctor` reports every declared extension it cannot start.
   them as `jig discover <path>` and `jig context <N>`.
 - The schema version becomes a fact every extension names, so a schema change is a release that can count what it
   breaks.
-- The policy of [rfc-003-policy.md](rfc-003-policy.md) gains a table naming each extension, its version and its point.
+- The policy of [rfc-001-types.md](rfc-001-types.md) gains a table naming each extension, its version and its point.
 
 ## Open questions
 
