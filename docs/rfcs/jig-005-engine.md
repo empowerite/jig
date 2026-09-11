@@ -10,6 +10,18 @@ transitions, and the capabilities a port offers, and it knows no state by name. 
 returns the actions that are due. It reads no provider and writes nothing. A tick calls it once and executes what it
 returns through the ports of [jig-003-ports.md](jig-003-ports.md).
 
+```text
+// next is pure: it reads the policy and the view and returns the actions that are due, and calls no port
+next(policy, view) -> actions
+
+// a tick, in its four steps; next is called once, at step 2
+tick(ports, policy):
+	view    = read(ports)          // 1. each port's changes since its cursor, or a resync
+	actions = next(policy, view)   // 2. derived states, enabled silent transitions, queued acted ones
+	results = act(ports, actions)  // 3. each queued action through its port, in order
+	record(ports, results)         // 4. cursors advanced, metrics, the tick's own summary
+```
+
 ### The tick
 
 1. Read: each port's changes since its cursor, or a resync when the cursor is lost or the schedule says so. A
@@ -21,6 +33,18 @@ returns through the ports of [jig-003-ports.md](jig-003-ports.md).
 3. Act: each queued action through its port, in order, each carrying the precondition it was computed under.
    A port that finds the precondition false refuses the action, and the refusal is a fact for the next tick.
 4. Record: the cursors advanced, the metrics of every call, and the tick's own summary.
+
+```json
+// the tick's own summary, written at step 4; the shape a desk or a jigbot's record shows
+{
+  "started":  "2026-09-11T06:12:00Z",
+  "finished": "2026-09-11T06:12:04Z",
+  "scope":    {"type": "change", "identity": "github.com/empowerite/jig#98"},
+  "cursors":  {"github-work": "2026-09-11T06:11:58Z", "github-change": "evt:88213"},
+  "actions":  [{"transition": "integrate", "instance": "#98", "result": "queued"}],
+  "metrics":  {"calls": 6, "failures": 0}
+}
+```
 
 A tick is idempotent: run twice over the same world, the second run acts on nothing, because every action's
 precondition is what the first run changed. A tick over unknowns acts on nothing it cannot see.
@@ -57,6 +81,14 @@ port reports what landed, a new commit over the tested tree or the tested commit
 next member from that. A landing that the provider refuses stops the batch; what landed stays landed, and the rest
 is rebuilt on the new default branch at the next tick.
 
+```text
+// one batch of two members, across successive ticks; next returns one step further each time
+tick 1: admit(#98), admit(#102)                  // both admissible, one partition
+tick 2: build_batch([#98, #102])                 // speculative tree built, gates queued over it
+tick 3: land(#98, on: batch_tree)                // gates green; the green prefix lands first
+tick 4: land(#102, on: #98.landed_commit)        // chained from what #98 landed as
+```
+
 ### Bisection
 
 A red batch of k members is split at the first half: the first half is rebuilt and run, and a green half lands
@@ -72,6 +104,14 @@ succeeds leads; a jig that reads a fresh heartbeat naming another follows and bu
 adopted at the next epoch. The lease is an efficiency, so that two jigs do not build the same batch twice.
 Correctness never rests on it: the head-match guard on each member and the compare-and-swap on the default branch
 are what keep two landings from composing an untested tree.
+
+```text
+// the lease: a compare-and-swap on a ref outside refs/heads, through the scm port
+cas("refs/jig/lease/board", expect: {actor: "jig-1", epoch: 3}, write: {actor: "jig-2", heartbeat: now(), epoch: 4})
+// succeeds         -> jig-2 leads
+// fails, fresh read -> jig-2 reads jig-1's live heartbeat and follows, building nothing
+// fails, stale read -> jig-2 adopts the lease at the next epoch
+```
 
 ### What the engine may write
 
