@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-A type of [rfc-001-types.md](rfc-001-types.md) declares a location, a port and a place in it, and a provider-backed
+A type of [jig-001-types.md](jig-001-types.md) declares a location, a port and a place in it, and a provider-backed
 type may declare one location per role: `origin`, where an instance is born; `work`, where the loop runs; `report`,
 where status is told. An instance is then bound to several providers at once, one binding per role. The bindings are
 the repository's own declaration in the chain, and composition is bindings plus roles: it needs no mechanism the model
@@ -42,7 +42,7 @@ Nothing stops and nothing is lost, because no item ever depended on which provid
 
 A second work port, Azure DevOps or Linear, dripping into GitHub, and a second change host, GitLab, receiving a
 drain from GitHub, each on scratch repositories, each proven by the live suites of
-[rfc-003-ports.md](rfc-003-ports.md). The abstraction holds when both run and nothing in the engine changed.
+[jig-003-ports.md](jig-003-ports.md). The abstraction holds when both run and nothing in the engine changed.
 
 ## Why
 
@@ -58,9 +58,9 @@ drain from GitHub, each on scratch repositories, each proven by the live suites 
 ## Consequences
 
 - Ports declare which roles they can play; `jig policy check` refuses a role a port cannot fill.
-- The identity of `rfc-001` is what survives a drain; provider numbers are bindings and change.
-- The interface of `rfc-006` shows an instance's bindings, so a person sees where each thing lives.
-- Bindings are declared by the repository's own policy and by no link above it, as the chain of `rfc-001` has it.
+- The identity of `jig-001` is what survives a drain; provider numbers are bindings and change.
+- The interface of `jig-006` shows an instance's bindings, so a person sees where each thing lives.
+- Bindings are declared by the repository's own policy and by no link above it, as the chain of `jig-001` has it.
 
 ## Open questions
 

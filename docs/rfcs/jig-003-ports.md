@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-A port is the typed interface between the model in [rfc-001-types.md](rfc-001-types.md) and one provider. It
+A port is the typed interface between the model in [jig-001-types.md](jig-001-types.md) and one provider. It
 translates the provider's objects into the model's types and the model's actions into the provider's calls, and it
 is the only code in jig that speaks to a provider. The engine, the policy and the operator surface see ports and
 never a provider.
@@ -33,7 +33,7 @@ Every port keeps one contract, in five parts.
   a digest. On a desk the port runs the command now. On the provider it triggers the check, or waits for the one a
   push already raised. For a gate that is an extension, it invokes the extension in the tick. The engine's guard reads
   a verdict and never runs a gate; a missing verdict is requested through this operation and the transition waits. The
-  verdict a gate port produces is the record of [rfc-001-types.md](rfc-001-types.md), one shape for a command, a check
+  verdict a gate port produces is the record of [jig-001-types.md](jig-001-types.md), one shape for a command, a check
   and an extension. An action that the provider refuses is reported as refused, with the provider's reason, never
   retried in silence.
 - Capabilities: the canonical paths this port offers for each lifecycle step, with their sub-states, so policy can
@@ -97,11 +97,11 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 ## Consequences
 
-- The engine, [rfc-005-engine.md](rfc-005-engine.md), reaches every provider through these operations and no other,
+- The engine, [jig-005-engine.md](jig-005-engine.md), reaches every provider through these operations and no other,
   and its lease lives in the scm port's compare-and-swap on a ref.
-- Policy, [rfc-001-types.md](rfc-001-types.md), chooses among the capabilities a port declares and cannot name a
+- Policy, [jig-001-types.md](jig-001-types.md), chooses among the capabilities a port declares and cannot name a
   path a port does not offer.
-- The operator surface, [rfc-006-operator-surface.md](rfc-006-operator-surface.md), shows the metrics every port
+- The operator surface, [jig-006-operator-surface.md](jig-006-operator-surface.md), shows the metrics every port
   reports.
 - A scratch repository per provider, for the live suite, is provisioned outside this repository.
 
