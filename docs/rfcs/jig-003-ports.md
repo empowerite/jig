@@ -36,11 +36,33 @@ Every port keeps one contract, in five parts.
   verdict a gate port produces is the record of [jig-001-types.md](jig-001-types.md), one shape for a command, a check
   and an extension. An action that the provider refuses is reported as refused, with the provider's reason, never
   retried in silence.
+
+```text
+// a port's contract: one method per operation the model needs, and nothing else the model may call
+Port:
+	ReadSince(cursor) -> (events, newCursor)  // changes since the last read
+	Resync()          -> (view, newCursor)    // a full read, on schedule or on demand
+	Act(action)       -> (result)             // one call per action the lifecycle's tables name
+
+GatePort extends Port:
+	RequestVerdict(gate, subject, digest) -> (verdict)  // one gate, one subject, one digest; the guard only reads it
+```
+
 - Capabilities: the canonical paths this port offers for each lifecycle step, with their sub-states, so policy can
   choose among them and the interface can draw them. A change port also declares which tree its provider tests for a
   change, the merge of head onto base on GitHub. The guard for admissible reads verdicts keyed by that tree; the guard
   for integrating reads verdicts keyed by the batch's speculative tree; a file-backed instance's verdicts are keyed by
   its blob. A verdict on any other tree is a fact about that tree and satisfies no guard.
+
+```cue
+// the capabilities the GitHub change port declares, one canonical path per lifecycle step
+capabilities: change: github: {
+	propose:    {paths: ["draft", "ready-for-review"]}  // opened as a draft pull request, or opened ready
+	admissible: {tree: "merge"}                         // GitHub tests head merged onto base; verdicts key on it
+	integrate:  {paths: ["merge", "squash", "rebase"]}  // methods the branch ruleset may accept
+}
+```
+
 - Constraints: the facts the engine must respect before it acts, read from the provider and not assumed. For an
   integrate port: whether fast-forward is allowed, whether signatures are required, whether a review must attach
   at the merge event, which merge methods the branch's rules accept. For a work port: page maxima and rate limits.
@@ -49,6 +71,17 @@ Every port keeps one contract, in five parts.
   an attestation store keyed by digest where the provider has one, a ref or a note where it does not, a comment last.
 - Metrics: every call counted and timed, labeled by port, operation and outcome, with the provider's rate-limit
   budget read and reported, so the cost of a tick is a number and not a feeling.
+
+```json
+// one call to the GitHub change port, as the metrics slot reports it
+{
+  "port":        "github-change",
+  "operation":   "act:propose",
+  "outcome":     "ok",
+  "duration_ms": 340,
+  "rate_limit":  {"remaining": 4821, "limit": 5000, "reset": "2026-09-11T07:00:00Z"}
+}
+```
 
 ### The cursor
 
@@ -67,6 +100,15 @@ A port is trusted by three tiers, and the third is the contract.
 - A live conformance suite: one per port, run against a scratch repository on the real provider, on a schedule and
   on every change to that port. It exercises every operation, every capability and every constraint the port
   claims, and it is what makes a claim about a provider a measurement. A port that does not pass it is not a port.
+
+```text
+// one case from the GitHub change port's live conformance suite, run against a scratch repository
+test "propose opens a draft pull request":
+	act:    Act(propose(change)) on a fresh branch
+	assert: change.state == "proposed"
+	assert: provider.pull_request.draft == true
+	assert: capabilities.change.github.propose.paths contains "draft"
+```
 
 ### Honesty
 

@@ -10,6 +10,18 @@ where status is told. An instance is then bound to several providers at once, on
 the repository's own declaration in the chain, and composition is bindings plus roles: it needs no mechanism the model
 does not already have.
 
+```cue
+// the repository's policy: this work item's origin is Linear, its work runs in GitHub, status reports back to Linear
+bindings: "work-item": {
+	ports: ["linear", "github"]                 // the providers this binding may use
+	location: {
+		origin: {port: "linear", place: "TEAM"}   // where the item is born, and where it resolves
+		work:   {port: "github", place: "issues"} // where the loop runs; the change lives beside it
+		report: {port: "linear", place: "TEAM"}   // status told back, never decided
+	}
+}
+```
+
 ### One fact, one owner
 
 Each fact of an instance has one authoritative provider, by role. The origin owns the item's text, its acceptance
@@ -37,6 +49,42 @@ Moving a repository between hosts is composition run as a transition:
    History stays where it was, and the identity in every mirrored object says what corresponded to what.
 
 Nothing stops and nothing is lost, because no item ever depended on which provider was the repository's.
+
+```cue
+// step 1 of the drain: gitlab's ports now exist beside github's; this binding has not moved yet
+bindings: "work-item": {
+	ports: ["linear", "github", "gitlab"]
+	location: {
+		origin: {port: "linear", place: "TEAM"}
+		work:   {port: "github", place: "issues"}
+		report: {port: "linear", place: "TEAM"}
+	}
+}
+```
+
+```cue
+// step 2: the policy shifts work to gitlab; instances filed from now on use it, and origin and report are untouched
+bindings: "work-item": {
+	ports: ["linear", "github", "gitlab"]
+	location: {
+		origin: {port: "linear", place: "TEAM"}
+		work:   {port: "gitlab", place: "empowerite/jig"}
+		report: {port: "linear", place: "TEAM"}
+	}
+}
+```
+
+```cue
+// step 4: no instance in flight binds to github any longer, so its port is removed from the policy
+bindings: "work-item": {
+	ports: ["linear", "gitlab"]
+	location: {
+		origin: {port: "linear", place: "TEAM"}
+		work:   {port: "gitlab", place: "empowerite/jig"}
+		report: {port: "linear", place: "TEAM"}
+	}
+}
+```
 
 ### The proof
 
