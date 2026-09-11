@@ -139,11 +139,11 @@ Azure DevOps, Linear, is written to the contract above and proven by its own sui
 
 ## Consequences
 
-- The engine, [jig-005-engine.md](jig-005-engine.md), reaches every provider through these operations and no other,
+- The engine, [jig-008-engine.md](jig-008-engine.md), reaches every provider through these operations and no other,
   and its lease lives in the scm port's compare-and-swap on a ref.
 - Policy, [jig-001-types.md](jig-001-types.md), chooses among the capabilities a port declares and cannot name a
   path a port does not offer.
-- The operator surface, [jig-006-operator-surface.md](jig-006-operator-surface.md), shows the metrics every port
+- The operator surface, [jig-011-operator-surface.md](jig-011-operator-surface.md), shows the metrics every port
   reports.
 - A scratch repository per provider, for the live suite, is provisioned outside this repository.
 

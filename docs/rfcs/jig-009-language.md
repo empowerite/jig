@@ -90,7 +90,7 @@ its own, and the gates it attaches. It writes no rule.
 
 The exported document is OPA's `data` and the view is its `input`. jig ships the standard rules: the guard of every
 acted transition, the actor rules, the well-formedness of a lifecycle, the structural checks of the chain, and the
-rule gates the standard types need. The engine's `next` of [jig-005-engine.md](jig-005-engine.md) is a query over
+rule gates the standard types need. The engine's `next` of [jig-008-engine.md](jig-008-engine.md) is a query over
 them, and a tick calls it once.
 
 ```json
@@ -224,12 +224,12 @@ over the board:
 
 - The declarations of [jig-001-types.md](jig-001-types.md) have a concrete form: the standard policy is a CUE module
   and the standard rules are a Rego bundle, both versioned and released with the binary; see
-  [jig-010-release.md](jig-010-release.md).
-- The ports of [jig-003-ports.md](jig-003-ports.md) read a repository's bindings from the exported document.
-- The tick of [jig-005-engine.md](jig-005-engine.md) calls `next` as a query over the standard rules.
-- The verbs of [jig-006-operator-surface.md](jig-006-operator-surface.md) run CUE then Rego for `policy check` and
+  [jig-013-release.md](jig-013-release.md).
+- The ports of [jig-006-ports.md](jig-006-ports.md) read a repository's bindings from the exported document.
+- The tick of [jig-008-engine.md](jig-008-engine.md) calls `next` as a query over the standard rules.
+- The verbs of [jig-011-operator-surface.md](jig-011-operator-surface.md) run CUE then Rego for `policy check` and
   `policy plan`, and `explain` renders a declaration through Jinja2.
-- An extension of [jig-007-extensions.md](jig-007-extensions.md) may ship rule gates in Rego and templates in Jinja2.
+- An extension of [jig-010-extensions.md](jig-010-extensions.md) may ship rule gates in Rego and templates in Jinja2.
 - The install page gains nothing: a consumer installs `jig` and no evaluator.
 
 ## Open questions

@@ -37,7 +37,7 @@ blocked: gate "tests" is fail; gate "review" has no verdict yet
 ```
 
 ```json
-// jig-008: the same brief, as `jig context 97 --json`
+// jig-012: the same brief, as `jig context 97 --json`
 {
   "item": {"identity": 97, "state": "assigned", "holder": "jeffrey-aguilera"},
   "changes": [{
@@ -67,13 +67,13 @@ work item 133                         every blocker closed, waiting for an assig
 ### Where it is served
 
 On the command line, as text and as `--json`; over the MCP server of
-[jig-006-operator-surface.md](jig-006-operator-surface.md), as a tool and as a resource per item; and through the
+[jig-011-operator-surface.md](jig-011-operator-surface.md), as a tool and as a resource per item; and through the
 harness port at session start, so a session that opens with an item in hand is handed its brief before its first
 question.
 
 ### The seat
 
-`jig-context` attaches at the brief-source point of [jig-007-extensions.md](jig-007-extensions.md). It reads the view
+`jig-context` attaches at the brief-source point of [jig-010-extensions.md](jig-010-extensions.md). It reads the view
 and the chain in force through the public model; it takes no transition and writes nothing.
 
 ## Why
@@ -88,8 +88,8 @@ and the chain in force through the public model; it takes no transition and writ
 ## Consequences
 
 - `CLAUDE.md` sheds its account of states and moves; the loop's file becomes a pointer.
-- The interface's item view of `jig-006` is this brief drawn.
-- The dispatcher of [jig-007-extensions.md](jig-007-extensions.md) polls `jig context --needs`; jig ships one
+- The interface's item view of `jig-011` is this brief drawn.
+- The dispatcher of [jig-010-extensions.md](jig-010-extensions.md) polls `jig context --needs`; jig ships one
   reference dispatcher and starts nothing itself.
 
 ## Open questions

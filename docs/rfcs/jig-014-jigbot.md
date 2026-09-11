@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-jigbot is the engine of [jig-005-engine.md](jig-005-engine.md) run board-wide, hosted by the repository's own CI
+jigbot is the engine of [jig-008-engine.md](jig-008-engine.md) run board-wide, hosted by the repository's own CI
 through the gate port's provider, as its own actor. It is optional the way an automated dependency updater is
 optional: a repository adds one workflow file and has a jigbot; a repository without one has people and sessions
 running the same verbs by hand.
@@ -22,7 +22,7 @@ puts its authority on a desk. The organization holds the key where no desk is, a
 broker mints tokens narrowed to one repository for people it authenticates through GitHub. Every session's posts
 appear under the organization's bot, and whose session it was is the broker's record. A stolen desk exposes one
 broker token, which the broker revokes, and never the key. jig ships a reference broker the way
-[jig-007-extensions.md](jig-007-extensions.md) ships a reference dispatcher.
+[jig-010-extensions.md](jig-010-extensions.md) ships a reference dispatcher.
 
 A person typing a verb at their own keyboard is still the person: the verb is theirs, and the provider records the
 fact under their login. Commits stay the person's, authored and signed on the desk with the session named in a
@@ -76,7 +76,7 @@ A repository learns of the App through two channels, and jig joins them. The App
 declared in the organization's link of the chain as the binding of the jigbot actor, so every repository that pulls
 the link knows which App is jig's actor there. The key is an organization Actions secret, `JIG_APP_PRIVATE_KEY`, and
 the ID an organization variable, `JIG_APP_ID`, shared with the repositories and read by the reusable workflow of
-[jig-010-release.md](jig-010-release.md) under those names. A repository with an App of its own sets the same two at
+[jig-013-release.md](jig-013-release.md) under those names. A repository with an App of its own sets the same two at
 its own level, and its own win. A personal account, having no organization secrets, sets them per repository.
 
 ```yaml
@@ -131,7 +131,7 @@ except as the landing step of a batch that policy gave it.
 - The App is registered in the organization's settings by `jig app create`, and its key and ID are provisioned as the
   organization's secret and variable. Nothing about it is committed, and the install page says what it is, what it may
   do, and how a desk or a runner authenticates as it.
-- The batch of `jig-005` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
+- The batch of `jig-008` lands from the leader's tick, whoever holds the lease; a running jigbot is the usual leader,
   and a desk's `jig land` is a person's own merge.
 - Under a strict ruleset, a change must be current with the default branch before it merges, and jigbot never
   rebases a member; the batch's landing path satisfies strictness by construction, and a change outside a batch is

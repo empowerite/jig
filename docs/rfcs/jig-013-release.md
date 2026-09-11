@@ -4,7 +4,7 @@ Status: draft
 
 ## Decision
 
-This repository runs on jig. Its own policy, in the language of [jig-002-language.md](jig-002-language.md), declares
+This repository runs on jig. Its own policy, in the language of [jig-009-language.md](jig-009-language.md), declares
 its types and attaches its gates; its pull requests pass those gates; and its board is its own issues.
 
 ### A release
@@ -16,7 +16,7 @@ A release is a git tag, `vMAJOR.MINOR.PATCH`, and what it carries:
 - The reusable workflow other repositories invoke rather than copy, which checks out, installs the pinned binary by
   its checksum and runs `jig verify`.
 - The GraphQL schema file, which is the public contract at that version.
-- The standard policy of [jig-002-language.md](jig-002-language.md), the CUE module and the Rego bundle, at its own
+- The standard policy of [jig-009-language.md](jig-009-language.md), the CUE module and the Rego bundle, at its own
   version, so that a consumer can pin it as a link of the chain.
 - Checksums over every artifact. A consumer's `mise` installs the binary straight from the release by them.
 
@@ -40,7 +40,7 @@ release/1.2:  └──────────B'───────C'
 
 The lifecycle is data and is versioned with the policy that declares it, never with the binary. The binary's version
 says what changed in its contracts: a change to a kind of [jig-001-types.md](jig-001-types.md), to the port contract
-of [jig-003-ports.md](jig-003-ports.md), or to the schema is a major release; a new port capability, verb, extension
+of [jig-006-ports.md](jig-006-ports.md), or to the schema is a major release; a new port capability, verb, extension
 point or standard rule is a minor one; a fix that changes no contract is a patch. The standard policy is versioned on
 its own, the same way, and a change to the standard lifecycle is a major release of the standard policy and never of
 the binary. A change to a kind lands only after its RFC is accepted, so a major release of the binary is announced by
