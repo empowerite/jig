@@ -14,6 +14,7 @@ code is checked against. A user reads the pages and skips the RFCs; an extender 
 - A page is one of three kinds, install, use, or extend, and says which in its first line.
 - A page and the code do not disagree. The pull request that changes a behavior changes the page that describes
   it.
+
 ## The record
 
 - An RFC is a file named `rfc-NNN-<slug>.md`. `NNN` is three digits in the order the designs were made, and a
@@ -21,10 +22,10 @@ code is checked against. A user reads the pages and skips the RFCs; an extender 
 - The first line after the title is the status: `Status: draft`, `Status: accepted`, or
   `Status: superseded by rfc-NNN`. A person accepts an RFC the way a person accepts an issue, by reading it and
   saying so; the status changes in a pull request a maintainer merges.
-- The sections come in this order, so the decision is read first and the argument only by someone who questions
-  it: `## Decision`, what is decided, in the imperative; `## Why`, the argument; `## Consequences`, what follows
-  for other RFCs, for the code, and for the operator. Open questions are named under their own heading, never
-  buried.
+- The sections come in this order, so the decision is read first and the argument only by someone who questions it:
+  `## Decision`, what is decided, stated declaratively with the thing decided as its subject; `## Why`, the argument;
+  `## Consequences`, what follows for other RFCs, for the code, and for the operator. Open questions are named under
+  their own heading, never buried.
 - An accepted RFC and the code do not disagree. The change that would make them disagree corrects the RFC, or
   marks it superseded and writes the successor, in the same pull request. An RFC never rots silently.
 - A link to an RFC that has not landed names the RFC's issue, and the pull request that lands the RFC rewrites
