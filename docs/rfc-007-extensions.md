@@ -15,21 +15,30 @@ and it sees the public model of [rfc-001-types.md](rfc-001-types.md) as the sche
 
 An extension attaches at fixed points, and a point is a typed contract:
 
-- A gate: a verdict source. Given a change and its tree, it returns a verdict, keyed by tree, with artifacts. A review
-  by a model, a policy check no provider runs, a cost estimate.
+- A gate: a verdict producer. Given a subject at a digest, it returns the verdict record of
+  [rfc-001-types.md](rfc-001-types.md), keyed by the gate and the digest, with its evidence. A review by a model, a
+  policy check no provider runs, a cost estimate. Beside its executable, a gate extension may ship rule gates,
+  predicates in the decision language of [rfc-002-language.md](rfc-002-language.md) over facts jig already holds,
+  which the engine evaluates in the guard without starting a process.
 - A hook: before or after a transition. It may refuse a transition before it is taken, with a reason, and it may act
   after one is taken. It cannot take one.
 - A presenter: a new surface over the same API, a chat integration, a status page.
 - A port: a provider jig does not ship, written to the contract of [rfc-003-ports.md](rfc-003-ports.md) and proven by
   its own conformance suite before policy may name it.
-- A brief source and a rule source: the two points [rfc-008-jig-context.md](rfc-008-jig-context.md) and jig-discover
-  attach to, which is the test of this spec: if the seam cannot carry those two, it is the wrong seam.
+- A brief source: the point [rfc-008-jig-context.md](rfc-008-jig-context.md) attaches to.
+- A dispatcher: given the needs jig publishes, it starts an actor in a harness with the instance's brief, and reports
+  what it started. It takes no transition; the actor it started takes them, as itself. jig starts no actor, so the
+  dispatcher is outside the engine and inside the seam.
+
+The brief source and the dispatcher are the test of this spec: they are the two jig needs to develop itself with
+agents, and if the seam cannot carry them it is the wrong seam.
 
 ### What it sees
 
-The public model, the verbs, the events of the tick it runs in, and the policy's own section for it. It does not
-see the engine's internal API, a provider's client or token, another extension, or jig's own facts except the
-identity written into provider objects, which any reader of the provider sees anyway.
+The declared types as the schema publishes them, the verbs, the events of the tick it runs in, the brief of the
+instance at hand, and the policy's own section for it. It does not see the engine's internal API, a provider's client
+or token, another extension, or jig's own facts except the identity written into provider objects, which any reader of
+the provider sees anyway.
 
 ### The handshake
 
@@ -50,16 +59,21 @@ beside its name. `jig doctor` reports every declared extension it cannot start.
   nobody decided to run.
 - Fixed points, because an extension that may attach anywhere is a fork in disguise, and a fork is what the
   charter's "not a workflow language" rules out for policy and this rules out for code.
-- The two first extensions as the test, because they are the two jig needs to develop itself, and a seam that
-  cannot carry what jig itself needs is not a seam.
+- The brief source and the dispatcher as the test, because they are the two jig needs to develop itself with agents,
+  and a seam that cannot carry what jig itself needs is not a seam.
+- A dispatcher as an extension and never a part of the engine, because jig starts no actor: a jig that started
+  sessions would own a process it cannot see, and who acts on a need is not its decision.
 
 ## Consequences
 
-- `jig-discover` and `jig-context` are written against this spec and change nothing in the engine; a desk runs
-  them as `jig discover <path>` and `jig context <N>`.
+- `jig-context` is written against this spec and changes nothing in the engine; a desk runs it as `jig context <N>`.
+- jig ships one reference dispatcher, for one harness, released and pinned like any extension: the proof of the seam,
+  and the one jig's own repository needs to develop itself with agents. Every other dispatcher is written by whoever
+  runs the agents.
 - The schema version becomes a fact every extension names, so a schema change is a release that can count what it
   breaks.
-- The policy of [rfc-001-types.md](rfc-001-types.md) gains a table naming each extension, its version and its point.
+- The repository's policy names each extension, its version and its point, and a rule gate an extension ships is
+  attached to a guard like any gate of [rfc-001-types.md](rfc-001-types.md).
 
 ## Open questions
 
