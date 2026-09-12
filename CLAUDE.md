@@ -19,13 +19,17 @@ way.
    a habit, not a rule.
 4. Commit with a signed commit. The subject is `#<N> <what changed>`, under 72 characters. The body says why, in plain
    prose. The branch ruleset rejects an unsigned commit; the one-time setup is in [README.md](README.md), under Setup.
-5. Open a pull request and link the issue under Development in its sidebar. A session working through the API
-   makes the same link with the `addCloseIssueReferences` mutation. The link is what counts, and the check on `main`
-   reads only that. The pull request is the report: what changed, what was checked, and what was left out and why.
-   Call nothing merged, landed or done until the merge is observed.
+   Push the branch and open a pull request as soon as this first commit exists — GitHub refuses one with nothing to
+   compare, so it cannot come before. Link the issue under Development in its sidebar; a session working through the
+   API makes the same link with the `addCloseIssueReferences` mutation. The link is what counts, and the check on
+   `main` reads only that.
+5. Keep committing to the same branch as the work continues. The pull request is the report: what changed, what was
+   checked, and what was left out and why, kept current rather than written once at the end. Call nothing merged,
+   landed or done until the merge is observed.
 6. A maintainer reviews and merges, by squash or rebase. A merge to `main` is never automatic: it happens on a
    maintainer's request, or as the landing step of a transition that owns the merge. The ruleset requires linear
-   history, so there are no merge commits.
+   history, so there are no merge commits. Once it lands, remove the worktree (`git worktree remove`) and delete the
+   local branch — `-D`, since a squash-merged branch is never an ancestor of `main` and `-d` refuses it.
 
 ## Labels
 
