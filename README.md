@@ -1,9 +1,7 @@
 # jig
 
 jig is a policy engine over declared entity types, and the software development lifecycle is the standard policy it
-ships. What that means, and what jig is not, is the charter, jig-000, being rewritten in
-[#125](https://github.com/empowerite/jig/issues/125); the series it replaces is in
-[docs/rfcs/superseded/](docs/rfcs/superseded/1st.md).
+ships. What that means, and what jig is not, is [jig-000-charter.md](docs/rfcs/jig-000-charter.md).
 
 ## Install
 
