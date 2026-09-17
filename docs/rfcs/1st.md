@@ -42,4 +42,4 @@ replaces are in [superseded/1st.md](superseded/1st.md). Until an RFC below has l
 - [jig-002-lifecycles.md](jig-002-lifecycles.md): state kinds, components, and the two gates every policy repeats (draft)
 - [jig-003-machines.md](jig-003-machines.md): WorkOrder, WorkProduct, Release, Deployment, and their couplings (draft)
 - [jig-004-outside.md](jig-004-outside.md): acts taken outside jig, their mapping, and the evidence they leave (draft)
-- jig-005, recording: [#130](https://github.com/empowerite/jig/issues/130)
+- [jig-005-recording.md](jig-005-recording.md): the evidence store, versions, and the snapshot of an issue (draft)
