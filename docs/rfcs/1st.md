@@ -39,7 +39,7 @@ replaces are in [superseded/1st.md](superseded/1st.md). Until an RFC below has l
 
 - [jig-000-charter.md](jig-000-charter.md): what jig is and is not (draft)
 - [jig-001-desk.md](jig-001-desk.md): where jig runs, and at which version (draft)
-- jig-002, states, transitions and gates: [#127](https://github.com/empowerite/jig/issues/127)
+- [jig-002-lifecycles.md](jig-002-lifecycles.md): state kinds, components, and the two gates every policy repeats (draft)
 - jig-003, the standard machines: [#128](https://github.com/empowerite/jig/issues/128)
 - jig-004, acts taken outside jig: [#129](https://github.com/empowerite/jig/issues/129)
 - jig-005, recording: [#130](https://github.com/empowerite/jig/issues/130)
