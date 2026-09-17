@@ -38,7 +38,7 @@ The series restarted at 000 on 2026-09-17, by [#123](https://github.com/empoweri
 replaces are in [superseded/1st.md](superseded/1st.md). Until an RFC below has landed, its line names its issue.
 
 - [jig-000-charter.md](jig-000-charter.md): what jig is and is not (draft)
-- jig-001, the desk and the checkout: [#126](https://github.com/empowerite/jig/issues/126)
+- [jig-001-desk.md](jig-001-desk.md): where jig runs, and at which version (draft)
 - jig-002, states, transitions and gates: [#127](https://github.com/empowerite/jig/issues/127)
 - jig-003, the standard machines: [#128](https://github.com/empowerite/jig/issues/128)
 - jig-004, acts taken outside jig: [#129](https://github.com/empowerite/jig/issues/129)
