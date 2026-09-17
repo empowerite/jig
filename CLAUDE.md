@@ -1,7 +1,9 @@
 # Working in this repository
 
 jig is a policy engine over declared entity types, and the software development lifecycle is the standard policy it
-ships. [jig-000-charter.md](docs/rfcs/jig-000-charter.md) is the charter and says what that means and what jig is not.
+ships. The charter that says what that means and what jig is not is being rewritten as jig-000, in
+[#125](https://github.com/empowerite/jig/issues/125); the series it replaces is in
+[docs/rfcs/superseded/](docs/rfcs/superseded/1st.md).
 This file says how work moves here until jig can say so itself. Each paragraph below is a job jig will take over, and
 when it does, the paragraph goes.
 
