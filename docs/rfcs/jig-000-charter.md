@@ -50,8 +50,7 @@ standard ones.
 - Six components rather than one engine, because the questions a team asks of the machinery are six different
   questions. What may happen next is deciding. What happened, provably, is recording. What to do when someone acted
   outside the machinery is mediating. How to see it is presenting. What to do now is guiding. Whether the factory is
-  running well is observing. A design that answers only the first has nothing to say to the other five, and the
-  earlier series answered only the first.
+  running well is observing. A design that answers only the first has nothing to say to the other five.
 - Deciding takes no transition of its own because the record is only worth trusting if every act in it has an
   actor, and a machine that acts in the owners' place erases the one fact the record exists to keep.
 - Recording keeps a snapshot of a mutable entity because a fact about something that can change is worthless
